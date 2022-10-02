@@ -1,0 +1,9 @@
+@font-face {
+	font-family: gothRegular;
+	src: url("public/fonts/GothicA1-Regular.ttf");
+}
+
+@font-face {
+	font-family: gothLight;
+	src: url("public/fonts/GothicA1-Light.ttf");
+}

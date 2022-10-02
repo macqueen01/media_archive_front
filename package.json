@@ -1,0 +1,33 @@
+{
+  "name": "svelte",
+  "version": "1.0.0",
+  "devDependencies": {
+    "rollup-plugin-json": "^4.1.0",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^1.10.1",
+    "rollup-plugin-commonjs": "^9.3.4",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-svelte": "^6.1.1",
+    "rollup-plugin-terser": "^4.0.4",
+    "sirv-cli": "^0.3.1",
+    "tinro": "^0.6.12"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "svelte": "^3.32.3"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "autobuild": "rollup -c -w",
+    "dev": "run-p start:dev autobuild",
+    "start": "sirv public --single --host 0.0.0.0",
+    "start:dev": "sirv public --dev",
+    "routing-setup": "npm i -D tinro",
+    "axios-setup": "npm i axios"
+  },
+  "keywords": [
+    "svelte",
+    "starter"
+  ],
+  "description": "Svelte example starter project"
+}
