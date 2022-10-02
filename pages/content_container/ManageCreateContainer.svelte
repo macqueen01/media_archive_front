@@ -229,7 +229,7 @@
     import { Route, router } from 'tinro';
     import axios from 'axios';
 
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { crossfade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     
@@ -238,10 +238,11 @@
     import InputCheckboxValue from '../../components/manager/InputCheckboxValue.svelte';
     import InputDateValue from '../../components/manager/InputDateValue.svelte';
     import InputSelectValue from '../../components/manager/InputSelectValue.svelte';
-
+    import Tiptap from '../../components/manager/Tiptap.svelte'
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
 
     export let stage = 1;
+
 
     let title;
     let location;
@@ -331,6 +332,13 @@
             satisfied_text: "좋습니다!"
         }
     ]
+
+
+
+
+
+
+
 
     function downloader(item) {
         if (!item) {
@@ -650,6 +658,8 @@
                 </div>
             </div>
         </div>
+    {:else if stage == 3}
+        <Tiptap />
     {/if}
 </div>
 
