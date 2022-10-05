@@ -28994,61 +28994,51 @@ img.ProseMirror-separator {
 
     // (26:4) {:else}
     function create_else_block$7(ctx) {
-    	let button;
-    	let div;
+    	let div1;
+    	let div0;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			button = element("button");
-    			div = element("div");
-    			attr_dev(div, "contenteditable", "true");
-    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div_input_handler_4*/ ctx[8].call(div));
-    			add_location(div, file$g, 27, 12, 1008);
-    			attr_dev(button, "class", "svelte-19z6eo5");
-    			toggle_class(button, "active", /*editor*/ ctx[1].isActive({ name: /*name*/ ctx[2] }));
-    			add_location(button, file$g, 26, 8, 921);
+    			div1 = element("div");
+    			div0 = element("div");
+    			attr_dev(div0, "contenteditable", "true");
+    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div0_input_handler_4*/ ctx[12].call(div0));
+    			add_location(div0, file$g, 27, 12, 1126);
+    			attr_dev(div1, "id", "tool-item");
+    			attr_dev(div1, "class", "svelte-vthnzy");
+    			toggle_class(div1, "active", /*editor*/ ctx[1].isActive({ name: /*name*/ ctx[2] }));
+    			add_location(div1, file$g, 26, 8, 1013);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    			append_dev(button, div);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
 
     			if (/*svg*/ ctx[0] !== void 0) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div, "input", /*div_input_handler_4*/ ctx[8]),
-    					listen_dev(
-    						button,
-    						"click",
-    						function () {
-    							if (is_function(/*toggleFunction*/ ctx[3])) /*toggleFunction*/ ctx[3].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
+    					listen_dev(div0, "input", /*div0_input_handler_4*/ ctx[12]),
+    					listen_dev(div1, "click", /*click_handler_4*/ ctx[13], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-
-    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div.innerHTML) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div0.innerHTML) {
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (dirty & /*editor, name*/ 6) {
-    				toggle_class(button, "active", /*editor*/ ctx[1].isActive({ name: /*name*/ ctx[2] }));
+    				toggle_class(div1, "active", /*editor*/ ctx[1].isActive({ name: /*name*/ ctx[2] }));
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(div1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -29067,56 +29057,46 @@ img.ProseMirror-separator {
 
     // (22:34) 
     function create_if_block_4$1(ctx) {
-    	let button;
-    	let div;
+    	let div1;
+    	let div0;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			button = element("button");
-    			div = element("div");
-    			attr_dev(div, "contenteditable", "true");
-    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div_input_handler_3*/ ctx[7].call(div));
-    			add_location(div, file$g, 23, 12, 824);
-    			attr_dev(button, "class", "svelte-19z6eo5");
-    			add_location(button, file$g, 22, 8, 776);
+    			div1 = element("div");
+    			div0 = element("div");
+    			attr_dev(div0, "contenteditable", "true");
+    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div0_input_handler_3*/ ctx[10].call(div0));
+    			add_location(div0, file$g, 23, 12, 919);
+    			attr_dev(div1, "id", "tool-item");
+    			attr_dev(div1, "class", "svelte-vthnzy");
+    			add_location(div1, file$g, 22, 8, 845);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    			append_dev(button, div);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
 
     			if (/*svg*/ ctx[0] !== void 0) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div, "input", /*div_input_handler_3*/ ctx[7]),
-    					listen_dev(
-    						button,
-    						"click",
-    						function () {
-    							if (is_function(/*toggleFunction*/ ctx[3])) /*toggleFunction*/ ctx[3].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
+    					listen_dev(div0, "input", /*div0_input_handler_3*/ ctx[10]),
+    					listen_dev(div1, "click", /*click_handler_3*/ ctx[11], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-
-    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div.innerHTML) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div0.innerHTML) {
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(div1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -29135,56 +29115,46 @@ img.ProseMirror-separator {
 
     // (18:29) 
     function create_if_block_3$1(ctx) {
-    	let button;
-    	let div;
+    	let div1;
+    	let div0;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			button = element("button");
-    			div = element("div");
-    			attr_dev(div, "contenteditable", "true");
-    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div_input_handler_2*/ ctx[6].call(div));
-    			add_location(div, file$g, 19, 12, 656);
-    			attr_dev(button, "class", "svelte-19z6eo5");
-    			add_location(button, file$g, 18, 8, 608);
+    			div1 = element("div");
+    			div0 = element("div");
+    			attr_dev(div0, "contenteditable", "true");
+    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div0_input_handler_2*/ ctx[8].call(div0));
+    			add_location(div0, file$g, 19, 12, 728);
+    			attr_dev(div1, "id", "tool-item");
+    			attr_dev(div1, "class", "svelte-vthnzy");
+    			add_location(div1, file$g, 18, 8, 654);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    			append_dev(button, div);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
 
     			if (/*svg*/ ctx[0] !== void 0) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div, "input", /*div_input_handler_2*/ ctx[6]),
-    					listen_dev(
-    						button,
-    						"click",
-    						function () {
-    							if (is_function(/*toggleFunction*/ ctx[3])) /*toggleFunction*/ ctx[3].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
+    					listen_dev(div0, "input", /*div0_input_handler_2*/ ctx[8]),
+    					listen_dev(div1, "click", /*click_handler_2*/ ctx[9], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-
-    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div.innerHTML) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div0.innerHTML) {
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(div1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -29203,61 +29173,51 @@ img.ProseMirror-separator {
 
     // (14:28) 
     function create_if_block_2$4(ctx) {
-    	let button;
-    	let div;
+    	let div1;
+    	let div0;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			button = element("button");
-    			div = element("div");
-    			attr_dev(div, "contenteditable", "true");
-    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div_input_handler_1*/ ctx[5].call(div));
-    			add_location(div, file$g, 15, 12, 493);
-    			attr_dev(button, "class", "svelte-19z6eo5");
-    			toggle_class(button, "active", /*editor*/ ctx[1].isActive('heading', { level: 2 }));
-    			add_location(button, file$g, 14, 8, 389);
+    			div1 = element("div");
+    			div0 = element("div");
+    			attr_dev(div0, "contenteditable", "true");
+    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div0_input_handler_1*/ ctx[6].call(div0));
+    			add_location(div0, file$g, 15, 12, 542);
+    			attr_dev(div1, "id", "tool-item");
+    			attr_dev(div1, "class", "svelte-vthnzy");
+    			toggle_class(div1, "active", /*editor*/ ctx[1].isActive('heading', { level: 2 }));
+    			add_location(div1, file$g, 14, 8, 412);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    			append_dev(button, div);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
 
     			if (/*svg*/ ctx[0] !== void 0) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div, "input", /*div_input_handler_1*/ ctx[5]),
-    					listen_dev(
-    						button,
-    						"click",
-    						function () {
-    							if (is_function(/*toggleFunction*/ ctx[3])) /*toggleFunction*/ ctx[3].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
+    					listen_dev(div0, "input", /*div0_input_handler_1*/ ctx[6]),
+    					listen_dev(div1, "click", /*click_handler_1*/ ctx[7], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-
-    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div.innerHTML) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div0.innerHTML) {
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (dirty & /*editor*/ 2) {
-    				toggle_class(button, "active", /*editor*/ ctx[1].isActive('heading', { level: 2 }));
+    				toggle_class(div1, "active", /*editor*/ ctx[1].isActive('heading', { level: 2 }));
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(div1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -29276,61 +29236,51 @@ img.ProseMirror-separator {
 
     // (10:4) {#if name == 'h-1'}
     function create_if_block_1$6(ctx) {
-    	let button;
-    	let div;
+    	let div1;
+    	let div0;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			button = element("button");
-    			div = element("div");
-    			attr_dev(div, "contenteditable", "true");
-    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div_input_handler*/ ctx[4].call(div));
-    			add_location(div, file$g, 11, 12, 275);
-    			attr_dev(button, "class", "svelte-19z6eo5");
-    			toggle_class(button, "active", /*editor*/ ctx[1].isActive('heading', { level: 1 }));
-    			add_location(button, file$g, 10, 8, 171);
+    			div1 = element("div");
+    			div0 = element("div");
+    			attr_dev(div0, "contenteditable", "true");
+    			if (/*svg*/ ctx[0] === void 0) add_render_callback(() => /*div0_input_handler*/ ctx[4].call(div0));
+    			add_location(div0, file$g, 11, 12, 301);
+    			attr_dev(div1, "id", "tool-item");
+    			attr_dev(div1, "class", "svelte-vthnzy");
+    			toggle_class(div1, "active", /*editor*/ ctx[1].isActive('heading', { level: 1 }));
+    			add_location(div1, file$g, 10, 8, 171);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, button, anchor);
-    			append_dev(button, div);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
 
     			if (/*svg*/ ctx[0] !== void 0) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div, "input", /*div_input_handler*/ ctx[4]),
-    					listen_dev(
-    						button,
-    						"click",
-    						function () {
-    							if (is_function(/*toggleFunction*/ ctx[3])) /*toggleFunction*/ ctx[3].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
+    					listen_dev(div0, "input", /*div0_input_handler*/ ctx[4]),
+    					listen_dev(div1, "click", /*click_handler*/ ctx[5], false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
-    		p: function update(new_ctx, dirty) {
-    			ctx = new_ctx;
-
-    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div.innerHTML) {
-    				div.innerHTML = /*svg*/ ctx[0];
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*svg*/ 1 && /*svg*/ ctx[0] !== div0.innerHTML) {
+    				div0.innerHTML = /*svg*/ ctx[0];
     			}
 
     			if (dirty & /*editor*/ 2) {
-    				toggle_class(button, "active", /*editor*/ ctx[1].isActive('heading', { level: 1 }));
+    				toggle_class(div1, "active", /*editor*/ ctx[1].isActive('heading', { level: 1 }));
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(button);
+    			if (detaching) detach_dev(div1);
     			mounted = false;
     			run_all(dispose);
     		}
@@ -29409,30 +29359,40 @@ img.ProseMirror-separator {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Button> was created with unknown prop '${key}'`);
     	});
 
-    	function div_input_handler() {
+    	function div0_input_handler() {
     		svg = this.innerHTML;
     		$$invalidate(0, svg);
     	}
 
-    	function div_input_handler_1() {
+    	const click_handler = () => toggleFunction(editor);
+
+    	function div0_input_handler_1() {
     		svg = this.innerHTML;
     		$$invalidate(0, svg);
     	}
 
-    	function div_input_handler_2() {
+    	const click_handler_1 = () => toggleFunction(editor);
+
+    	function div0_input_handler_2() {
     		svg = this.innerHTML;
     		$$invalidate(0, svg);
     	}
 
-    	function div_input_handler_3() {
+    	const click_handler_2 = () => toggleFunction(editor);
+
+    	function div0_input_handler_3() {
     		svg = this.innerHTML;
     		$$invalidate(0, svg);
     	}
 
-    	function div_input_handler_4() {
+    	const click_handler_3 = () => toggleFunction(editor);
+
+    	function div0_input_handler_4() {
     		svg = this.innerHTML;
     		$$invalidate(0, svg);
     	}
+
+    	const click_handler_4 = () => toggleFunction(editor);
 
     	$$self.$$set = $$props => {
     		if ('editor' in $$props) $$invalidate(1, editor = $$props.editor);
@@ -29459,11 +29419,16 @@ img.ProseMirror-separator {
     		editor,
     		name,
     		toggleFunction,
-    		div_input_handler,
-    		div_input_handler_1,
-    		div_input_handler_2,
-    		div_input_handler_3,
-    		div_input_handler_4
+    		div0_input_handler,
+    		click_handler,
+    		div0_input_handler_1,
+    		click_handler_1,
+    		div0_input_handler_2,
+    		click_handler_2,
+    		div0_input_handler_3,
+    		click_handler_3,
+    		div0_input_handler_4,
+    		click_handler_4
     	];
     }
 
@@ -29541,32 +29506,139 @@ img.ProseMirror-separator {
     /* components/manager/Tiptap/FixedMenu.svelte generated by Svelte v3.50.1 */
     const file$h = "components/manager/Tiptap/FixedMenu.svelte";
 
+    function get_each_context$7(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[1] = list[i];
+    	child_ctx[3] = i;
+    	return child_ctx;
+    }
+
     // (8:0) {#if editor}
     function create_if_block$9(ctx) {
-    	let div;
+    	let div1;
+    	let div0;
+    	let current;
+    	let each_value = toggleFunctions;
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$7(get_each_context$7(ctx, each_value, i));
+    	}
+
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			div0 = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(div0, "class", "btn-wrap svelte-15g6js6");
+    			add_location(div0, file$h, 9, 2, 189);
+    			attr_dev(div1, "class", "fixed-menu svelte-15g6js6");
+    			add_location(div1, file$h, 8, 1, 161);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div0, null);
+    			}
+
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*editor, toggleFunctions*/ 1) {
+    				each_value = toggleFunctions;
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$7(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block$7(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(div0, null);
+    					}
+    				}
+
+    				group_outros();
+
+    				for (i = each_value.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
+    				check_outros();
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$9.name,
+    		type: "if",
+    		source: "(8:0) {#if editor}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (11:3) {#each toggleFunctions as toggleFunction, index}
+    function create_each_block$7(ctx) {
     	let button;
     	let current;
 
     	button = new Button({
     			props: {
     				editor: /*editor*/ ctx[0],
-    				toggleFunction: /*func*/ ctx[1],
-    				name: "bold",
-    				svg: toggleFunctions[0].svg
+    				toggleFunction: /*toggleFunction*/ ctx[1].function,
+    				name: /*toggleFunction*/ ctx[1].name,
+    				svg: /*toggleFunction*/ ctx[1].svg
     			},
     			$$inline: true
     		});
 
     	const block = {
     		c: function create() {
-    			div = element("div");
     			create_component(button.$$.fragment);
-    			attr_dev(div, "class", "fixed-menu svelte-1mhmv8t");
-    			add_location(div, file$h, 8, 1, 161);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div, anchor);
-    			mount_component(button, div, null);
+    			mount_component(button, target, anchor);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
@@ -29584,16 +29656,15 @@ img.ProseMirror-separator {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div);
-    			destroy_component(button);
+    			destroy_component(button, detaching);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$9.name,
-    		type: "if",
-    		source: "(8:0) {#if editor}",
+    		id: create_each_block$7.name,
+    		type: "each",
+    		source: "(11:3) {#each toggleFunctions as toggleFunction, index}",
     		ctx
     	});
 
@@ -29678,8 +29749,6 @@ img.ProseMirror-separator {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<FixedMenu> was created with unknown prop '${key}'`);
     	});
 
-    	const func = () => toggleFunctions[0].function;
-
     	$$self.$$set = $$props => {
     		if ('editor' in $$props) $$invalidate(0, editor = $$props.editor);
     	};
@@ -29694,7 +29763,7 @@ img.ProseMirror-separator {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [editor, func];
+    	return [editor];
     }
 
     class FixedMenu extends SvelteComponentDev {
@@ -29750,9 +29819,9 @@ img.ProseMirror-separator {
     			create_component(fixedmenu.$$.fragment);
     			t = space();
     			div0 = element("div");
-    			attr_dev(div0, "class", "element-wrapper svelte-1j59p25");
+    			attr_dev(div0, "class", "element-wrapper svelte-1gk5wo6");
     			add_location(div0, file$i, 46, 4, 1396);
-    			attr_dev(div1, "class", "wrapper svelte-1j59p25");
+    			attr_dev(div1, "class", "wrapper svelte-1gk5wo6");
     			add_location(div1, file$i, 44, 0, 1334);
     		},
     		l: function claim(nodes) {
@@ -30396,7 +30465,7 @@ img.ProseMirror-separator {
     const { console: console_1$5 } = globals;
     const file$k = "pages/content_container/ManageCreateContainer.svelte";
 
-    function get_each_context$7(ctx, list, i) {
+    function get_each_context$8(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[40] = list[i];
     	child_ctx[42] = i;
@@ -30510,7 +30579,7 @@ img.ProseMirror-separator {
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$7(get_each_context$7(ctx, each_value, i));
+    		each_blocks[i] = create_each_block$8(get_each_context$8(ctx, each_value, i));
     	}
 
     	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -30756,13 +30825,13 @@ img.ProseMirror-separator {
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$7(ctx, each_value, i);
+    					const child_ctx = get_each_context$8(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     						transition_in(each_blocks[i], 1);
     					} else {
-    						each_blocks[i] = create_each_block$7(child_ctx);
+    						each_blocks[i] = create_each_block$8(child_ctx);
     						each_blocks[i].c();
     						transition_in(each_blocks[i], 1);
     						each_blocks[i].m(div14, null);
@@ -31258,7 +31327,7 @@ img.ProseMirror-separator {
     }
 
     // (648:20) {#each item_objs as item, index}
-    function create_each_block$7(ctx) {
+    function create_each_block$8(ctx) {
     	let managecreateitem;
     	let current;
 
@@ -31307,7 +31376,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block$7.name,
+    		id: create_each_block$8.name,
     		type: "each",
     		source: "(648:20) {#each item_objs as item, index}",
     		ctx
@@ -32113,7 +32182,7 @@ img.ProseMirror-separator {
     /* pages/sidebar/ManageCategory.svelte generated by Svelte v3.50.1 */
     const file$m = "pages/sidebar/ManageCategory.svelte";
 
-    function get_each_context$8(ctx, list, i) {
+    function get_each_context$9(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[8] = list[i];
     	child_ctx[10] = i;
@@ -32217,7 +32286,7 @@ img.ProseMirror-separator {
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$8(get_each_context$8(ctx, each_value, i));
+    		each_blocks[i] = create_each_block$9(get_each_context$9(ctx, each_value, i));
     	}
 
     	const block = {
@@ -32249,12 +32318,12 @@ img.ProseMirror-separator {
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$8(ctx, each_value, i);
+    					const child_ctx = get_each_context$9(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     					} else {
-    						each_blocks[i] = create_each_block$8(child_ctx);
+    						each_blocks[i] = create_each_block$9(child_ctx);
     						each_blocks[i].c();
     						each_blocks[i].m(div, null);
     					}
@@ -32302,7 +32371,7 @@ img.ProseMirror-separator {
     }
 
     // (108:8) {#each sub_categories as sub_category, sub_index}
-    function create_each_block$8(ctx) {
+    function create_each_block$9(ctx) {
     	let div;
     	let h3;
     	let t0_value = /*sub_category*/ ctx[8].name + "";
@@ -32349,7 +32418,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block$8.name,
+    		id: create_each_block$9.name,
     		type: "each",
     		source: "(108:8) {#each sub_categories as sub_category, sub_index}",
     		ctx
@@ -32595,7 +32664,7 @@ img.ProseMirror-separator {
     /* components/manager/ManageSidebar.svelte generated by Svelte v3.50.1 */
     const file$n = "components/manager/ManageSidebar.svelte";
 
-    function get_each_context$9(ctx, list, i) {
+    function get_each_context$a(ctx, list, i) {
     	const child_ctx = ctx.slice();
     	child_ctx[4] = list[i];
     	child_ctx[6] = i;
@@ -32633,7 +32702,7 @@ img.ProseMirror-separator {
     }
 
     // (69:4) {#each categories as category, index}
-    function create_each_block$9(ctx) {
+    function create_each_block$a(ctx) {
     	let managecategory;
     	let current;
 
@@ -32678,7 +32747,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block$9.name,
+    		id: create_each_block$a.name,
     		type: "each",
     		source: "(69:4) {#each categories as category, index}",
     		ctx
@@ -32697,7 +32766,7 @@ img.ProseMirror-separator {
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$9(get_each_context$9(ctx, each_value, i));
+    		each_blocks[i] = create_each_block$a(get_each_context$a(ctx, each_value, i));
     	}
 
     	const out = i => transition_out(each_blocks[i], 1, 1, () => {
@@ -32754,13 +32823,13 @@ img.ProseMirror-separator {
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$9(ctx, each_value, i);
+    					const child_ctx = get_each_context$a(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     						transition_in(each_blocks[i], 1);
     					} else {
-    						each_blocks[i] = create_each_block$9(child_ctx);
+    						each_blocks[i] = create_each_block$a(child_ctx);
     						each_blocks[i].c();
     						transition_in(each_blocks[i], 1);
     						each_blocks[i].m(div1, null);

@@ -59,6 +59,7 @@
         padding: 1rem;
         flex: 1 1 0%;
         overflow-y: auto;
+        padding-top: 10px;
     }
 
     .element-wrapper :global(p:first-of-type) {

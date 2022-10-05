@@ -7,19 +7,36 @@
 
 {#if editor}
 	<div class="fixed-menu">
-		<!--
-		{#each toggleFunctions as toggleFunction, index}
-			<Button editor={editor} toggleFunction={toggleFunction.function} name={toggleFunction.name} svg={toggleFunction.svg} />
-		{/each}
-		-->
-		<Button editor={editor} toggleFunction={() => toggleFunctions[0].function} name="bold" svg={toggleFunctions[0].svg}/>
+		<div class="btn-wrap">
+			{#each toggleFunctions as toggleFunction, index}
+				<Button editor={editor} toggleFunction={toggleFunction.function} name={toggleFunction.name} svg={toggleFunction.svg} />
+			{/each}	
+		</div>
 	</div>
 {/if}
 
 <style>
+
+	.btn-wrap {
+		position: absolute;
+		left: 5px;
+		width: 100%;
+		height: fit-content;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
 	.fixed-menu {
-    	background: #ccc;
-		padding: 2px;
-		min-height: 36px;
+    	height: 55px;
+        width: 100%;
+        background: white;
+        position: relative;
+        top: 0;
+        z-index: 3;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
 	}
 </style>
