@@ -238,7 +238,7 @@
     import InputCheckboxValue from '../../components/manager/InputCheckboxValue.svelte';
     import InputDateValue from '../../components/manager/InputDateValue.svelte';
     import InputSelectValue from '../../components/manager/InputSelectValue.svelte';
-    import Tiptap from '../../components/manager/Tiptap.svelte'
+    import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte'
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
 
     export let stage = 1;
@@ -260,6 +260,7 @@
 
     let all_checked = false;
     let received_file = false;
+    let content = "<h3>Hello to this world!</h3>"
 
     let item_objs = [
         {
@@ -659,7 +660,7 @@
             </div>
         </div>
     {:else if stage == 3}
-        <Tiptap />
+        <Tiptap {content}/>
     {/if}
 </div>
 

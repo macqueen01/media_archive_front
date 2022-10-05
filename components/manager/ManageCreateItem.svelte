@@ -84,8 +84,6 @@
 <script>
 
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-    import { Editor } from '@tiptap/core';
-    import StarterKit from '@tiptap/starter-kit';
 
     export let checked = false;
     export let src = '/public/main_page_bg.JPG';
@@ -98,25 +96,6 @@
 
     var dispatch = createEventDispatcher();
 
-    onMount(() => {
-        editor = new Editor({
-            element: element,
-            extensions: [
-                StarterKit,
-            ],
-            content: '<p>Hello World!~~</p>',
-            onTransaction: () => {
-                // force rerender so 'editor.isActive' works as expected
-                editor = editor
-            }
-        })
-    })
-
-    onDestroy(() => {
-        if (editor) {
-            editor.destroy()
-        }
-    })
     
     function checkHandle() {
         if (checked) {
