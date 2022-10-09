@@ -42,10 +42,10 @@
             name: '통계',
             sub_category: [{
                 name: '나의 통계',
-                path: '/manage/stats/user'
+                path: '/manage/cases/stats/user'
             }, {
                 name: '기록물 생성',
-                path: '/manage/stats'
+                path: '/manage/cases/stats/'
             }]
         }
     ]
