@@ -100,11 +100,16 @@
 
     .ProseMirror > h2 {
         font-family: 'goth';
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .ProseMirror > h3 {
         font-family: 'goth';
-        font-size: 18px;
+        font-size: 20px;
+    }
+
+    .ProseMirror > p {
+        font-size: 19px;
+        font-family: 'goth';
     }
 </style>

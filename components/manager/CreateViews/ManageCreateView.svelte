@@ -1,8 +1,5 @@
 
 <style>
-    .bottom-bar {
-        margin-top: 20px;
-    }
 </style>
 
 <script>

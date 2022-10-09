@@ -23,8 +23,8 @@
     }
 
 
-    .bottom-bar {
-        margin-top: 20px;
+    :global(.bottom-bar) {
+        margin-top: 25px;
     }
 
     @media (max-width: 1555px){

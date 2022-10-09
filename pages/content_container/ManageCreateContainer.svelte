@@ -2,13 +2,13 @@
     .browse-content-container {
         width: 960px;
         height: 550px;
-        background-color: whitesmoke;
+        background-color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: inset 3px 3px 6px 0 rgb(197 197 197 / 50%);        
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);       
     }
 
     .single-input-wrap {
@@ -231,11 +231,11 @@
     import { crossfade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     
-    import InputSingleValue from '../../components/manager/InputSingleValue.svelte';
-    import InputMultiValue from '../../components/manager/InputMultiValue.svelte';
-    import InputCheckboxValue from '../../components/manager/InputCheckboxValue.svelte';
-    import InputDateValue from '../../components/manager/InputDateValue.svelte';
-    import InputSelectValue from '../../components/manager/InputSelectValue.svelte';
+    import InputSingleValue from '../../components/manager/InputForms/InputSingleValue.svelte';
+    import InputMultiValue from '../../components/manager/InputForms/InputMultiValue.svelte';
+    import InputCheckboxValue from '../../components/manager/InputForms/InputCheckboxValue.svelte';
+    import InputDateValue from '../../components/manager/InputForms/InputDateValue.svelte';
+    import InputSelectValue from '../../components/manager/InputForms/InputSelectValue.svelte';
     import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte';
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
     import Preview from '../../components/manager/CreateViews/Preview.svelte';
@@ -260,7 +260,7 @@
     let file_uploading = false;
     let all_checked = false;
     let received_file = false;
-    let content = "<h3>Hello to this world!</h3>";
+    let content = "";
     let item_objs = []
 
 
