@@ -1890,11 +1890,11 @@ var app = (function () {
     			label = element("label");
     			h3 = element("h3");
     			h3.textContent = "제목, 이름 또는 장소를 검색해보세요";
-    			attr_dev(h3, "class", "svelte-1ljxejy");
-    			add_location(h3, file$3, 143, 27, 3438);
+    			attr_dev(h3, "class", "svelte-10cphl4");
+    			add_location(h3, file$3, 143, 27, 3442);
     			attr_dev(label, "for", "search-input");
-    			attr_dev(label, "class", "search-label svelte-1ljxejy");
-    			add_location(label, file$3, 139, 20, 3195);
+    			attr_dev(label, "class", "search-label svelte-10cphl4");
+    			add_location(label, file$3, 139, 20, 3199);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, label, anchor);
@@ -1955,11 +1955,11 @@ var app = (function () {
     			label = element("label");
     			h3 = element("h3");
     			h3.textContent = "제목, 이름 또는 장소를 검색해보세요";
-    			attr_dev(h3, "class", "svelte-1ljxejy");
-    			add_location(h3, file$3, 134, 27, 3033);
+    			attr_dev(h3, "class", "svelte-10cphl4");
+    			add_location(h3, file$3, 134, 27, 3037);
     			attr_dev(label, "for", "search-input");
-    			attr_dev(label, "class", "search-label-focused svelte-1ljxejy");
-    			add_location(label, file$3, 131, 20, 2833);
+    			attr_dev(label, "class", "search-label-focused svelte-10cphl4");
+    			add_location(label, file$3, 131, 20, 2837);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, label, anchor);
@@ -2040,31 +2040,31 @@ var app = (function () {
     			span = element("span");
     			svg = svg_element("svg");
     			path = svg_element("path");
-    			attr_dev(input, "class", "search-input svelte-1ljxejy");
+    			attr_dev(input, "class", "search-input svelte-10cphl4");
     			attr_dev(input, "type", "text");
-    			add_location(input, file$3, 128, 8, 2623);
+    			add_location(input, file$3, 128, 8, 2627);
     			attr_dev(path, "d", "M10.5 0C11.0052 0 11.4922 0.0651042 11.9609 0.195312C12.4297 0.325521 12.8672 0.510417 13.2734 0.75C13.6797 0.989583 14.0495 1.27865 14.3828 1.61719C14.7214 1.95052 15.0104 2.32031 15.25 2.72656C15.4896 3.13281 15.6745 3.57031 15.8047 4.03906C15.9349 4.50781 16 4.99479 16 5.5C16 6.00521 15.9349 6.49219 15.8047 6.96094C15.6745 7.42969 15.4896 7.86719 15.25 8.27344C15.0104 8.67969 14.7214 9.05208 14.3828 9.39062C14.0495 9.72396 13.6797 10.0104 13.2734 10.25C12.8672 10.4896 12.4297 10.6745 11.9609 10.8047C11.4922 10.9349 11.0052 11 10.5 11C9.84896 11 9.22396 10.8906 8.625 10.6719C8.03125 10.4531 7.48438 10.138 6.98438 9.72656L0.851562 15.8516C0.752604 15.9505 0.635417 16 0.5 16C0.364583 16 0.247396 15.9505 0.148438 15.8516C0.0494792 15.7526 0 15.6354 0 15.5C0 15.3646 0.0494792 15.2474 0.148438 15.1484L6.27344 9.01562C5.86198 8.51562 5.54688 7.96875 5.32812 7.375C5.10938 6.77604 5 6.15104 5 5.5C5 4.99479 5.0651 4.50781 5.19531 4.03906C5.32552 3.57031 5.51042 3.13281 5.75 2.72656C5.98958 2.32031 6.27604 1.95052 6.60938 1.61719C6.94792 1.27865 7.32031 0.989583 7.72656 0.75C8.13281 0.510417 8.57031 0.325521 9.03906 0.195312C9.50781 0.0651042 9.99479 0 10.5 0ZM10.5 10C11.1198 10 11.7031 9.88281 12.25 9.64844C12.7969 9.40885 13.2734 9.08594 13.6797 8.67969C14.0859 8.27344 14.4062 7.79688 14.6406 7.25C14.8802 6.70312 15 6.11979 15 5.5C15 4.88021 14.8802 4.29688 14.6406 3.75C14.4062 3.20312 14.0859 2.72656 13.6797 2.32031C13.2734 1.91406 12.7969 1.59375 12.25 1.35938C11.7031 1.11979 11.1198 1 10.5 1C9.88021 1 9.29688 1.11979 8.75 1.35938C8.20312 1.59375 7.72656 1.91406 7.32031 2.32031C6.91406 2.72656 6.59115 3.20312 6.35156 3.75C6.11719 4.29688 6 4.88021 6 5.5C6 6.11979 6.11719 6.70312 6.35156 7.25C6.59115 7.79688 6.91406 8.27344 7.32031 8.67969C7.72656 9.08594 8.20312 9.40885 8.75 9.64844C9.29688 9.88281 9.88021 10 10.5 10Z");
-    			add_location(path, file$3, 150, 24, 3910);
+    			add_location(path, file$3, 150, 24, 3914);
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			attr_dev(svg, "width", "16px");
     			attr_dev(svg, "height", "16px");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			set_style(svg, "width", "20px");
     			set_style(svg, "height", "20px");
-    			add_location(svg, file$3, 149, 20, 3762);
+    			add_location(svg, file$3, 149, 20, 3766);
     			attr_dev(span, "class", "search-icon");
-    			add_location(span, file$3, 148, 16, 3714);
-    			attr_dev(button, "class", "search-button svelte-1ljxejy");
+    			add_location(span, file$3, 148, 16, 3718);
+    			attr_dev(button, "class", "search-button svelte-10cphl4");
     			attr_dev(button, "aria-hidden", "true");
     			attr_dev(button, "aria-disabled", "true");
     			attr_dev(button, "aria-label", "제목, 이름 또는 장소를 검색해보세요");
-    			add_location(button, file$3, 147, 12, 3554);
-    			attr_dev(form, "class", "search-form svelte-1ljxejy");
-    			add_location(form, file$3, 127, 4, 2587);
-    			attr_dev(div0, "class", "user-search-container svelte-1ljxejy");
-    			add_location(div0, file$3, 126, 4, 2546);
-    			attr_dev(div1, "class", "user-search-wrap svelte-1ljxejy");
-    			add_location(div1, file$3, 125, 0, 2510);
+    			add_location(button, file$3, 147, 12, 3558);
+    			attr_dev(form, "class", "search-form svelte-10cphl4");
+    			add_location(form, file$3, 127, 4, 2591);
+    			attr_dev(div0, "class", "user-search-container svelte-10cphl4");
+    			add_location(div0, file$3, 126, 4, 2550);
+    			attr_dev(div1, "class", "user-search-wrap svelte-10cphl4");
+    			add_location(div1, file$3, 125, 0, 2514);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2276,24 +2276,24 @@ var app = (function () {
     			t3 = space();
     			div2 = element("div");
     			create_component(usersearch.$$.fragment);
-    			attr_dev(h30, "class", "svelte-c93ysu");
-    			add_location(h30, file$4, 71, 16, 1436);
+    			attr_dev(h30, "class", "svelte-132r7z4");
+    			add_location(h30, file$4, 119, 16, 2580);
     			attr_dev(a0, "href", "/manage");
-    			attr_dev(a0, "class", "manage-nav svelte-c93ysu");
-    			add_location(a0, file$4, 70, 12, 1381);
-    			attr_dev(h31, "class", "svelte-c93ysu");
-    			add_location(h31, file$4, 74, 16, 1533);
+    			attr_dev(a0, "class", "manage-nav svelte-132r7z4");
+    			add_location(a0, file$4, 118, 12, 2525);
+    			attr_dev(h31, "class", "svelte-132r7z4");
+    			add_location(h31, file$4, 122, 16, 2677);
     			attr_dev(a1, "href", "/login");
-    			attr_dev(a1, "class", "login-nav svelte-c93ysu");
-    			add_location(a1, file$4, 73, 12, 1480);
-    			attr_dev(div0, "class", "user-panel svelte-c93ysu");
-    			add_location(div0, file$4, 69, 8, 1343);
-    			attr_dev(div1, "class", "user-panel-wrap svelte-c93ysu");
-    			add_location(div1, file$4, 68, 4, 1304);
-    			attr_dev(div2, "class", "search-wrap svelte-c93ysu");
-    			add_location(div2, file$4, 78, 4, 1597);
-    			attr_dev(div3, "class", "main-view-home svelte-c93ysu");
-    			add_location(div3, file$4, 67, 0, 1270);
+    			attr_dev(a1, "class", "login-nav svelte-132r7z4");
+    			add_location(a1, file$4, 121, 12, 2624);
+    			attr_dev(div0, "class", "user-panel svelte-132r7z4");
+    			add_location(div0, file$4, 117, 8, 2487);
+    			attr_dev(div1, "class", "user-panel-wrap svelte-132r7z4");
+    			add_location(div1, file$4, 116, 4, 2448);
+    			attr_dev(div2, "class", "search-wrap svelte-132r7z4");
+    			add_location(div2, file$4, 126, 4, 2741);
+    			attr_dev(div3, "class", "main-view-home svelte-132r7z4");
+    			add_location(div3, file$4, 115, 0, 2414);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -31464,9 +31464,9 @@ img.ProseMirror-separator {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div0, "class", "btn-wrap svelte-iw0mvh");
+    			attr_dev(div0, "class", "btn-wrap svelte-16lorjj");
     			add_location(div0, file$l, 9, 2, 189);
-    			attr_dev(div1, "class", "fixed-menu svelte-iw0mvh");
+    			attr_dev(div1, "class", "fixed-menu svelte-16lorjj");
     			add_location(div1, file$l, 8, 1, 161);
     		},
     		m: function mount(target, anchor) {

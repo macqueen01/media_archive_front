@@ -38,9 +38,9 @@
         background: transparent;
         border: none;
         outline: none;
-        font-family: 'goth';
+        font-family: NotoSans;
         font-size: 16px;
-        margin-top: 10px;
+        margin-top: 14px;
         margin-left: 10px;
         z-index: 1;
     }
@@ -56,13 +56,13 @@
         width: 240px;
         height: 95%;
         left: 10px;
-        top: 16.5px;
+        top: 14px;
         position: absolute;
         z-index: 0;
     }
 
     .search-label > h3 {
-        font-family: 'goth';
+        font-family: NotoSans;
         font-size: 14px;
         color: rgb(82, 82, 82);
     }
@@ -77,7 +77,7 @@
     }
 
     .search-label-focused > h3 {
-        font-family: 'goth';
+        font-family: NotoSans;
         font-size: 8px;
         color: rgb(20, 20, 20);
     }

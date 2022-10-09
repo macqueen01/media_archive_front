@@ -1,5 +1,53 @@
 <style>
 
+    @charset "utf-8";
+
+    /* Font */
+    @font-face{
+        font-family:NotoSansB;
+        src:url('/fonts/NotoSansKR-Bold.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:NotoSansM;
+        src:url('/fonts/NotoSansCJKkr-Medium.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:NotoSansDL;
+        src:url('/fonts/NotoSansKR-DemiLight.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:NotoSans;
+        src:url('/fonts/NotoSansCJKkr-Regular.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:Roboto;
+        src:url('/fonts/Roboto-Regular.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:RobotoM;
+        src:url('/fonts/Roboto-Medium.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:RobotoB;
+        src:url('/fonts/Roboto-Bold.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:PretendardSB;
+        src:url('/fonts/Pretendard-SemiBold.woff') format('woff');
+    }
+
+    @font-face{
+        font-family:rokafM;
+        src:url('/fonts/ROKAF_Medium.woff') format('woff');
+    }
+
     .main-view-home {
         background-image: url("main_page_bg.JPG");
         background-size: cover;
@@ -48,7 +96,7 @@
     }
 
     a > h3 {
-        font-family: 'goth';
+        font-family: NotoSans;
         font-size: 13px;
         color: rgb(231, 231, 231);
     }
