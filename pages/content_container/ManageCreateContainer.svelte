@@ -219,9 +219,6 @@
         font-size: 14px;
         color:#1e1c3b;
     }
-
-    
-
 </style>
 
 
@@ -230,6 +227,7 @@
     import axios from 'axios';
 
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+    import { writable } from 'svelte/store';
     import { crossfade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     
@@ -238,10 +236,12 @@
     import InputCheckboxValue from '../../components/manager/InputCheckboxValue.svelte';
     import InputDateValue from '../../components/manager/InputDateValue.svelte';
     import InputSelectValue from '../../components/manager/InputSelectValue.svelte';
-    import Tiptap from '../../components/manager/Tiptap.svelte'
+    import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte';
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
+    import Preview from '../../components/manager/CreateViews/Preview.svelte';
 
     export let stage = 1;
+    export let view = 'box';
 
 
     let title;
@@ -249,48 +249,19 @@
     let affiliation;
     let associate;
     let attendee;
+    let attendee_list=[];
     let date;
     let produced = true;
-    let type = '문서';
+    let type = '사진';
     let source;
     let pass_list = {};
     // FILE_UPLOADING is a flag for which to track if file is being 
     // transfered in that moment of time
     let file_uploading = false;
-
     let all_checked = false;
     let received_file = false;
-
-    let item_objs = [
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        },
-        {
-            checked: false,
-            src: "/public/main_page_bg.JPG"
-        }
-    ]
+    let content = "<h3>Hello to this world!</h3>";
+    let item_objs = []
 
 
     let default_conditions = [
@@ -332,12 +303,6 @@
             satisfied_text: "좋습니다!"
         }
     ]
-
-
-
-
-
-
 
 
     function downloader(item) {
@@ -445,6 +410,10 @@
 
         item_objs = item_objs;
     }
+
+    function contentHandle(e) {
+        content = e.detail.html
+    }
     
     // Call is received directly from buttons
 
@@ -535,19 +504,52 @@
         }
     }
 
+    function parseToList(str) {
+        // str = "#a #b #c ..."
+        let str_lst = str.split(' ');
+        let result = [];
+        
+        str_lst.forEach((item) => {
+            result.push(item.replace(/['#']*/, ''));
+        })
+
+        return result;
+    }
+
+    // stage manager
+    // stage manager manages the logic behind navigation within create-container
+
     $: {
         if (stage == 1) {
+
             if (item_objs) {
                 item_objs.forEach((item) => {
                     URL.revokeObjectURL(item.src)
                 })
                 item_objs = [];
             }
-        } else if (stage == 3) {
+
+        } else if (stage == 2) {
+            // parse ATTENDEE in form of list (ATTENDEE -> ATTENDEE_LIST)
+            if (attendee) {
+                attendee_list = parseToList(attendee);
+            }
+        }
+        
+        else if (stage == 3) {
             let result = fileUpload();
             console.log(result)
         }
     }
+
+
+
+
+
+
+
+
+
 
 
 </script>
@@ -648,6 +650,7 @@
                         <ManageCreateItem
                             checked = {item.checked}
                             src = {item.src}
+                            file = {item.file}
                             index = {index}
                             type = {type}
                             on:delete = {deleteHandle}
@@ -659,7 +662,17 @@
             </div>
         </div>
     {:else if stage == 3}
-        <Tiptap />
+        <Tiptap {content} on:change={contentHandle}/>
+    {:else if stage == 4}
+        <Preview item_objs={item_objs}
+                 title={title}
+                 location={location}
+                 affiliation={affiliation}
+                 associate={associate}
+                 attendee={attendee_list}
+                 date={date}
+                 produced={produced}
+                 type={type}
+                 content={content} />
     {/if}
 </div>
-

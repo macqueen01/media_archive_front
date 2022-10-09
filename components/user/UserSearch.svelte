@@ -53,7 +53,7 @@
     }
 
     .search-label {
-        width: 230px;
+        width: 240px;
         height: 95%;
         left: 10px;
         top: 16.5px;

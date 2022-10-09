@@ -77,6 +77,9 @@
         </div>
     </div>
     <div class="search-wrap">
+        <div class="logo-wrap">
+            <img src="/public/navy-logo.JPG" height="50px">
+        </div>
         <UserSearch />
     </div>
 </div>

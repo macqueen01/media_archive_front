@@ -56,7 +56,7 @@
     }
     
     .search-input {
-        z-input: -1;
+        z-index: -1;
         position: absolute;
         bottom: 0;
         right: 10px;

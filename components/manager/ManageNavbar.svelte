@@ -4,7 +4,7 @@
         position: absolute;
         top: 0;
         width: 100%;
-        height: 70px;
+        height: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -14,12 +14,15 @@
     .navbar {
         width: 100%;
         height: 98%;
+        min-width: 500px;
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: center;
         flex-direction: row;
         background-color: white;
         padding: 8px;
+        padding-left: 40px;
+        padding-right: 30px;
     }
     
     .logo-wrap {
@@ -45,17 +48,20 @@
         font-family: "goth";
         font-weight: 900;
         font-size: 14px;
-        padding: 9px;
+        padding-bottom: 9px;
+        padding-top: 9px;
     }
 
     .menu-select-hover {
-        color: white;
+        color: #15133C;
         font-family: "goth";
-        font-weight: 600;
+        font-weight: 900;
         font-size: 14px;
-        background: rgb(2,0,36);
-        background: linear-gradient(-65deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgba(9,18,127,1) 0%, rgba(4,145,173,1) 100%);
-        padding: 9px;
+        padding-bottom: 9px;
+        padding-top: 9px;
+        border-bottom: solid #15133C;
+        position: relative;
+        top: 1px;
     }
     
     

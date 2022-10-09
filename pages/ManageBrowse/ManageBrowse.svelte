@@ -1,12 +1,10 @@
 <style>
-    .manage-sidebar-wrap {
-        width: 300px;
+    .stats-content-wrap {
+        width: 100%;
         height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: rgb(31, 32, 88);
-        z-index: 4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .manage-content-main {
@@ -27,6 +25,32 @@
 
     .bottom-bar {
         margin-top: 20px;
+    }
+
+    @media (max-width: 1555px){
+        .manage-sidebar-wrap {
+            visibility: hidden;
+            width: 300px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: rgb(31, 32, 88);
+            z-index: 4;
+        }
+    }
+
+    @media (min-width: 1555px) {
+        .manage-sidebar-wrap {
+            visibility: visible;
+            width: 300px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: rgb(31, 32, 88);
+            z-index: 4;
+        }
     }
 
     @media (max-width: 1625px){
@@ -58,15 +82,12 @@
 
 <script>
     import ContentContainer from "../content_container/ContentContainer.svelte";
-    import ManageCreateContainer from '../content_container/ManageCreateContainer.svelte';
-
     import BrowseNavbar from '../sidebar/BrowseNavbar.svelte';
-    import ManageCreateNavbar from '../sidebar/ManageCreateNavbar.svelte';
-
     import ManageSidebar from '../../components/manager/ManageSidebar.svelte';
     import BrowseTitle from '../../components/manager/BrowseTitle.svelte';
-    import ManageCreateTitle from '../../components/manager/ManageCreateTitle.svelte';
+    import ManageCreateView from '../../components/manager/CreateViews/ManageCreateView.svelte';
     import UserInfo from "../../components/user/UserInfo.svelte";
+    import NotReadyView from "../DevViews/NotReadyView.svelte";
 
     import { meta, Route } from 'tinro';
     
@@ -81,14 +102,10 @@
     let page = 1;
     let stage = 1;
     let focus = false;
-    let subtitle = '';
+    let view = 'box';
     
     function categorySelect(e) {
         selected_index = e.detail.index;
-    }
-
-    function stageHandle(e) {
-        stage = e.detail.stage;
     }
 
     function pageHandle(e) {
@@ -99,22 +116,10 @@
         focus = e.detail.focus
     }
 
-    function titleChange(stage) {
-        if (stage == 1) {
-            return '메타데이터 등록'
-        } else if (stage == 2) {
-            return '기록물 파일 등록'
-        } else if (stage == 3) {
-            return '내용 등록'
-        } else if (stage == 4) {
-            return '미리보기'
-        }
-        return '허가되지 않은 창'
+    function viewHandle(e) {
+        view = e.detail.view;
     }
 
-    $: {
-        subtitle = titleChange(stage);
-    }
 </script>
 
 <Route path="/*">
@@ -127,21 +132,22 @@
             <Route path="/" redirect="/manage/cases/browse"></Route>
 
             <Route path="/browse/*">
-                <BrowseTitle />
-                <ContentContainer page={page} on:pageChange={pageHandle} on:focus={focusHandle}/>
+                <BrowseTitle on:viewChange={viewHandle} />
+                <ContentContainer page={page} on:pageChange={pageHandle} on:focus={focusHandle} view={view}/>
                 <div class="bottom-bar">
                     <BrowseNavbar page={page} on:pageChange={pageHandle} focus={focus}/>
                 </div>
             </Route>
 
             <Route path="/create">
-                <ManageCreateTitle subtitle={subtitle}/>
-                <ManageCreateContainer stage={stage} />
-                <div class="bottom-bar">
-                    <ManageCreateNavbar stage={stage} on:stageChange={stageHandle}/>
-                </div>
+                <ManageCreateView />
             </Route>
 
+            <Route path="/stats/*">
+                <div class="stats-content-wrap">
+                    <NotReadyView />
+                </div>
+            </Route>
         </div>
     </div>
     <div class="user-info-wrap">
