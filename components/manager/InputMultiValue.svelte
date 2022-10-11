@@ -169,9 +169,14 @@
         focused = false;
     }
 
-    $: dispatch('change', {
-        value: value
-    })
+    $: {
+        if (value) {
+            dispatch('change', {
+                value: value
+            })
+        }
+    }
+    
 
     function tagSplice(string) {
         let str = [...string]

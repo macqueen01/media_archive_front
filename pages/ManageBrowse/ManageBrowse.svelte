@@ -1,12 +1,124 @@
+<script>
+    import ContentContainer from "../content_container/ContentContainer.svelte";
+    import BrowseNavbar from "../sidebar/BrowseNavbar.svelte";
+    import ManageSidebar from "../../components/manager/ManageSidebar.svelte";
+    import BrowseTitle from "../../components/manager/BrowseTitle.svelte";
+    import ManageCreateView from "../../components/manager/CreateViews/ManageCreateView.svelte";
+    import UserInfo from "../../components/user/UserInfo.svelte";
+    import NotReadyView from "../DevViews/NotReadyView.svelte";
+
+    import { meta, Route } from "tinro";
+
+    let selected_index = null;
+
+    let page = 1;
+    let stage = 1;
+    let focus = false;
+    let view = "box";
+
+    let categories = [
+        {
+            name: "기록물 관리",
+            sub_category: [
+                {
+                    name: "기록물 관리",
+                    path: "/manage/cases/browse",
+                },
+                {
+                    name: "기록물 생성",
+                    path: "/manage/cases/create",
+                },
+            ],
+        },
+        {
+            name: "홈페이지",
+            sub_category: [
+                {
+                    name: "관리자 메인",
+                    path: "/manage",
+                },
+                {
+                    name: "유저 메인",
+                    path: "/user",
+                },
+            ],
+        },
+        {
+            name: "통계",
+            sub_category: [
+                {
+                    name: "나의 통계",
+                    path: "/manage/cases/stats/user",
+                },
+                {
+                    name: "기록물 생성",
+                    path: "/manage/cases/stats/",
+                },
+            ],
+        },
+    ];
+
+    function categorySelect(e) {
+        selected_index = e.detail.index;
+    }
+
+    function pageHandle(e) {
+        page = e.detail.page;
+    }
+
+    function focusHandle(e) {
+        focus = e.detail.focus;
+    }
+
+    function viewHandle(e) {
+        view = e.detail.view;
+    }
+</script>
+
+<Route path="/*">
+    <div class="sidebar-wrap">
+        <ManageSidebar categories={categories} />
+    </div>
+    <div class="manage-content-main">
+        <div class="browse-content-wrap">
+            <Route path="/" redirect="/manage/cases/browse" />
+
+            <Route path="/browse/*">
+                <BrowseTitle on:viewChange={viewHandle} />
+                <ContentContainer
+                    {page}
+                    on:pageChange={pageHandle}
+                    on:focus={focusHandle}
+                    {view}
+                />
+                <div class="bottom-bar">
+                    <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />
+                </div>
+            </Route>
+
+            <Route path="/create">
+                <ManageCreateView />
+            </Route>
+
+            <Route path="/stats/*">
+                <div class="stats-content-wrap">
+                    <NotReadyView />
+                </div>
+            </Route>
+        </div>
+    </div>
+    <div class="user-info-wrap">
+        <UserInfo />
+    </div>
+</Route>
+
 <style>
-    .manage-sidebar-wrap {
-        width: 300px;
+    .stats-content-wrap {
+        width: 100%;
         height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        background-color: rgb(31, 32, 88);
-        z-index: 4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .manage-content-main {
@@ -24,13 +136,38 @@
         height: fit-content;
     }
 
-
     .bottom-bar {
         margin-top: 20px;
     }
 
-    @media (max-width: 1625px){
-        .user-info-wrap {
+    @media (max-width: 1555px) {
+        :global(.sidebar-wrap) {
+            visibility: hidden;
+            width: 300px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: rgb(31, 32, 88);
+            z-index: 4;
+        }
+    }
+
+    @media (min-width: 1555px) {
+        :global(.sidebar-wrap) {
+            visibility: visible;
+            width: 300px;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: rgb(31, 32, 88);
+            z-index: 4;
+        }
+    }
+
+    @media (max-width: 1625px) {
+        :global(.user-info-wrap) {
             visibility: hidden;
             position: absolute;
             top: 160px;
@@ -41,8 +178,8 @@
     }
 
     @media (min-width: 1625px) {
-        .user-info-wrap {
-            visibility:visible;
+        :global(.user-info-wrap) {
+            visibility: visible;
             position: absolute;
             top: 160px;
             right: 60px;
@@ -50,101 +187,4 @@
             padding: 10px;
         }
     }
-
-
-
-
 </style>
-
-<script>
-    import ContentContainer from "../content_container/ContentContainer.svelte";
-    import ManageCreateContainer from '../content_container/ManageCreateContainer.svelte';
-
-    import BrowseNavbar from '../sidebar/BrowseNavbar.svelte';
-    import ManageCreateNavbar from '../sidebar/ManageCreateNavbar.svelte';
-
-    import ManageSidebar from '../../components/manager/ManageSidebar.svelte';
-    import BrowseTitle from '../../components/manager/BrowseTitle.svelte';
-    import ManageCreateTitle from '../../components/manager/ManageCreateTitle.svelte';
-    import UserInfo from "../../components/user/UserInfo.svelte";
-
-    import { meta, Route } from 'tinro';
-    
-    let categories = [
-        "기록물",
-        "통계",
-        "홈페이지로 가기"
-    ]
-    
-    let selected_index = null;
-
-    let page = 1;
-    let stage = 1;
-    let focus = false;
-    let subtitle = '';
-    
-    function categorySelect(e) {
-        selected_index = e.detail.index;
-    }
-
-    function stageHandle(e) {
-        stage = e.detail.stage;
-    }
-
-    function pageHandle(e) {
-        page = e.detail.page
-    }
-
-    function focusHandle(e) {
-        focus = e.detail.focus
-    }
-
-    function titleChange(stage) {
-        if (stage == 1) {
-            return '메타데이터 등록'
-        } else if (stage == 2) {
-            return '기록물 파일 등록'
-        } else if (stage == 3) {
-            return '내용 등록'
-        } else if (stage == 4) {
-            return '미리보기'
-        }
-        return '허가되지 않은 창'
-    }
-
-    $: {
-        subtitle = titleChange(stage);
-    }
-</script>
-
-<Route path="/*">
-    <div class="manage-sidebar-wrap">
-        <ManageSidebar />
-    </div>
-    <div class="manage-content-main">
-        <div class="browse-content-wrap">
-
-            <Route path="/" redirect="/manage/cases/browse"></Route>
-
-            <Route path="/browse/*">
-                <BrowseTitle />
-                <ContentContainer page={page} on:pageChange={pageHandle} on:focus={focusHandle}/>
-                <div class="bottom-bar">
-                    <BrowseNavbar page={page} on:pageChange={pageHandle} focus={focus}/>
-                </div>
-            </Route>
-
-            <Route path="/create">
-                <ManageCreateTitle subtitle={subtitle}/>
-                <ManageCreateContainer stage={stage} />
-                <div class="bottom-bar">
-                    <ManageCreateNavbar stage={stage} on:stageChange={stageHandle}/>
-                </div>
-            </Route>
-
-        </div>
-    </div>
-    <div class="user-info-wrap">
-        <UserInfo />
-    </div>
-</Route>

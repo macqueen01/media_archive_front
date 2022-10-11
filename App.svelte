@@ -77,9 +77,9 @@
     import Browse from "./pages/Browse.svelte";
     import ManageMain from "./pages/ManageMain.svelte";
     import ManageBrowse from './pages/ManageBrowse/ManageBrowse.svelte';
+    import ManageUserMain from './components/manager/UserManage/ManageUserMain.svelte';
     import Help from "./pages/Help.svelte";
     import Stats from "./pages/Stats.svelte";
-    import Accounts from "./pages/Accounts.svelte";
 
     
   
@@ -88,27 +88,40 @@
 
 <main>
     <Route path="/" redirect="/user">
+
         <UserMain />
+        
     </Route>
 
     <Route path="/user/*">
+
         <Route path="/">
             <UserMain />
         </Route>
+
         <Route path="/browse/*">
             <UserNavbar />
             <Browse />
         </Route>
+
     </Route>
 
     <Route path="/manage/*">
+
         <ManageNavbar />
+
         <Route path="/">
             <ManageMain />
         </Route>
+
         <Route path="/cases/*">
             <ManageBrowse />
         </Route>
+
+        <Route path="/accounts/*">
+            <ManageUserMain />
+        </Route>
+
     </Route>
     
     <Footer /> 

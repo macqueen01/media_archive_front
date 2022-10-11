@@ -1,5 +1,5 @@
 <script>
-    import { onMount, onDestroy } from "svelte";
+    import { onMount, onDestroy, createEventDispatcher } from "svelte";
     import { writable } from "svelte/store";
     import { Editor } from "@tiptap/core";
     import StarterKit from "@tiptap/starter-kit";
@@ -14,12 +14,13 @@
 
     export let content = "";
 
-    const contentStore = writable(content);
+
 
     let element;
     // HTML content of editor can be accessed through editor.getHTML()
     let editor;
     let bubbleMenu;
+    let dispatch = createEventDispatcher();
 
 
     onMount(() => {
@@ -33,7 +34,9 @@
         });
         editor.on("update", ({ editor }) => {
             console.log("editor html", editor.getHTML());
-            contentStore.set(editor.getHTML());
+            dispatch('change', {
+                html: editor.getHTML()
+            })
         });
     });
 
@@ -44,7 +47,9 @@
 
 <div class="wrapper">
     <FixedMenu editor={editor} />
-    <div class="element-wrapper" bind:this={element} />
+    <div class="element-view">
+        <div class="element-wrapper" bind:this={element} />
+    </div>
 </div>
 
 
@@ -55,11 +60,18 @@
         flex-direction: column;
     }
 
+    .element-view {
+        height: 495px;
+        width: 100%;
+        overflow-y: auto;
+    }
+
     .element-wrapper {
         padding: 1rem;
         flex: 1 1 0%;
         overflow-y: auto;
         padding-top: 10px;
+        height: fit-content;
     }
 
     .element-wrapper :global(p:first-of-type) {
@@ -81,16 +93,18 @@
         border: 1px solid #ccc;
     }
 
-    .text-2xl {
-        font-size: 1.5rem !important;
-        line-height: 2rem !important;
+    .ProseMirror > h1 {
+        font-family: 'goth';
+        font-size: 24px;
     }
-    .text-xl {
-        font-size: 1.25rem !important;
-        line-height: 1.75rem !important;
+
+    .ProseMirror > h2 {
+        font-family: 'goth';
+        font-size: 20px;
     }
-    .text-lg {
-        font-size: 1.125rem !important;
-        line-height: 1.75rem !important;
+
+    .ProseMirror > h3 {
+        font-family: 'goth';
+        font-size: 18px;
     }
 </style>

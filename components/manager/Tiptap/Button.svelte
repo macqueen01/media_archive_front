@@ -4,6 +4,9 @@
     export let name;
     export let toggleFunction;
     export let svg;
+    
+
+
 </script>
 
 {#if editor}
@@ -15,8 +18,8 @@
         <div id="tool-item" class:active={editor.isActive('heading', { level: 2 })} on:click={() => toggleFunction(editor)}>
             <div contenteditable="true" bind:innerHTML={svg}></div>
         </div>
-    {:else if name == 'text'}
-        <div id="tool-item" on:click={() => toggleFunction(editor)}>
+    {:else if name == 'h-3'}
+        <div id="tool-item" class:active={editor.isActive('heading', { level: 3 })} on:click={() => toggleFunction(editor)}>
             <div contenteditable="true" bind:innerHTML={svg}></div>
         </div>
     {:else if name == 'paragraph'}
@@ -43,14 +46,6 @@
     }
 
       
-    #tool-item.active {
-        background: rgb(31, 32, 88);
-
-
-    }
     
-    div.active >div > svg {
-        color: white;
-    }
 
 </style>

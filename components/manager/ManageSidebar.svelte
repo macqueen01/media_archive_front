@@ -18,37 +18,8 @@
     import ManageCategory from "../../pages/sidebar/ManageCategory.svelte";
 
     import { meta, Route, router } from 'tinro';
-    
-    let categories = [
-        {
-            name: '기록물 관리',
-            sub_category: [{
-                name: '기록물 관리',
-                path: '/manage/cases/browse'
-            }, {
-                name: '기록물 생성',
-                path: '/manage/cases/create'
-            }]
-        }, {
-            name: '홈페이지',
-            sub_category: [{
-                name: '관리자 메인',
-                path: '/manage'
-            }, {
-                name: '유저 메인',
-                path: '/user'
-            }]
-        }, {
-            name: '통계',
-            sub_category: [{
-                name: '나의 통계',
-                path: '/manage/stats/user'
-            }, {
-                name: '기록물 생성',
-                path: '/manage/stats'
-            }]
-        }
-    ]
+
+    export let categories;
     
     let selected_index = null;
     

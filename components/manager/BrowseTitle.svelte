@@ -81,23 +81,40 @@
         height: fit-content;
         color: rgb(245 245 245);
         font-family: 'goth';
-        font-size: 4px;
+        font-size: 10px;
     }
 </style>
 
 <script>
     import { Route } from 'tinro';
+    import { createEventDispatcher } from 'svelte';
+
+    var dispatch = createEventDispatcher()
+
+    function viewChange(template) {
+        if (template == 'list') {
+            dispatch('viewChange', {
+                view: 'list'
+            })
+        } else if (template == 'box') {
+            dispatch('viewChange', {
+                view: 'box'
+            })
+        } else {
+            console.log('Error on browse content view change')
+        }
+    }
 </script>
 
 
     <div class="browse-content-title">
         <h3>기록물 조회</h3>
         <div class="svg-holder">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" width="18" height="18">
+            <svg on:click={() => viewChange('list')} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" width="18" height="18">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" width="18" height="18">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            <svg on:click={() => viewChange('box')} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="white">
+                <path fill="none" d="M0 0h24v24H0z"/><path d="M3 3h8v8H3V3zm0 10h8v8H3v-8zM13 3h8v8h-8V3zm0 10h8v8h-8v-8z"/>
             </svg>
         </div>
         <div class="keyword-holder-wrap">

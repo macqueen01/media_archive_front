@@ -87,6 +87,7 @@
 
     export let checked = false;
     export let src = '/public/main_page_bg.JPG';
+    export let file;
     export let index = 0;
     export let type = '사진';
 
@@ -124,8 +125,7 @@
 
     $: {
         if (src) {
-            let source = src.split('/');
-            name = source.pop();
+            name = file.name;
         } else {
             name = "알 수 없는 이름";
         }
