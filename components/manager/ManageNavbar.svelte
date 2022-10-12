@@ -23,6 +23,7 @@
         padding: 8px;
         padding-left: 40px;
         padding-right: 30px;
+        z-index: 3;
     }
     
     .logo-wrap {
@@ -63,6 +64,16 @@
         position: relative;
         top: 1px;
     }
+
+    .detail-menu {
+        position: absolute;
+        left: 0;
+        height: 130px;
+        width: 100vw;
+        background-color: white;
+        z-index:-1;
+        box-shadow: 3px 3px 6px 0 rgb(197 197 197 / 50%);
+    }
     
     
     
@@ -71,6 +82,7 @@
 <script>
 
     import { Route } from 'tinro';
+    import { fly } from 'svelte/transition';
 
     let hover = null;
 
@@ -87,7 +99,7 @@
 </script>
 
 <div class="navbar-wrap">
-    <div class="navbar">
+    <div class="navbar" transition:fly={{duration: 200, x: 0, y: -100}}>
         <div class="logo-wrap">
             <a href="/">
                 <img src="/public/nama_logo.png" alt="navy" height="60">

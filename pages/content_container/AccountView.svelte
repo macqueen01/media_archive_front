@@ -263,6 +263,7 @@
 
     let user_id = route.params._id;
     let status = 0;
+    let image;
 
 
 
@@ -303,7 +304,7 @@
     */
 
     user = {
-                _id: i,
+                _id: 0,
                 name: "김재우",
                 authority: "관리자",
                 standing: "상병",
@@ -388,42 +389,6 @@
             <div class="body-content-wrap">
                 <!-- awaits until file is fetched from the server -->
                 {#if status == 0}
-                <div class="media-wrap">
-                    <div class="photo-container">
-                        {#if img_hover}
-                        <div class="facad">
-                            <div class="left-arrow-wrap" on:click={imageNavigateBack}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                                </svg>
-                            </div>
-                            <div class="right-arrow-wrap" on:click={imageNavigateForth}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                                </svg>
-                            </div>
-                        </div>
-                        {/if}
-                        {#if file.type == '영상'}
-                            <video bind:this={image} controls on:mouseover={hoverHandle}>
-                                <source src={curr} />
-                            </video>
-                        {:else if file.type == '사진'}
-                        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                            <img src={curr} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
-                        {:else if file.type == '문서'}
-                            <h1>아직 문서지원 준비중입니다</h1>
-                        {/if}
-                        {#if img_hover}
-                            <div class="caption">
-                                <h4>{name}</h4>
-                            </div>
-                        {:else}
-                            <div class="caption-placeholder"></div>
-                        {/if}
-                    </div>
-                </div>
-
                 <div class="details-wrap">
                     <div class="info-header">
                         <h5>세부사항</h5>
@@ -434,16 +399,17 @@
                                 <h5>대표장소:</h5>
                             </div>
                             <div class="location info-item-content">
-                                <h5>@{file.location}
+                                <h5>@{user.location}
                                 </h5>
                             </div>
                         </div>
+                        
                         <div class="assosiate-wrap info-item">
                             <div class="label">
                                 <h5>촬영자:</h5>
                             </div>
                             <div class="associate info-item-content">
-                                <h5>#{file.associate}</h5>
+                                <h5>#{user.associate}</h5>
                             </div>
                         </div>
                         <div class="attendee-wrap info-item">
@@ -451,15 +417,11 @@
                                 <h5>주요참석자:</h5>
                             </div>
                             <div class="attendees info-item-content">
-                                {#each file.attendee as attendee, index}
-                                    <h5>#{attendee}</h5>
-                                {:else}
                                     <h4>주요 참석자가 없습니다.</h4>
-                                {/each}
                             </div>
                         </div>
                         <div class="collected-wrap info-item">
-                            {#if file.collected}
+                            {#if user.collected}
                                 <h5>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -476,7 +438,7 @@
                             {/if}
                         </div>
                         <div class="private-wrap info-item">
-                            {#if file.private}
+                            {#if user.private}
                                 <h5>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -496,7 +458,7 @@
                     <div class="content-header">
                         <h5>설명</h5>
                     </div>
-                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={file.content}>
+                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={user.content}>
                     </div>
                 </div>
                 {:else if status == 2}

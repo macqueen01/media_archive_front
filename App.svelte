@@ -57,6 +57,8 @@
         position: relative;
         height: 100%;
         width: 100%;
+        overflow-y: hidden;
+        overflow-x: hidden;
     }
 </style>
 

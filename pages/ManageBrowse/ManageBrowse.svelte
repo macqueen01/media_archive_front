@@ -8,6 +8,7 @@
     import NotReadyView from "../DevViews/NotReadyView.svelte";
 
     import { meta, Route } from "tinro";
+    import { fly, fade } from 'svelte/transition';
 
     let selected_index = null;
 
@@ -76,7 +77,7 @@
 </script>
 
 <Route path="/*">
-    <div class="sidebar-wrap">
+    <div class="sidebar-wrap" in:fly={{duration: 200, x: -400, y: 0}} out:fade={{duration: 10}}>
         <ManageSidebar categories={categories} />
     </div>
     <div class="manage-content-main">
@@ -107,7 +108,7 @@
             </Route>
         </div>
     </div>
-    <div class="user-info-wrap">
+    <div class="user-info-wrap" in:fly={{duration: 200, x: +400, y: 0}} out:fade={{duration: 10}}>
         <UserInfo />
     </div>
 </Route>

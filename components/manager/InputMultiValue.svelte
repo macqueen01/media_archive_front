@@ -127,6 +127,7 @@
     import { createEventDispatcher } from 'svelte';
     import { crossfade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
+    import Search from '../Search.svelte';
     const [send, receive] = crossfade({});
     var dispatch = createEventDispatcher();
 
@@ -216,7 +217,7 @@
         }
 
         value = value.replace(/\s+[^#]/, '_');
-        value = value.replace();
+
 
         condition_result = conditionResult(value);
         console.log(condition_result)

@@ -19,7 +19,7 @@
         position: absolute;
         top: 37px;
         left: 23px;
-        width: 70%;
+        width: 64%;
         height: 25px;
         display: flex;
         flex-direction: row;
@@ -71,13 +71,51 @@
         font-family: 'goth';
         font-size: 10px;
     }
+
+    .search-field {
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+    .keyword-holder > h5 {
+        width: 45px;
+        height: fit-content;
+        padding-top: 2px;
+        color: rgb(247, 247, 247);
+        font-family: 'goth';
+        font-size: 11px;
+    }
+
 </style>
 
 <script>
     import { Route } from 'tinro';
     import { createEventDispatcher } from 'svelte';
 
+    import UserSearchSmall from './UserSearchSmall.svelte';
+
     export let keywords = [];
+
+    var dispatch = createEventDispatcher();
+
+
+    function valueChangeHandle(e) {
+        let search_keywords = e.detail.value;
+        keywords = search_keywords.split(' ');
+    }
+
+    function keywordChange(keywords) {
+        dispatch('keyword', {
+            keywords: keywords
+        })
+    }
+
+    $: {
+        keywordChange(keywords);
+    }
 </script>
 
 
@@ -89,10 +127,15 @@
             </div>
             <div class="keyword-holder">
                 {#each keywords as keyword, index}
-                    <div class="keyword"><h3>{keyword}</h3></div>
+                    {#if keyword != ''}
+                        <div class="keyword"><h3>{keyword}</h3></div>
+                    {/if}
                 {:else}
                     <h5>키워드를 입력해주세요.</h5>
                 {/each}
             </div>
+        </div>
+        <div class="search-field">
+            <UserSearchSmall placeholder={"키워드 검색"} on:change={valueChangeHandle}/>
         </div>
     </div>

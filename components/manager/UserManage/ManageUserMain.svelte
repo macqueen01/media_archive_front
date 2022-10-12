@@ -7,12 +7,9 @@
     import NotReadyView from "../../../pages/DevViews/NotReadyView.svelte";
 
     import { meta, Route } from "tinro";
+    import { fly, fade } from 'svelte/transition';
 
-    let keywords = [
-        "#상병",
-        "#학술정보원",
-        "#전산병"
-    ]
+    let keywords = ['#사용자_전체'];
 
     let categories = [
         {
@@ -65,11 +62,15 @@
     function viewHandle(e) {
         view = e.detail.view;
     }
+
+    function keywordSet(e) {
+        keywords = e.detail.keywords;
+    }
 </script>
 
 <Route path="/*">
 
-    <div class="sidebar-wrap">
+    <div class="sidebar-wrap" in:fly={{duration: 200, x: -400, y: 0}} out:fade={{duration: 10}}>
         <ManageSidebar categories={categories} />
     </div>
 
@@ -78,12 +79,12 @@
             <Route path="/" redirect="/manage/accounts/browse" />
 
             <Route path="/browse/*">
-                <BrowseAccountTitle keywords={keywords}/>
+                <BrowseAccountTitle {keywords} on:keyword={keywordSet}/>
                 <AccountListContainer
                     {page}
                     on:pageChange={pageHandle}
                     on:focus={focusHandle}
-                    {view}
+                    {keywords}
                 />
                 <div class="bottom-bar">
                     <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />
@@ -92,7 +93,7 @@
             </Route>
         </div>
     </div>
-    <div class="user-info-wrap">
+    <div class="user-info-wrap" in:fly={{duration: 200, x: +400, y: 0}} out:fade={{duration: 10}}>
         <UserInfo />
     </div>
 </Route>

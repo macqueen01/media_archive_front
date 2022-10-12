@@ -1,5 +1,6 @@
 <script>
     import { Route, meta, router } from "tinro";
+    import axios from 'axios';
     import { draw, fade } from "svelte/transition";
     import { createEventDispatcher } from "svelte";
 
@@ -17,21 +18,41 @@
     */
 
     export let page = 1;
+    export let keywords;
 
     var dispatch = createEventDispatcher();
 
     let focus = null;
+    let fetching = false;
+    let error = null;
 
     let fetched_items = [];
 
     $: curr_page_items = fetched_items.slice((page - 1) * 12, page * 12);
+
+    async function getUserFromKeywords(keywords) {
+        if (!fetching) {
+            fetched_items = [];
+            error = null;
+            fetching = true;
+            try {
+                fetched_items = await axios.get('http://localhost:8080');
+                fetching = false;
+            } catch (e) {
+                error = 1;
+                fetching = false;
+            }
+        }
+
+        console.log('fetch')
+    }
 
     function passFocus(e) {
         focus = e.detail.item;
         dispatch("focus", {
             focus: true,
         });
-        router.goto(`/manage/account/browse/${focus._id}`);
+        router.goto(`/manage/accounts/browse/${focus._id}`);
     }
 
     function undoFocus() {
@@ -73,6 +94,8 @@
             },
         ];
     }
+
+
 </script>
 
 <div class="browse-content-container">
@@ -115,15 +138,35 @@
             </div>
         </div>
         <div class="list-frame">
-            <div class="table">
-                {#each curr_page_items as item, index}
-                    <UserListItem {item} on:click={passFocus} />
-                {/each}
-            </div>
+            {#if fetching}
+                <div class="user-fetch-spinner-page">
+                    <div class="spinner-wrap">
+                        <div class="spinner-outer-circle"></div>
+                        <div class="spinner-inner-circle"></div>
+                    </div>
+                </div>
+            {:else if !error && !fetching}
+                <div class="table">
+                    {#each curr_page_items as item, index}
+                        <UserListItem {item} on:click={passFocus} />
+                    {/each}
+                </div>
+            {:else if !fetching && error == 1}
+                <div class="user-fetch-error-page">
+                    <div class="svg-wrap">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(226, 41, 41)" height="100" width="100">
+                            <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                    </div>
+                    <h4>연결이 끊겼습니다</h4>
+                    <h5>다시 한번 시도해보세요</h5>
+                </div>
+            {/if}
+
         </div>
     </div>
     <Route path="/:_id">
-        <AccountView file={focus} on:escape={undoFocus} />
+        <AccountView user={focus} on:escape={undoFocus} />
     </Route>
 </div>
 
@@ -258,5 +301,32 @@
         font-family: "goth";
         font-size: 14px;
         color: #1e1c3b;
+    }
+
+    .user-fetch-error-page, .user-fetch-spinner-page {
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+    .user-fetch-error-page > h4 {
+        font-family: 'goth';
+        font-size: 30px;
+        width: 250px;
+        color: rgb(31, 32, 88);
+        text-align: center;
+    }
+
+    .user-fetch-error-page > h5 {
+        font-family: 'goth';
+        font-size: 25px;
+        width: 500px;
+        color: rgb(106 107 163);
+        text-align: center;
     }
 </style>

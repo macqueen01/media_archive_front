@@ -14,7 +14,6 @@
 
     .search-wrap {
         position: relative;
-        bottom: 40px;
     }
     
     .info-wrap {
