@@ -326,8 +326,13 @@
 
 
     async function getDataFromId(id) {
-        file = await axios.get(`http://localhost:4000/browse/${id}`);
-        return file
+        file = await axios.get(`http://localhost:8000/users/cases/${id}`);
+        if (file) {
+            console.log(file.data[0])
+            return file.data[0]
+        } else {
+            throw 'Error 404'
+        }
     }
 
     /* Test variables to be fetched from server when online */
@@ -360,26 +365,6 @@
             }
         }
     }
-
-    file = {
-            type: 'photos',
-            _id: 1,
-            uploader_id: 2,
-            associate: "김재우",
-            location: "학술정보원",
-            collected: true,
-            private: false,
-            attendee: ["교장", "부교장", "대통령", "국방부장관", "생도"],
-            created_at: "22년 2월 3일",
-            title: "이인호 동상 앞에서",
-            src: [
-                "/public/main_page_bg.JPG",
-                "/public/nama_logo.png",
-                "/public/navy-logo.JPG"
-            ],
-            content: "<h4>This is sample content of the post.<h4>"
-        }
-
     
 </script>            
            
