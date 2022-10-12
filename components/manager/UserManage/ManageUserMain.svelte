@@ -79,7 +79,7 @@
             <Route path="/" redirect="/manage/accounts/browse" />
 
             <Route path="/browse/*">
-                <BrowseAccountTitle {keywords} on:keyword={keywordSet}/>
+                <BrowseAccountTitle on:keyword={keywordSet}/>
                 <AccountListContainer
                     {page}
                     on:pageChange={pageHandle}

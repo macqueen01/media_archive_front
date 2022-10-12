@@ -97,14 +97,16 @@
 
     import UserSearchSmall from './UserSearchSmall.svelte';
 
-    export let keywords = [];
+    let keywords = ['#사용자_전체'];
 
     var dispatch = createEventDispatcher();
 
 
     function valueChangeHandle(e) {
         let search_keywords = e.detail.value;
-        keywords = search_keywords.split(' ');
+        if (search_keywords.length > 1) {
+            keywords = search_keywords.split(' ');
+        }
     }
 
     function keywordChange(keywords) {

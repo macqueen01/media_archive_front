@@ -94,7 +94,7 @@
     import { crossfade, fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     const [send, receive] = crossfade({});
-    var dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher();
 
     let focused = false;
     let search_value = '';
@@ -132,14 +132,27 @@
         return str
     }
 
-    function change(value) {
+    function changeCall(value) {
         dispatch('change', {
             value: value
-        })
+        });
     }
 
     $: {
-        change(search_value);
+        if (focused) {
+            if (!search_value) {
+                search_value = '#';
+            };
+        } else if (search_value.length == 1) {
+            search_value = '';
+        }
+    }
+
+    $: {
+        dispatch('change', {
+            value: search_value
+        })
+        console.log('hi')
     }
 
     $: {
@@ -165,7 +178,7 @@
 <div class="user-search-wrap">
     <div class="user-search-container">
     <form class="search-form">
-        <input class="search-input-small" type="text" on:focus={focusHandle} on:blur={blurHandle} bind:value={search_value} >
+        <input class="search-input-small" type="text" on:focus={focusHandle} on:blur={blurHandle} bind:value={search_value}>
             {#if focused || search_value}
                 {#key 'focused'}
                     <label for="search-input" class="search-label-focused"

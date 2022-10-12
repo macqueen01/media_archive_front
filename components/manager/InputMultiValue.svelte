@@ -176,6 +176,14 @@
                 value: value
             })
         }
+
+        if (focused) {
+            if (!value) {
+                value = '#'
+            }
+        } else if (value.length == 1) {
+            value = '';
+        }
     }
     
 
