@@ -2,7 +2,7 @@
     import ContentContainer from "../content_container/ContentContainer.svelte";
     import BrowseNavbar from "../sidebar/BrowseNavbar.svelte";
     import ManageSidebar from "../../components/manager/ManageSidebar.svelte";
-    import BrowseTitle from "../../components/manager/BrowseTitle.svelte";
+    import BrowseTitle from "../../components/manager/ContentTitle/BrowseTitle.svelte";
     import ManageCreateView from "../../components/manager/CreateViews/ManageCreateView.svelte";
     import UserInfo from "../../components/user/UserInfo.svelte";
     import NotReadyView from "../DevViews/NotReadyView.svelte";

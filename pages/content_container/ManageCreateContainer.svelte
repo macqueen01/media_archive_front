@@ -231,17 +231,18 @@
     import { crossfade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     
-    import InputSingleValue from '../../components/manager/InputSingleValue.svelte';
-    import InputMultiValue from '../../components/manager/InputMultiValue.svelte';
-    import InputCheckboxValue from '../../components/manager/InputCheckboxValue.svelte';
-    import InputDateValue from '../../components/manager/InputDateValue.svelte';
-    import InputSelectValue from '../../components/manager/InputSelectValue.svelte';
+    import InputSingleValue from '../../components/manager/Input/InputSingleValue.svelte';
+    import InputMultiValue from '../../components/manager/Input/InputMultiValue.svelte';
+    import InputCheckboxValue from '../../components/manager/Input/InputCheckboxValue.svelte';
+    import InputDateValue from '../../components/manager/Input/InputDateValue.svelte';
+    import InputSelectValue from '../../components/manager/Input/InputSelectValue.svelte';
     import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte';
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
     import Preview from '../../components/manager/CreateViews/Preview.svelte';
 
+    import { condition_set } from "../../utilities/inputConditions.js";
+
     export let stage = 1;
-    export let view = 'box';
 
 
     let title;
@@ -262,47 +263,6 @@
     let received_file = false;
     let content = "<h3>Hello to this world!</h3>";
     let item_objs = []
-
-
-    let default_conditions = [
-        {
-            condition: (val) => {
-                if (val.length >= 1) {
-                    return true;
-                }
-
-                return false;
-            },
-            name: "longerThanOneLetter",
-            not_satisfied_text: "최소 한자 이상 들어가야 합니다"
-        },
-        {
-            condition: (val) => {
-                if (val.length <= 20) {
-                    return true;
-                }
-
-                return false;
-            },
-            name: "shorterThanGivenLength",
-            not_satisfied_text: "더 짧게 입력해주세요"
-        }
-    ]
-
-    let attendee_conditions = [
-        {
-            condition: (val) => {
-                let words = val.split(' ');
-                if (words.length >= 1 && words[0] != '' && words[0] != '#') {
-                    return true;
-                } 
-                return false;
-            },
-            name: "longerThanOneWord",
-            not_satisfied_text: "인물이 한명 이상 들어가야 합니다",
-            satisfied_text: "좋습니다!"
-        }
-    ]
 
 
     function downloader(item) {
@@ -561,18 +521,18 @@
             <div class="input-category-title">
                 <h3>기본 등록 정보</h3>
             </div>
-            <InputSingleValue placeholder="제목을 입력해주세요" on:change={titleChange} conditions={default_conditions} on:pass={passHandle} value={title} />
-            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" on:change={attendeeChange} conditions={attendee_conditions} on:pass={passHandle}  />
+            <InputSingleValue placeholder="제목을 입력해주세요" on:change={titleChange} conditions={condition_set.default_conditions} on:pass={passHandle} value={title} />
+            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" on:change={attendeeChange} conditions={condition_set.attendee_conditions} on:pass={passHandle}  />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSingleValue placeholder="행사 장소를 입력해주세요" on:change={locationChange} conditions={default_conditions} on:pass={passHandle} />
-            <InputSelectValue placeholder="기록 유형을 선택해주세요" on:change={typeChange} conditions={attendee_conditions} on:pass={passHandle} option_list={['영상', '사진', '문서']} />
+            <InputSingleValue placeholder="행사 장소를 입력해주세요" on:change={locationChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSelectValue placeholder="기록 유형을 선택해주세요" on:change={typeChange} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['영상', '사진', '문서']} />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSelectValue placeholder="생산물 여부를 선택해주세요" on:change={producedChange} conditions={attendee_conditions} on:pass={passHandle} option_list={['생산', '수집']} />
-            <InputSingleValue placeholder="생산 부대를 입력해주세요" on:change={affiliationChange} conditions={default_conditions} on:pass={passHandle} />
+            <InputSelectValue placeholder="생산물 여부를 선택해주세요" on:change={producedChange} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['생산', '수집']} />
+            <InputSingleValue placeholder="생산 부대를 입력해주세요" on:change={affiliationChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
         </div>
 
         <div class="buffer"></div>
@@ -582,8 +542,8 @@
             <div class="input-category-title">
                 <h3>생산 정보</h3>
             </div>
-            <InputSingleValue placeholder="촬영자를 입력해주세요" on:change={associateChange} conditions={default_conditions} on:pass={passHandle} />
-            <InputSingleValue placeholder="생산연도를 입력해주세요" on:change={dateChange} conditions={default_conditions} on:pass={passHandle} />
+            <InputSingleValue placeholder="촬영자를 입력해주세요" on:change={associateChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSingleValue placeholder="생산연도를 입력해주세요" on:change={dateChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
         </div>
 
     {:else if stage == 2}

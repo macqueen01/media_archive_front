@@ -4,8 +4,7 @@
         width: 100%;
         height: 100%;
         z-index: 3;
-        position: relative;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
         position: absolute;
     }
@@ -36,6 +35,50 @@
         height: 100%;
         position: relative;
         z-index: 3;
+        overflow-y: auto;
+    }
+
+
+    .single-input-wrap {
+        margin-top: 8px;
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+    }
+
+    .padding {
+        width: 140px;
+        height: 40px;
+    }
+
+    .input-category-title {
+        position: relative;
+        width: 140px;
+        height: 92px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .input-category-title > h3 {
+        position: absolute;
+        font-size: 17px;
+        font-family: 'goth';
+        color: rgb(30, 42, 95);
+        width: 100%;
+        height: 20px;
+        padding-left: 12px;
+        padding-top: 5px;
+        left: 15px;
+        top: -37px;
+    }
+
+    .buffer {
+        width: 100%;
+        height: 50px;
     }
 
     .back-btn-wrap {
@@ -122,123 +165,14 @@
 
     .body-content-wrap {
         position: absolute;
-        top: 55px;
-        height: 495px;
+        top: 95px;
+        height: 100%;
         width: 100%;
-        display: grid;
-        grid-template-columns: 1.4fr 1fr;
+        background: white;
     }
 
-    .media-wrap {
-        height: 100%;
-        width: 560px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        flex-direction: column;
-    }
-
-    .details-wrap {
-        height: 100%;
-        width: 400px;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
     
-    .photo-container {
-        height: fit-content;
-        width: fit-content;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-    }
-
-    .caption {
-        display: flex;
-        justify-content: end;
-        align-items: center;
-        background-color: rgba(12, 12, 12, 0.856);
-        height: 25px;
-        width: 100%;
-        position: relative;
-    }
-
-    .caption > h4 {
-        color: white;
-        font-family: 'goth';
-        font-weight: 400;
-        font-size: 12px;
-        position: absolute;
-        right: 13px;
-    }
-
-    .caption-placeholder {
-        height: 25px;
-        width: 100%;
-    }
-
-    .facad {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .info-header, .content-header {
-        padding-top: 25px;
-    }
-
-    .info-header > h5, .content-header > h5 {
-        font-family: 'goth';
-        font-size: 18px;
-    }
-
-    .info-item {
-        display: flex;
-        flex-direction: row;
-        width:  100%;
-        height: fit-content;
-        padding: 2px;
-        font-family: 'goth';
-        font-size: 14.5px;
-        position: relative;
-    }
-
-    .detail-wrap-info {
-        padding-top: 10px;
-        display:  flex;
-        flex-direction: column;
-    }
-
-    .info-item-content {
-        padding-left: 5px;
-        display: flex;
-        flex-direction: column;
-        color: rgb(31, 31, 184);
-    }
-
-    h5 > svg {
-        position: relative;
-        top: 3px;
-    }
-
-    .detail-wrap-content {
-        padding-top: 10px;
-        font-size: 12px;
-        font-family: 'goth';
-    }
-
-
-
+  
 
     
 
@@ -250,11 +184,17 @@
     import { draw, fade } from 'svelte/transition';
     import { createEventDispatcher, onMount } from 'svelte';
 
+    import { condition_set } from '../../utilities/inputConditions.js';
+    
+    import InputMultiValue from '../../components/manager/Input/InputMultiValue.svelte';
+    import InputSingleValue from '../../components/manager/Input/InputSingleValue.svelte';
+    import InputSelectValue from '../../components/manager/Input/InputSelectValue.svelte';
+
 
 
 
     /* 
-        FILE inherits FOCUS obj from ContentContainer.
+        USER inherits FOCUS obj from AccountListContainer.
     */
 
     export let user;
@@ -265,6 +205,7 @@
     let status = 0;
     let image;
 
+    
 
 
 
@@ -279,12 +220,32 @@
         router.goto('/manage/accounts/browse');
     }
 
+    function changeHandle(e, variable) {
+        variable = e.detail.value;
+    }
 
-   
+    function changeOptionHandle(e, variable) {
+        variable = e.detail.key;
+    }
+
+    function passHandle(e) {
+        let input_name = e.detail.name;
+        pass_list[input_name] = e.detail.pass;
+    }
 
 
     async function getDataFromId(id) {
         user = await axios.get(`http://localhost:4000/account/${id}`);
+        ({ name,
+          registered_by,
+          registered_id,
+          affiliation,
+          id,
+          ip_address,
+          date,
+          authority,
+          standing,
+          position } = user);
         return user
 
         //if user is fetched:
@@ -295,23 +256,48 @@
         //  status = 2;
     }
 
+
+
     /* Test variables to be fetched from server when online */
     
     /* USER object:
-            @authority - Show the contents to authorized personal only. 
-                         Set false at default.
-            @name      - Name of the logged in user.  
+            @redistered_id - Registered id used to login user
+            @authority     - Show confidential contents to authorized personal only. 
+                             Set 0 at default.
+                             (0: waitlist
+                              1: user
+                              2: admin)
+            @name          - Name of the logged in user.
+            @standing      - String, set "" at default.
+            @position      - String, set "" at default.
+            @affiliation   - Location object, set blank at default.
+            @created_at    - Date time object.
     */
 
     user = {
-                _id: 0,
+                _id: 2,
+                registered_id: 'sampleId',
                 name: "김재우",
-                authority: "관리자",
+                authority: 1,
                 standing: "상병",
                 position: "전산병",
                 affiliation: "학술정보원 멀티미디어교실",
                 created_at: "22년 2월 3일",
+                ip_address: "192.168.0.101",
+                registered_by: "김재우",
+                date: "2022년 12월 12일"
             }
+    
+    let name = user.name
+    let registered_by = user.registered_by
+    let registered_id = user.registered_id
+    let affiliation = user.affiliation
+    let id = user._id
+    let ip_address = user.ip_address
+    let date = user.date
+    let authority = user.authority
+    let standing = user.standing
+    let position = user.position
 
     
 </script>            
@@ -389,78 +375,39 @@
             <div class="body-content-wrap">
                 <!-- awaits until file is fetched from the server -->
                 {#if status == 0}
-                <div class="details-wrap">
-                    <div class="info-header">
-                        <h5>세부사항</h5>
+                    <div class="single-input-wrap">
+                        <div class="input-category-title">
+                            <h3>기본 등록 정보</h3>
+                        </div>
+                        <InputSingleValue placeholder="이름" init={name} on:change={(e) => changeHandle(e, name)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+                        <InputSingleValue placeholder="아이디" init={registered_id} on:change={(e) => changeHandle(e, registered_id)} conditions={condition_set.registered_id_conditions} on:pass={passHandle}  />
                     </div>
-                    <div class="detail-wrap-info">
-                        <div class="location-wrap info-item">
-                            <div class="label">
-                                <h5>대표장소:</h5>
-                            </div>
-                            <div class="location info-item-content">
-                                <h5>@{user.location}
-                                </h5>
-                            </div>
-                        </div>
-                        
-                        <div class="assosiate-wrap info-item">
-                            <div class="label">
-                                <h5>촬영자:</h5>
-                            </div>
-                            <div class="associate info-item-content">
-                                <h5>#{user.associate}</h5>
-                            </div>
-                        </div>
-                        <div class="attendee-wrap info-item">
-                            <div class="label">
-                                <h5>주요참석자:</h5>
-                            </div>
-                            <div class="attendees info-item-content">
-                                    <h4>주요 참석자가 없습니다.</h4>
-                            </div>
-                        </div>
-                        <div class="collected-wrap info-item">
-                            {#if user.collected}
-                                <h5>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                    </svg>
-                                    본 기록물은 수집되었습니다.
-                                </h5>
-                            {:else}
-                                <h5>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                    </svg>
-                                    본 기록물은 생산되었습니다.
-                                </h5>
-                            {/if}
-                        </div>
-                        <div class="private-wrap info-item">
-                            {#if user.private}
-                                <h5>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                    </svg>
-                                    본 기록물은 또한 비공개 기록물입니다.
-                                </h5>
-                            {:else}
-                                <h5>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                                    </svg>
-                                    본 기록물은 또한 공개 기록물입니다.
-                                </h5>
-                            {/if}
-                        </div>
+                    <div class="single-input-wrap">
+                        <div class="padding"></div>
+                        <InputSingleValue placeholder="계급" init={standing} on:change={(e) => changeHandle(e, standing)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+                        <InputSingleValue placeholder="직별 혹은 직책" init={position} on:change={(e) => changeHandle(e, position)} conditions={condition_set.default_conditions} on:pass={passHandle} />
                     </div>
-                    <div class="content-header">
-                        <h5>설명</h5>
+                    <div class="single-input-wrap">
+                        <div class="padding"></div>
+                        <InputSingleValue placeholder="소속" init={affiliation} on:change={(e) => changeHandle(e, affiliation)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+                        <InputSingleValue placeholder="등록 번호" init={id} on:change={(e) => changeHandle(e, id)} conditions={condition_set.unchangable_conditions('등록 번호')} immutable={true} on:pass={passHandle} />
                     </div>
-                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={user.content}>
+                    <div class="single-input-wrap">
+                        <div class="padding"></div>
+                        <InputSingleValue placeholder="등록 일자" init={date} on:change={(e) => changeHandle(e, date)} conditions={condition_set.unchangable_conditions('등록 일자')} immutable={true} on:pass={passHandle} />
+                        <InputSingleValue placeholder="등록 IP" init={ip_address} on:change={(e) => changeHandle(e, ip_address)} conditions={condition_set.unchangable_conditions('등록 IP')} immutable={true} on:pass={passHandle} />
                     </div>
-                </div>
+            
+                    <div class="buffer"></div>
+            
+            
+                    <div class="single-input-wrap">
+                        <div class="input-category-title">
+                            <h3>권한 정보</h3>
+                        </div>
+                        <InputSelectValue placeholder="권한 종류" init={authority} on:change={(e) => changeOptionHandle(e, authority)} conditions={condition_set.default_conditions} on:pass={passHandle} option_list={['비인가', '일반 유저', '관리자']} />
+                        <InputSingleValue placeholder="권한 부여자" init={registered_by} on:change={(e) => changeHandle(e, registered_by)} conditions={condition_set.unchangable_conditions('권한 부여자')} immutable={true} on:pass={passHandle} />
+                    </div>
                 {:else if status == 2}
                     Error!
                 {/if}

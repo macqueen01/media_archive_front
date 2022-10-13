@@ -1,10 +1,11 @@
 <script>
     import ManageSidebar from "../../manager/ManageSidebar.svelte";
-    import BrowseAccountTitle from "../../../components/manager/UserManage/BrowseAccountTitle.svelte";
+    import BrowseAccountTitle from "../ContentTitle/BrowseAccountTitle.svelte";
     import AccountListContainer from "../../../pages/content_container/AccountListContainer.svelte";
     import BrowseNavbar from "../../../pages/sidebar/BrowseNavbar.svelte";
     import UserInfo from "../../user/UserInfo.svelte";
     import NotReadyView from "../../../pages/DevViews/NotReadyView.svelte";
+    import AccountCreateView from "../CreateViews/AccountCreateView.svelte";
 
     import { meta, Route } from "tinro";
     import { fly, fade } from 'svelte/transition';
@@ -23,6 +24,10 @@
                     name: "회원 생성",
                     path: "/manage/accounts/create",
                 },
+                {
+                    name: "기록물 접근 관리",
+                    path: "/manage/accounts/access-list"
+                }
             ],
         },
         {
@@ -89,7 +94,10 @@
                 <div class="bottom-bar">
                     <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />
                 </div>
+            </Route>
 
+            <Route path="/create/*">
+                <AccountCreateView />
             </Route>
         </div>
     </div>

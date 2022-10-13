@@ -7,13 +7,12 @@
 
 <script>
 
-    import ManageCreateContainer from '../../../pages/content_container/ManageCreateContainer.svelte';
+    import AccountCreateContainer from '../../../pages/content_container/AccountCreateContainer.svelte';
     import ManageCreateNavbar from '../../../pages/sidebar/ManageCreateNavbar.svelte';
-    import ManageCreateTitle from '../ContentTitle/ManageCreateTitle.svelte';
+    import AccountCreateTitle from '../ContentTitle/AccountCreateTitle.svelte';
 
     let subtitle = '';
     let stage = 1;
-    let view = 'box';
 
     function stageHandle(e) {
         stage = e.detail.stage;
@@ -21,13 +20,9 @@
 
     function titleChange(stage) {
         if (stage == 1) {
-            return '메타데이터 등록'
+            return '회원정보 등록'
         } else if (stage == 2) {
-            return '기록물 파일 등록'
-        } else if (stage == 3) {
-            return '내용 등록'
-        } else if (stage == 4) {
-            return '미리보기'
+            return '저장'
         }
         return '허가되지 않은 창'
     }
@@ -38,8 +33,8 @@
     }
 </script>
 
-<ManageCreateTitle subtitle={subtitle}/>
-<ManageCreateContainer stage={stage} />
+<AccountCreateTitle subtitle={subtitle}/>
+<AccountCreateContainer stage={stage} on:stageChange={stageHandle}/>
 <div class="bottom-bar">
     <ManageCreateNavbar stage={stage} on:stageChange={stageHandle}/>
 </div>

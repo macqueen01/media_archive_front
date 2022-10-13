@@ -152,7 +152,6 @@
         dispatch('change', {
             value: search_value
         })
-        console.log('hi')
     }
 
     $: {
