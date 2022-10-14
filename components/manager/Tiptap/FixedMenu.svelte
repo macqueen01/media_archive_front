@@ -38,6 +38,7 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: flex-start;
+		box-shadow: -2px -3px 20px 0px rgb(197 197 197 / 50%);
 	}
 	
 </style>

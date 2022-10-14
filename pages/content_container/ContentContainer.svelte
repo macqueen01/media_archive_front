@@ -2,12 +2,12 @@
     .browse-content-container {
         width: 960px;
         height: 550px;
-        background-color: whitesmoke;
+        background-color: white;
         display: flex;
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: inset 3px 3px 6px 0 rgb(197 197 197 / 50%);        
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);       
     }    
     
     .browse-contents-list-view {
@@ -188,7 +188,7 @@
     for (let i = 0; i < 40; i++) {
         fetched_items = [...fetched_items, 
         {
-            type: '사진',
+            type: 1,
             _id: i,
             uploader_id: 2,
             associate: "김재우",

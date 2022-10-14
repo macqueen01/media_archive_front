@@ -2,13 +2,13 @@
     .browse-content-container {
         width: 960px;
         height: 550px;
-        background-color: whitesmoke;
+        background-color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: inset 3px 3px 6px 0 rgb(197 197 197 / 50%);        
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);       
     }
 
     .single-input-wrap {
@@ -239,11 +239,9 @@
     import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte';
     import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
     import Preview from '../../components/manager/CreateViews/Preview.svelte';
-
-    import { condition_set } from "../../utilities/inputConditions.js";
+    import { condition_set } from '../../utilities/inputConditions';
 
     export let stage = 1;
-
 
     let title;
     let location;
@@ -253,7 +251,8 @@
     let attendee_list=[];
     let date;
     let produced = true;
-    let type = '사진';
+    let created_at;
+    let type;
     let source;
     let pass_list = {};
     // FILE_UPLOADING is a flag for which to track if file is being 
@@ -261,7 +260,7 @@
     let file_uploading = false;
     let all_checked = false;
     let received_file = false;
-    let content = "<h3>Hello to this world!</h3>";
+    let content = "";
     let item_objs = []
 
 
@@ -273,44 +272,12 @@
         console.log("downloading from...",item.src)
     }
 
-    function titleChange(e) {
-        title = e.detail.value;
+    function changeHandle(e, variable) {
+        variable = e.detail.value;
     }
 
-    function locationChange(e) {
-        location = e.detail.value;
-    }
-
-    function affiliationChange(e) {
-        affiliation = e.detail.value;
-    }
-
-    function associateChange(e) {
-        associate = e.detail.value;
-    }
-
-    function attendeeChange(e) {
-        attendee = e.detail.value;
-    }
-
-    function producedChange(e) {
-        produced = e.detail.value;
-    }
-
-    function typeChange(e) {
-        type = e.detail.value;
-    }
-
-    function dateChange(e) {
-        date = e.detail.value;
-    }
-
-    function categoryChange(e) {
-        category = e.detail.value;
-    }
-
-    function sourceChange(e) {
-        source = e.detail.value;
+    function changeOptionHandle(e, variable) {
+        variable = e.detail.key;
     }
 
     // Handler is received from components
@@ -521,18 +488,18 @@
             <div class="input-category-title">
                 <h3>기본 등록 정보</h3>
             </div>
-            <InputSingleValue placeholder="제목을 입력해주세요" on:change={titleChange} conditions={condition_set.default_conditions} on:pass={passHandle} value={title} />
-            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" on:change={attendeeChange} conditions={condition_set.attendee_conditions} on:pass={passHandle}  />
+            <InputSingleValue placeholder="제목을 입력해주세요" on:change={(e) => changeHandle(e,title)} conditions={condition_set.default_conditions} on:pass={passHandle} value={title} />
+            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" on:change={(e) => changeHandle(e,attendee)} conditions={condition_set.attendee_conditions} on:pass={passHandle}  />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSingleValue placeholder="행사 장소를 입력해주세요" on:change={locationChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
-            <InputSelectValue placeholder="기록 유형을 선택해주세요" on:change={typeChange} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['영상', '사진', '문서']} />
+            <InputSingleValue placeholder="행사 장소를 입력해주세요" on:change={(e) => changeHandle(e,location)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSelectValue placeholder="기록 유형을 선택해주세요" on:change={(e) => changeOptionHandle(e,type)} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['사진', '영상', '문서']} />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSelectValue placeholder="생산물 여부를 선택해주세요" on:change={producedChange} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['생산', '수집']} />
-            <InputSingleValue placeholder="생산 부대를 입력해주세요" on:change={affiliationChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSelectValue placeholder="생산물 여부를 선택해주세요" on:change={(e) => changeOptionHandle(e,produced)} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['생산', '수집']} />
+            <InputSingleValue placeholder="생산 부대를 입력해주세요" on:change={(e) => changeOptionHandle(e,created_at)} conditions={condition_set.default_conditions} on:pass={passHandle} />
         </div>
 
         <div class="buffer"></div>
@@ -542,18 +509,18 @@
             <div class="input-category-title">
                 <h3>생산 정보</h3>
             </div>
-            <InputSingleValue placeholder="촬영자를 입력해주세요" on:change={associateChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
-            <InputSingleValue placeholder="생산연도를 입력해주세요" on:change={dateChange} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSingleValue placeholder="촬영자를 입력해주세요" on:change={(e) => changeHandle(e,associate)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSingleValue placeholder="생산연도를 입력해주세요" on:change={(e) => changeHandle(e,date)} conditions={condition_set.default_conditions} on:pass={passHandle} />
         </div>
 
     {:else if stage == 2}
         <div class="upload-view">
             <div class="header">
-                {#if type == '사진'}
-                 <h3>사진 업로드</h3>
-                {:else if type == '영상'}
+                {#if type == 0}
+                    <h3>사진 업로드</h3>
+                {:else if type == 1}
                     <h3>영상 업로드</h3>
-                {:else if type == '문서'}
+                {:else if type == 2}
                     <h3>문서 업로드</h3>
                 {:else}
                     <h3>다시 시도해 주세요</h3>

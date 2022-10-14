@@ -390,12 +390,12 @@
                     <div class="single-input-wrap">
                         <div class="padding"></div>
                         <InputSingleValue placeholder="소속" init={affiliation} on:change={(e) => changeHandle(e, affiliation)} conditions={condition_set.default_conditions} on:pass={passHandle} />
-                        <InputSingleValue placeholder="등록 번호" init={id} on:change={(e) => changeHandle(e, id)} conditions={condition_set.unchangable_conditions('등록 번호')} immutable={true} on:pass={passHandle} />
+                        <InputSingleValue placeholder="등록 번호" init={id} on:change={(e) => changeHandle(e, id)} conditions={condition_set.unchangable_conditions('등록 번호를')} immutable={true} on:pass={passHandle} />
                     </div>
                     <div class="single-input-wrap">
                         <div class="padding"></div>
-                        <InputSingleValue placeholder="등록 일자" init={date} on:change={(e) => changeHandle(e, date)} conditions={condition_set.unchangable_conditions('등록 일자')} immutable={true} on:pass={passHandle} />
-                        <InputSingleValue placeholder="등록 IP" init={ip_address} on:change={(e) => changeHandle(e, ip_address)} conditions={condition_set.unchangable_conditions('등록 IP')} immutable={true} on:pass={passHandle} />
+                        <InputSingleValue placeholder="등록 일자" init={date} on:change={(e) => changeHandle(e, date)} conditions={condition_set.unchangable_conditions('등록 일자를')} immutable={true} on:pass={passHandle} />
+                        <InputSingleValue placeholder="등록 IP" init={ip_address} on:change={(e) => changeHandle(e, ip_address)} conditions={condition_set.unchangable_conditions('등록 IP를')} immutable={true} on:pass={passHandle} />
                     </div>
             
                     <div class="buffer"></div>
@@ -406,7 +406,7 @@
                             <h3>권한 정보</h3>
                         </div>
                         <InputSelectValue placeholder="권한 종류" init={authority} on:change={(e) => changeOptionHandle(e, authority)} conditions={condition_set.default_conditions} on:pass={passHandle} option_list={['비인가', '일반 유저', '관리자']} />
-                        <InputSingleValue placeholder="권한 부여자" init={registered_by} on:change={(e) => changeHandle(e, registered_by)} conditions={condition_set.unchangable_conditions('권한 부여자')} immutable={true} on:pass={passHandle} />
+                        <InputSingleValue placeholder="권한 부여자" init={registered_by} on:change={(e) => changeHandle(e, registered_by)} conditions={condition_set.unchangable_conditions('권한 부여자를')} immutable={true} on:pass={passHandle} />
                     </div>
                 {:else if status == 2}
                     Error!

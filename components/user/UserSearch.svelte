@@ -16,7 +16,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: whitesmoke;
+        background: white;
         border-radius: 30px;
         box-shadow: inset 3px 3px 6px 0 rgb(197 197 197 / 50%);
         position:  relative;

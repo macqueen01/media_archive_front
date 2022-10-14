@@ -179,9 +179,13 @@
         focused = false;
     }
 
-    $: dispatch('change', {
+    $: {
+        dispatch('change', {
         key: option_list.indexOf(value),
     })
+        console.log(option_list.indexOf(value))
+
+    }
 
 
 

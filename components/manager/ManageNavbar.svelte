@@ -102,7 +102,7 @@
     <div class="navbar" transition:fly={{duration: 200, x: 0, y: -100}}>
         <div class="logo-wrap">
             <a href="/">
-                <img src="/public/nama_logo.png" alt="navy" height="60">
+                <img src="/public/navy-logo.JPG" alt="navy" height="40">
             </a>
         </div>
         <div class="menu-wrap">

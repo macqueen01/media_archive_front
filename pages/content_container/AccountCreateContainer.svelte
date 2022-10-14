@@ -2,13 +2,14 @@
     .browse-content-container {
         width: 960px;
         height: 550px;
-        background-color: whitesmoke;
+        background-color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: inset 3px 3px 6px 0 rgb(197 197 197 / 50%);        
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);
+        
     }
 
     .single-input-wrap {

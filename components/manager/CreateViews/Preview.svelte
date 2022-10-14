@@ -231,9 +231,30 @@
 
     .detail-wrap-content {
         padding-top: 10px;
-        font-size: 12px;
         font-family: 'goth';
+        padding-right: 15px;
+        padding-bottom: 20px;
     }
+
+    :global(.detail-wrap-content > p) {
+        min-height: 15px;
+        font-family: 'goth';
+        font-size: 14px;
+    }
+
+    :global(.detail-wrap-content > h1) {
+        font-size: 17px;
+    }
+
+    :global(.detail-wrap-content > h2) {
+        font-size: 16px;
+    }
+
+    :global(.detail-wrap-content > h3) {
+        font-size: 15px;
+    }
+
+
 
 
 

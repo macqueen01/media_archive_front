@@ -49,7 +49,7 @@ condition_set.unchangable_conditions = (type) => {
         },
         name: "unchangable",
         not_satisfied_text: "오류",
-        satisfied_text: `${type}를 임의로 바꿀 수 없습니다`
+        satisfied_text: `${type} 임의로 바꿀 수 없습니다`
     }]
 }
 

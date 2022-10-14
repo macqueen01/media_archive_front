@@ -5,6 +5,7 @@
     import BrowseNavbar from "../../../pages/sidebar/BrowseNavbar.svelte";
     import UserInfo from "../../user/UserInfo.svelte";
     import NotReadyView from "../../../pages/DevViews/NotReadyView.svelte";
+    import AccessControlView from "../../../pages/content_container/AccessControlView.svelte"
     import AccountCreateView from "../CreateViews/AccountCreateView.svelte";
 
     import { meta, Route } from "tinro";
@@ -26,7 +27,7 @@
                 },
                 {
                     name: "기록물 접근 관리",
-                    path: "/manage/accounts/access-list"
+                    path: "/manage/accounts/access-control"
                 }
             ],
         },
@@ -94,6 +95,10 @@
                 <div class="bottom-bar">
                     <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />
                 </div>
+            </Route>
+
+            <Route path="/access-control/*">
+                <AccessControlView />
             </Route>
 
             <Route path="/create/*">
