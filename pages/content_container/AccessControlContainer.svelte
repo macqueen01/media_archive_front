@@ -390,13 +390,13 @@
             detail: '권한 수정 요청',
             content: {
                 type: 0,
-            //    access_to: [
-            //        0,1,3,4
-            //    ]
+                access_to: [
+                    0,1,3,4
+                ]
             //  if type == 1,
-            //       {
-              type: 1,
-              change_to: 2
+             //      {
+            //  type: 1,
+            //  change_to: 2
             //}
             },
             reasons: "해사 역사 기록 연구 목적"

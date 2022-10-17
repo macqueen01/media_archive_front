@@ -30,14 +30,6 @@
         bottom: 18px;
     }
 
-    .body {
-        background-color: white;
-        width: 100%;
-        height: 100%;
-        position: relative;
-        z-index: 3;
-    }
-
     .back-btn-wrap {
         height: 40px;
         width: 40px;
@@ -121,9 +113,9 @@
     }
 
     .body-content-wrap {
-        position: absolute;
+        position: relative;
         top: 95px;
-        height: 100%;
+        height: fit-content;
         width: 100%;
         background: white;
     }
@@ -136,6 +128,7 @@
         flex-direction: row;
         justify-content: space-around;
         align-items: center;
+        position: relative;
     }
 
     .padding {
@@ -144,9 +137,8 @@
     }
 
     .input-category-title {
-        position: relative;
         width: 140px;
-        height: 92px;
+        min-height: 92px;
         display: flex;
         justify-content: center;
         align-items: flex-start;
@@ -157,11 +149,11 @@
         font-size: 17px;
         font-family: 'goth';
         color: rgb(30, 42, 95);
-        width: 100%;
+        width: 200px;
         height: 20px;
         padding-left: 12px;
         padding-top: 5px;
-        left: 15px;
+        left: 40px;
         top: -37px;
     }
 
@@ -196,44 +188,100 @@
         position: relative;
         overflow-y: auto;
         z-index: 3;
+        background-color: white;
     }
 
     .browsing-request-wrap {
         width: 720px;
-        height: 100px;
+        height: fit-content;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        align-items: center;
     }
 
     .browsing-request-container {
         width: 90%;
-        height: 100%;
+        height: 45px;
         padding-right: 10px;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        align-items: baseline;
-        padding-bottom: 10px;
+        align-items: center;
+        background: whitesmoke;
+        padding-left: 15px;
+        margin-bottom: 14px;
+        border-radius: 5px;
+        position: relative;
     }
 
-    .browsing-request-container > h3 {
+    .request-content-container {
+        height: fit-content;
+        width: 100%;
+        justify-content: flex-start;
+        align-items: baseline;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .request-content-container > h3 {
         font-family: 'goth';
         font-size: 15px;
         color:rgb(15, 21, 46);
     }
 
-    .browsing-request-container > h4 {
+    .request-content-container > h4 {
         font-family: 'goth';
         font-size: 16px;
         color:rgb(31, 31, 184);
     }
 
-    .browsing-request-container > h5 {
+    .request-content-container > h5 {
         font-family: 'goth';
         font-size: 8px;
         color:rgb(26, 26, 128);
+    }
+
+    .decline-container-clicked {
+        background-color: rgb(226, 41, 41);
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    .accept-container-clicked {
+        background-color: rgb(99, 228, 99);
+    }
+
+    .clicked {
+        color: white;
+    }
+
+    .unclicked {
+        color: currentColor;
+    }
+
+    .container {
+        width: 50px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container > h3 {
+        font-size: 11px;
+        font-family: 'goth';
+    }
+
+    .select-wrap {
+        width: 100px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        display: flex;
+        flex-direction: row;
     }
 
     .whitespace {
@@ -267,6 +315,61 @@
         font-family: 'goth';
     }
 
+    .text-wrap {
+        width: 720px;
+        min-height: 93px;
+    }
+
+    .text-wrap > h5 {
+        font-size: 14.5px;
+        font-family: 'goth';
+        width: 95%;
+    }
+
+    .btn-control-wrap {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        bottom: 0;
+        right: 0;
+    }
+
+    .btn-container {
+        width: 350px;
+        display: flex;
+        height: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-evenly;
+        margin-right: 15px;
+    }
+
+    .btn {
+        width: 85px;
+        height: 37px;
+        border: none;
+        outline:  none;
+        display: flex;
+        background: #1f2058;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(-65deg, rgb(5 123 165) 0%, rgb(5 116 162) 0%, rgb(6 114 162) 0%, rgb(9 29 131) 100%);
+        border-radius: 2px;
+    }
+
+    .btn > h3 {
+        color: white;
+        font-size: 13px;
+        width: fit-content;
+        font-family: 'goth';
+        padding-top: 3px;
+    }
+
+
+
 
 
 
@@ -297,6 +400,8 @@
     */
 
     export let request;
+    let acceptList = [];
+    let declineList = [];
     let status = 0;
 
 
@@ -316,6 +421,56 @@
     async function getRequestFromId(id) {
         let result = await axios.get(`http://localhost:8000/request/${id}`);
         return result
+    }
+
+    function clickCall(type, index) {
+        if (type == 1 && !acceptClicked(index)) {
+            if (declineClicked(index)) {
+                let pop_index = declineList.indexOf(index);
+                declineList.splice(pop_index, 1);
+            }
+            acceptList = [...acceptList, index];
+            declineList = declineList;
+            console.log(acceptList)
+            return acceptList
+        } else if (type == 0 && !declineClicked(index)) {
+            if (acceptClicked(index)) {
+                let pop_index = acceptList.indexOf(index);
+                acceptList.splice(pop_index, 1);
+            }
+            declineList = [...declineList, index];
+            acceptList = acceptList;
+            console.log(declineList)
+            return declineList
+        }
+    }
+
+    function acceptClicked(index) {
+        return acceptList.includes(index);
+    }
+
+    function accepted(index) {
+        if (acceptClicked(index)) {
+            acceptList = acceptList
+            return "white"
+        } else {
+            acceptList = acceptList
+            return "currentColor"
+        }
+    }
+
+    function declineClicked(index) {
+        return declineList.includes(index);
+    }
+
+    function declined(index) {
+        if (declineClicked(index)) {
+            declineList = declineList
+            return "white"
+        } else {
+            declineList = declineList
+            return "currentColor"
+        }
     }
 
     /* Test variables to be fetched from server when online */
@@ -467,18 +622,53 @@
                         <h3>요청 사항</h3>
                     </div>
                     {#if request.content.type == 0}
-                        <div class="browsing-request-wrap">
+                        <div class="browsing-request-wrap ">
                             {#each request.content.access_to as case_id, index}
                                 <div class="browsing-request-container">
-                                    <h3>등록 번호</h3>
-                                    <div class="whitespace"></div>
-                                    <h4>{case_id}</h4>
-                                    <h3>의 기록물</h3>
-                                    <div class="whitespace"></div>
-                                    <h4>#이인호_동상_앞</h4>
-                                    <h5>(눌러서 이동)</h5>
-                                    <div class="whitespace"></div>
-                                    <h3>에 대한 열럼 권한</h3>
+                                    <div class="request-content-container">
+                                        <h3>등록 번호</h3>
+                                        <div class="whitespace"></div>
+                                        <h4>{case_id}</h4>
+                                        <div class="whitespace"></div>
+                                        <h3>의 기록물</h3>
+                                        <div class="whitespace"></div>
+                                        <h4>#이인호_동상_앞</h4>
+                                        <h5>(눌러서 이동)</h5>
+                                        <div class="whitespace"></div>
+                                        <h3>에 대한 열람 권한</h3>
+                                    </div>
+                                    <div class="select-wrap">
+                                        <div class={(acceptList.includes(index)) ? 'accept-container-clicked container' : 'accept-container container'}
+                                            on:click={() => clickCall(1, index)}>
+                                            <div class="accept-svg">
+                                                {#if !acceptList.includes(index)}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke='currentColor' height="18" width="18">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                {:else}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke='white' height="18" width="18">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                                    </svg>
+                                                {/if}
+                                            </div>
+                                            <h3 class={(acceptList.includes(index)) ? 'clicked' : 'unclicked'}>수락</h3>
+                                        </div>
+                                        <div class={(declineList.includes(index)) ? 'decline-container-clicked container' : 'decline-container container'}
+                                            on:click={() => clickCall(0, index)} >
+                                            <div class="decline-svg">
+                                                {#if !declineList.includes(index)}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke='currentColor' height="18" width="18">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                {:else}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke='white' height="18" width="18">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                {/if}
+                                            </div>
+                                            <h3 class={(declineList.includes(index)) ? 'clicked' : 'unclicked'}>거절</h3>
+                                        </div>
+                                    </div>
                                 </div>
                             {:else}
                                 <div class="no-case-id"><h3>요청이 비어있습니다</h3></div>
@@ -506,18 +696,37 @@
                     {/if}
                 </div>
 
+                <div class="buffer"></div>
+
                 <div class="single-input-wrap">
                     <div class="input-category-title">
                         <h3>사유</h3>
                     </div>
-                    <InputSingleValue placeholder="이름" init={name} conditions={condition_set.unchangable_conditions('여기서는')} immutable={true} />
-                    <InputSingleValue placeholder="아이디" init={registered_id} conditions={condition_set.unchangable_conditions('여기서는')} />
+                    <div class="text-wrap">
+                        <h5>
+                            안녕하십니까, 상병 김재우입니다. 다름이 아니라 이번 순항훈련전단에서 
+                            지금까지 있었던 순항훈련 기록물을 참고하여 기항지 탐색/조사를 시행하려 합니다.
+                            협조 부탁드립니다
+                        </h5>
+                    </div>    
+                </div>
+                <div class="btn-control-wrap">
+                    <div class="btn-container">
+                        <button class="withdraw-btn btn">
+                            <h3>보류하기</h3>
+                        </button>
+                        <button class="accept-btn btn">
+                            <h3>적용하기</h3>
+                        </button>
+                        <button class="decline-btn btn">
+                            <h3>거부하기</h3>
+                        </button>
+                    </div>
                 </div>
             </div>
         {:else}
             <div class="body-content-wrap-unauthorized"></div>
         {/if}
     </div>
-
 
 </div>
