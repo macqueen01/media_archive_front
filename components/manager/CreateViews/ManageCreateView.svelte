@@ -1,22 +1,15 @@
 
 <style>
-<<<<<<< HEAD
-=======
     .bottom-bar {
         margin-top: 20px;
     }
->>>>>>> main
 </style>
 
 <script>
 
     import ManageCreateContainer from '../../../pages/content_container/ManageCreateContainer.svelte';
     import ManageCreateNavbar from '../../../pages/sidebar/ManageCreateNavbar.svelte';
-<<<<<<< HEAD
-    import ManageCreateTitle from '../../../components/manager/ManageCreateTitle.svelte';
-=======
     import ManageCreateTitle from '../ContentTitle/ManageCreateTitle.svelte';
->>>>>>> main
 
     let subtitle = '';
     let stage = 1;
