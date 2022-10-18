@@ -188,7 +188,7 @@
     for (let i = 0; i < 40; i++) {
         fetched_items = [...fetched_items, 
         {
-            type: '사진',
+            type: 1,
             _id: i,
             uploader_id: 2,
             associate: "김재우",

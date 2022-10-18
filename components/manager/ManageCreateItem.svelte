@@ -147,9 +147,9 @@
     </div>
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
-            {#if type == '사진'}
+            {#if type == 0}
                 <img src="{src}" height="85px" alt="test-img">
-            {:else if type == '영상'}
+            {:else if type == 1}
                 <video height="85px" controls>
                     <source src={src} type="video/mp4"/>
                 </video>

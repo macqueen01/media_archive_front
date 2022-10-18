@@ -75,6 +75,8 @@
         flex-direction: row;
         justify-content: flex-end;
         align-items: center;
+        padding-bottom: 100px;
+        background: linear-gradient( rgba(2,0,36,1) 0%, rgba(9,9,121,1) 0%, rgb(0 0 0 / 28%) 0%, rgb(255 255 255 / 0%) 100%);
     }
 
     .user-panel {

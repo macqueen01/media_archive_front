@@ -1,0 +1,782 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+}
+.editor__header {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
+}
+.editor__content {
+  flex: 1 1 auto;
+}
+.editor__footer {
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0 0 calc(0.25rem - 1px) calc(0.25rem - 1px);
+}
+.editor .menu-item {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #0d0d0d;
+  border: none;
+  background-color: transparent;
+  border-radius: 0.4rem;
+  padding: 0.25rem;
+  margin-right: 0.25rem;
+}
+.editor .menu-item svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+.editor .menu-item.is-active,
+.editor .menu-item:hover {
+  color: #fff;
+  background-color: #0d0d0d;
+}
+.editor .menu-item.is-disabled {
+  color: #d1d5db;
+}
+.editor .divider {
+  width: 2px;
+  height: 1.25rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-left: 0.5rem;
+  margin-right: 0.75rem;
+}
+.editor .bubble-menu {
+  display: flex;
+  background-color: #374151;
+  padding: 0.2rem;
+  border-radius: 0.5rem;
+}
+.editor .bubble-menu button {
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0 0.2rem;
+  color: #fff;
+  opacity: 0.8;
+}
+.editor .bubble-menu button.is-active,
+.editor .bubble-menu button:hover {
+  opacity: 1;
+}
+.editor .floating-menu {
+  display: flex;
+  background-color: rgba(13, 13, 13, 0.06274509803921569);
+  padding: 0.2rem;
+  border: 0;
+  border-radius: 0.5rem;
+}
+.editor .floating-menu button {
+  border: none;
+  background: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0 0.2rem;
+  opacity: 0.6;
+}
+.editor .floating-menu button.is-active,
+.editor .floating-menu button:hover {
+  opacity: 1;
+}
+.fullScreen {
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.fullScreen .editor__content {
+  height: 35rem;
+  overflow: auto;
+}
+.fullScreen .ProseMirror {
+  height: 100%;
+}
+.ProseMirror-gapcursor {
+  position: relative;
+}
+.ProseMirror {
+  padding: 0 1rem;
+  height: 35rem;
+  overflow-y: scroll;
+}
+.ProseMirror > * {
+  max-width: 850px;
+  margin: auto;
+}
+.ProseMirror:focus {
+  outline: none;
+}
+.ProseMirror p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.ProseMirror a {
+  --tw-text-opacity: 1;
+  color: rgba(37, 99, 235, var(--tw-text-opacity));
+}
+.ProseMirror h1 {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+.ProseMirror h1,
+.ProseMirror h2 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.ProseMirror .ProseMirror h2,
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.ProseMirror h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.ProseMirror .ProseMirror h3,
+.ProseMirror h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.ProseMirror h4 {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.ProseMirror .ProseMirror h4,
+.ProseMirror h4 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.ProseMirror .text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+.ProseMirror .text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+.ProseMirror .text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+.ProseMirror ul {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  list-style-position: outside;
+  list-style-type: disc;
+  padding: 0.125rem;
+  line-height: 1.5;
+}
+@media (min-width: 1024px) {
+  .ProseMirror ul {
+    line-height: 2;
+  }
+}
+.ProseMirror ul li {
+  margin-left: 1.25rem;
+}
+.ProseMirror ul p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.ProseMirror ol {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  list-style-position: outside;
+  list-style-type: decimal;
+  padding: 0.125rem;
+  line-height: 1.5;
+}
+@media (min-width: 1024px) {
+  .ProseMirror ol {
+    line-height: 2;
+  }
+}
+.ProseMirror ol li {
+  margin-left: 1.25rem;
+}
+.ProseMirror ol p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.ProseMirror code {
+  background-color: rgba(97, 97, 97, 0.1);
+  color: #616161;
+}
+.ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: JetBrainsMono, monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+.ProseMirror mark {
+  background: #ff0;
+}
+.ProseMirror img {
+  height: auto;
+  max-width: 100%;
+}
+.ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(13, 13, 13, 0.1);
+}
+.ProseMirror hr {
+  border: none;
+  border-top: 2px solid rgba(13, 13, 13, 0.1);
+}
+.ProseMirror [v-cloak] {
+  display: none;
+}
+.ProseMirror .btn {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.ProseMirror .btn,
+.ProseMirror .ProseMirror .btn {
+  border-radius: 0.25rem;
+}
+.ProseMirror .bg-primary-100 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(195, 202, 222, var(--tw-bg-opacity)) !important;
+}
+.ProseMirror .border-primary-100 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgba(195, 202, 222, var(--tw-border-opacity)) !important;
+}
+.ProseMirror .bg-green-700 {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(4, 120, 87, var(--tw-bg-opacity)) !important;
+}
+.ProseMirror .border-green-700 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgba(4, 120, 87, var(--tw-border-opacity)) !important;
+}
+.ProseMirror .no-underline {
+  text-decoration: none !important;
+}
+.ProseMirror .hover\:text-black:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgba(0, 0, 0, var(--tw-text-opacity)) !important;
+}
+.ProseMirror .hover\:text-primary:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgba(0, 19, 77, var(--tw-text-opacity)) !important;
+}
+.ProseMirror .hover\:text-secondary:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgba(73, 80, 87, var(--tw-text-opacity)) !important;
+}
+.ProseMirror .hover\:bg-white:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(255, 255, 255, var(--tw-bg-opacity)) !important;
+}
+.ProseMirror .flex {
+  display: flex;
+}
+.ProseMirror .flex-row {
+  flex-direction: row;
+}
+.ProseMirror .flex-col {
+  flex-direction: column;
+}
+.ProseMirror .grid {
+  display: grid;
+}
+.ProseMirror .gap-5 {
+  gap: 1.25rem;
+}
+.ProseMirror .gap-10 {
+  gap: 2.5rem;
+}
+.ProseMirror .grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+@media (min-width: 768px) {
+  .ProseMirror .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ProseMirror .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ProseMirror .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .ProseMirror .md\:hidden {
+    display: none;
+  }
+}
+@media (min-width: 1024px) {
+  .ProseMirror .lg\:gap-10 {
+    gap: 2.5rem;
+  }
+}
+.ProseMirror .card {
+  position: relative;
+  overflow: hidden;
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+}
+.ProseMirror .card,
+.ProseMirror .ProseMirror .card {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
+    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
+}
+.ProseMirror .card-header {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .ProseMirror .card-header {
+  border-width: 1px;
+}
+.ProseMirror .card-body {
+  padding: 0.5rem;
+}
+.ProseMirror .intro-box {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.25rem;
+}
+.ProseMirror .ProseMirror .intro-box {
+  border-radius: 0.25rem;
+}
+.ProseMirror .intro-box {
+  border: 4px solid;
+  --tw-border-opacity: 1 !important;
+  border-color: rgba(121, 137, 186, var(--tw-border-opacity)) !important;
+}
+.ProseMirror .intro-box .intro-box__summary {
+  padding: 1rem;
+}
+.ProseMirror .intro-box .intro-box__summary ol,
+.ProseMirror .intro-box .intro-box__summary p,
+.ProseMirror .intro-box .intro-box__summary ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .intro-box .intro-box__how-to {
+  --tw-border-opacity: 1;
+  border-color: rgba(121, 137, 186, var(--tw-border-opacity));
+  padding: 1rem;
+}
+.ProseMirror .intro-box .intro-box__how-to,
+.ProseMirror .ProseMirror .intro-box .intro-box__how-to {
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(195, 202, 222, var(--tw-bg-opacity));
+}
+.ProseMirror .intro-box .intro-box__how-to a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(30, 58, 138, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .intro-box .intro-box__how-to a:hover {
+  text-decoration: none;
+}
+.ProseMirror .intro-box .intro-box__how-to ol,
+.ProseMirror .intro-box .intro-box__how-to p,
+.ProseMirror .intro-box .intro-box__how-to ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .summary-box {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.25rem;
+  padding: 1rem;
+}
+.ProseMirror .ProseMirror .summary-box {
+  border-radius: 0.25rem;
+}
+.ProseMirror .summary-box {
+  border: 4px solid;
+  --tw-border-opacity: 1 !important;
+  border-color: rgba(121, 137, 186, var(--tw-border-opacity)) !important;
+}
+.ProseMirror .summary-box ol,
+.ProseMirror .summary-box p,
+.ProseMirror .summary-box ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .alert-primary {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(121, 137, 186, var(--tw-border-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .alert-primary,
+.ProseMirror .ProseMirror .alert-primary {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  --tw-bg-opacity: 1;
+  background-color: rgba(195, 202, 222, var(--tw-bg-opacity));
+}
+.ProseMirror .alert-primary a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(30, 58, 138, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .alert-primary a:hover {
+  text-decoration: none;
+}
+.ProseMirror .alert-primary ol,
+.ProseMirror .alert-primary p,
+.ProseMirror .alert-primary ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .alert-secondary {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(180, 186, 191, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(223, 226, 230, var(--tw-bg-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .alert-secondary,
+.ProseMirror .ProseMirror .alert-secondary {
+  border-radius: 0.25rem;
+  border-width: 1px;
+}
+.ProseMirror .alert-secondary a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(17, 24, 39, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .alert-secondary a:hover {
+  text-decoration: none;
+}
+.ProseMirror .alert-secondary ol,
+.ProseMirror .alert-secondary p,
+.ProseMirror .alert-secondary ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .alert-success {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(167, 243, 208, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(209, 250, 229, var(--tw-bg-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .alert-success,
+.ProseMirror .ProseMirror .alert-success {
+  border-radius: 0.25rem;
+  border-width: 1px;
+}
+.ProseMirror .alert-success a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(6, 78, 59, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .alert-success a:hover {
+  text-decoration: none;
+}
+.ProseMirror .alert-success ol,
+.ProseMirror .alert-success p,
+.ProseMirror .alert-success ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .alert-danger {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(254, 202, 202, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(254, 226, 226, var(--tw-bg-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .alert-danger,
+.ProseMirror .ProseMirror .alert-danger {
+  border-radius: 0.25rem;
+  border-width: 1px;
+}
+.ProseMirror .alert-danger a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(127, 29, 29, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .alert-danger a:hover {
+  text-decoration: none;
+}
+.ProseMirror .alert-danger ol,
+.ProseMirror .alert-danger p,
+.ProseMirror .alert-danger ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .alert-info {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  --tw-border-opacity: 1;
+  border-color: rgba(191, 219, 254, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(219, 234, 254, var(--tw-bg-opacity));
+  padding: 0.5rem;
+}
+.ProseMirror .alert-info,
+.ProseMirror .ProseMirror .alert-info {
+  border-radius: 0.25rem;
+  border-width: 1px;
+}
+.ProseMirror .alert-info a {
+  font-weight: 600;
+  --tw-text-opacity: 1;
+  color: rgba(30, 58, 138, var(--tw-text-opacity));
+  text-decoration: underline;
+}
+.ProseMirror .alert-info a:hover {
+  text-decoration: none;
+}
+.ProseMirror .alert-info ol,
+.ProseMirror .alert-info p,
+.ProseMirror .alert-info ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror .product-info {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  padding: 0.5rem 1.25rem;
+}
+.ProseMirror .product-info,
+.ProseMirror .ProseMirror .product-info {
+  border-radius: 0.25rem;
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
+    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
+}
+.ProseMirror .product-info {
+  border: 1px solid #e5e7eb;
+}
+.ProseMirror ul.positive-list {
+  list-style-image: url(/svg/check.svg);
+  list-style-position: outside;
+}
+.ProseMirror ul.negative-list {
+  list-style-image: url(/svg/cancel.svg);
+  list-style-position: outside;
+}
+.ProseMirror .page__navigation {
+  list-style-type: disc !important;
+  border-radius: 0.25rem !important;
+  border-width: 1px !important;
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(0, 19, 77, var(--tw-bg-opacity)) !important;
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+  padding-left: 1rem !important;
+  line-height: 2.5rem !important;
+  --tw-text-opacity: 1 !important;
+  color: rgba(255, 255, 255, var(--tw-text-opacity)) !important;
+}
+@media (min-width: 640px) {
+  .ProseMirror .page__navigation {
+    line-height: 2rem !important;
+  }
+}
+.ProseMirror .ProseMirror .page__navigation {
+  border-width: 1px !important;
+  border-radius: 0.25rem !important;
+}
+.ProseMirror .page__navigation a {
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+.ProseMirror .page-lean-navigation {
+  list-style-type: disc !important;
+  padding-top: 1.25rem !important;
+  padding-bottom: 1.25rem !important;
+  padding-left: 1rem !important;
+  line-height: 2.5rem !important;
+  --tw-text-opacity: 1 !important;
+  color: rgba(0, 19, 77, var(--tw-text-opacity)) !important;
+}
+@media (min-width: 640px) {
+  .ProseMirror .page-lean-navigation {
+    line-height: 2rem !important;
+  }
+}
+.ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+.ProseMirror table td,
+.ProseMirror table th {
+  min-width: 1em;
+  border: 1px solid #ced4da;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  position: relative;
+}
+.ProseMirror table td p,
+.ProseMirror table th p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.ProseMirror table th {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 19, 77, var(--tw-bg-opacity));
+  padding: 0.5rem;
+  --tw-text-opacity: 1;
+  color: rgba(255, 255, 255, var(--tw-text-opacity));
+}
+.ProseMirror .ProseMirror table th {
+  border-width: 1px;
+}
+.ProseMirror table th {
+  font-weight: 400;
+}
+.ProseMirror table .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(200, 200, 255, 0.4);
+  pointer-events: none;
+}
+.ProseMirror table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background-color: #adf;
+  pointer-events: none;
+}
+.ProseMirror .tableWrapper {
+  max-width: 851px;
+  padding: 1rem 0;
+  margin: auto;
+  overflow-x: auto;
+}
+.ProseMirror .resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
+.ProseMirror tr:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgba(229, 231, 235, var(--tw-bg-opacity));
+}
+.ProseMirror tr:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(209, 213, 219, var(--tw-bg-opacity));
+}
+.ProseMirror tr:first-child {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(0, 19, 77, var(--tw-bg-opacity)) !important;
+  --tw-text-opacity: 1 !important;
+  color: rgba(255, 255, 255, var(--tw-text-opacity)) !important;
+}
+.ProseMirror .img-fluid {
+  height: auto;
+  max-width: 100%;
+}
+.ProseMirror .shadow-md {
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent),
+    var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow);
+}
+.ProseMirror .border {
+  border-width: 1px;
+}
+.ProseMirror .rounded {
+  border-radius: 0.25rem;
+}
+.ProseMirror .aspect-w-9,
+.ProseMirror .aspect-w-16 {
+  position: relative;
+  padding-bottom: calc(var(--tw-aspect-h) / var(--tw-aspect-w) * 100%);
+}
+.ProseMirror .aspect-h-9 {
+  --tw-aspect-h: 9;
+}
+.ProseMirror .aspect-w-16 {
+  --tw-aspect-w: 16;
+}
+.ProseMirror .aspect-w-9 > *,
+.ProseMirror .aspect-w-16 > * {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+@media (min-width: 768px) {
+  .ProseMirror .resp-container {
+    overflow: hidden;
+  }
+}
+.ProseMirror .resp-container iframe {
+  width: 100%;
+  display: block;
+  margin: auto !important;
+}
+body {
+  padding-right: 0 !important;
+}
