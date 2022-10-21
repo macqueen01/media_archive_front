@@ -160,7 +160,7 @@
     let key;
 
     onMount(() => {
-        if (init) {
+        if (init == 0 || init) {
             key = init;
             value = option_list[key];
             console.log(key)
@@ -181,7 +181,8 @@
 
     $: {
         dispatch('change', {
-        key: option_list.indexOf(value),
+            key: option_list.indexOf(value),
+            pass: conditionResult(value)
     })
         console.log(option_list.indexOf(value))
 
@@ -192,8 +193,8 @@
     function conditionResult(value) {
         let result = true;
         conditions.forEach((con) => {
-            if (!con.condition(value)) {
-                result = false
+            if (!con.condition(option_list.indexOf(value))) {
+                result = false;
             }
         })
         return result
@@ -238,7 +239,7 @@
     <div class="warning-wrap">
         <div class="warning-container">
             {#each conditions as con, con_id}
-                {#if !con.condition(value)}
+                {#if !con.condition(option_list.indexOf(value))}
                     <h3 class="not-satisfied">{con.not_satisfied_text}</h3>
                 {/if}
             {/each}

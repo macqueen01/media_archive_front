@@ -242,8 +242,8 @@
     import { condition_set } from '../../utilities/inputConditions';
 
     export let stage = 1;
-    export let view = 'box';
 
+    let saved_data = {};
     let title;
     let location;
     let affiliation;
@@ -251,11 +251,29 @@
     let attendee;
     let attendee_list=[];
     let date;
-    let produced = true;
+    let produced = -1;
     let created_at;
-    let type;
+    let type = -1;
     let source;
-    let pass_list = {};
+    let pass_list = {
+        length: () => {
+            let length = 0;
+            for (var item in this) {
+                length += 1;
+            }
+            return length
+        },
+        title: false,
+        location: false,
+        affiliation: false,
+        associate: false,
+        attendee: false,
+        date: false,
+        produced: false,
+        type: false,
+
+    };
+
     // FILE_UPLOADING is a flag for which to track if file is being 
     // transfered in that moment of time
     let file_uploading = false;
@@ -264,29 +282,65 @@
     let content = "";
     let item_objs = []
 
+    var dispatch = createEventDispatcher();
+
 
     function downloader(item) {
         if (!item) {
             console.log('cannot find item')
         }
 
-        console.log("downloading from...",item.src)
+        console.log("downloading from...", item.src)
     }
 
-    function changeHandle(e, variable) {
-        variable = e.detail.value;
+    function changeHandle(e, variable_name) {
+        if (variable_name == 'title') {
+            title = e.detail.value;
+            pass_list.title = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'attendee') {
+            attendee = e.detail.value;
+            pass_list.attendee = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'location') {
+            location = e.detail.value;
+            pass_list.location = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'associate') {
+            associate = e.detail.value;
+            pass_list.associate = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'date') {
+            date = e.detail.value;
+            pass_list.date = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'affiliation') {
+            affiliation = e.detail.value;
+            pass_list.affiliation = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'produced') {
+            // Option input doesn't save renewed value without console.log call
+            // to KEY. The reason is left unanswered.
+            // DON'T REMOVE THE CONSOLE LOG BELOW!
+            console.log(e.detail.key)
+
+            produced = e.detail.key;
+            pass_list.produced = e.detail.pass;
+            pass_list = pass_list
+        } else if (variable_name == 'type') {
+            // DON'T REMOVE THE CONSOLE LOG BELOW!
+            console.log(e.detail.key)
+
+            type = e.detail.key;
+            pass_list.type = e.detail.pass;
+            pass_list = pass_list
+        } else {
+            console.log('Change Error Occurred')
+        }
     }
 
-    function changeOptionHandle(e, variable) {
-        variable = e.detail.key;
-    }
 
     // Handler is received from components
-
-    function passHandle(e) {
-        let input_name = e.detail.name;
-        pass_list[input_name] = e.detail.pass;
-    }
 
     function allCheckHandle(e) {
         if (all_checked) {
@@ -444,6 +498,21 @@
         return result;
     }
 
+    function passCheck(lst) {
+        if (lst.length() == 1) {
+            return false
+        }
+
+        for (var item in lst) {
+            console.log(item, ':', lst[item])
+            if (!lst[item]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // stage manager
     // stage manager manages the logic behind navigation within create-container
 
@@ -460,6 +529,7 @@
         } else if (stage == 2) {
             // parse ATTENDEE in form of list (ATTENDEE -> ATTENDEE_LIST)
             if (attendee) {
+                passCheck(pass_list);
                 attendee_list = parseToList(attendee);
             }
         }
@@ -467,6 +537,18 @@
         else if (stage == 3) {
             let result = fileUpload();
             console.log(result)
+        }
+    }
+
+    $: {
+        if (passCheck(pass_list)) {
+            dispatch('data', {
+                cleared: true
+            })
+        } else {
+            dispatch('data', {
+                cleared: false
+            })
         }
     }
 
@@ -489,18 +571,18 @@
             <div class="input-category-title">
                 <h3>기본 등록 정보</h3>
             </div>
-            <InputSingleValue placeholder="제목을 입력해주세요" on:change={(e) => changeHandle(e,title)} conditions={condition_set.default_conditions} on:pass={passHandle} value={title} />
-            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" on:change={(e) => changeHandle(e,attendee)} conditions={condition_set.attendee_conditions} on:pass={passHandle}  />
+            <InputSingleValue placeholder="제목을 입력해주세요" init={title} on:change={(e) => changeHandle(e, 'title')} conditions={condition_set.default_conditions} />
+            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" init={attendee} on:change={(e) => changeHandle(e, 'attendee')} conditions={condition_set.attendee_conditions} />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSingleValue placeholder="행사 장소를 입력해주세요" on:change={(e) => changeHandle(e,location)} conditions={condition_set.default_conditions} on:pass={passHandle} />
-            <InputSelectValue placeholder="기록 유형을 선택해주세요" on:change={(e) => changeOptionHandle(e,type)} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['사진', '영상', '문서']} />
+            <InputSingleValue placeholder="행사 장소를 입력해주세요" init={location} on:change={(e) => changeHandle(e,'location')} conditions={condition_set.default_conditions} />
+            <InputSelectValue placeholder="기록 유형을 선택해주세요" init={type} on:change={(e) => changeHandle(e, 'type')} conditions={condition_set.select_conditions} option_list={['사진', '영상', '문서']} />
         </div>
         <div class="single-input-wrap">
             <div class="padding"></div>
-            <InputSelectValue placeholder="생산물 여부를 선택해주세요" on:change={(e) => changeOptionHandle(e,produced)} conditions={condition_set.attendee_conditions} on:pass={passHandle} option_list={['생산', '수집']} />
-            <InputSingleValue placeholder="생산 부대를 입력해주세요" on:change={(e) => changeOptionHandle(e,created_at)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSelectValue placeholder="생산물 여부를 선택해주세요" init={produced} on:change={(e) => changeHandle(e, 'produced')} conditions={condition_set.select_conditions} option_list={['생산', '수집']} />
+            <InputSingleValue placeholder="생산 부대를 입력해주세요" init={affiliation} on:change={(e) => changeHandle(e, 'affiliation')} conditions={condition_set.default_conditions} />
         </div>
 
         <div class="buffer"></div>
@@ -510,8 +592,8 @@
             <div class="input-category-title">
                 <h3>생산 정보</h3>
             </div>
-            <InputSingleValue placeholder="촬영자를 입력해주세요" on:change={(e) => changeHandle(e,associate)} conditions={condition_set.default_conditions} on:pass={passHandle} />
-            <InputSingleValue placeholder="생산연도를 입력해주세요" on:change={(e) => changeHandle(e,date)} conditions={condition_set.default_conditions} on:pass={passHandle} />
+            <InputSingleValue placeholder="촬영자를 입력해주세요" init={associate} on:change={(e) => changeHandle(e, 'associate')} conditions={condition_set.default_conditions} />
+            <InputSingleValue placeholder="생산연도를 입력해주세요" init={date} on:change={(e) => changeHandle(e, 'date')} conditions={condition_set.default_conditions} />
         </div>
 
     {:else if stage == 2}

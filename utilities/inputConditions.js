@@ -12,7 +12,8 @@ condition_set.default_conditions = [
             return false;
         },
         name: "longerThanOneLetter",
-        not_satisfied_text: "최소 한자 이상 들어가야 합니다"
+        not_satisfied_text: "최소 한자 이상 들어가야 합니다",
+        satisfied_text: "좋습니다!"
     },
     {
         condition: (val) => {
@@ -38,6 +39,21 @@ condition_set.attendee_conditions = [
         },
         name: "longerThanOneWord",
         not_satisfied_text: "인물이 한명 이상 들어가야 합니다",
+        satisfied_text: "좋습니다!"
+    }
+]
+
+condition_set.select_conditions = [
+    {
+        condition: (val) => {
+            if (val == -1) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+        name: "pickOne",
+        not_satisfied_text: "한개를 반드시 선택해야 합니다",
         satisfied_text: "좋습니다!"
     }
 ]

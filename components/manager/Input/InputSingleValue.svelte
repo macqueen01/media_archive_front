@@ -174,7 +174,8 @@
     }
 
     $: dispatch('change', {
-        value: value
+        value: value,
+        pass: conditionResult(value)
     })
 
 
