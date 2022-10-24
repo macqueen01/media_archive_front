@@ -99,9 +99,9 @@
     </div>
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
-            {#if item.type == '사진'}
+            {#if item.type == 0}
                 <img src="{item.src[0]}" height="85px" alt="test-img">
-            {:else if item.type == '영상'}
+            {:else if item.type == 1}
                 <video height="85px" controls>
                     <source src={item.src[0]} type="video/mp4"/>
                 </video>

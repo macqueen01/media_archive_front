@@ -121,7 +121,7 @@
             <a href="/manage" class="manage-nav">
                 <h3>관리자</h3>
             </a>
-            <a href="/login" class="login-nav">
+            <a href="/auth/login" class="login-nav">
                 <h3>로그인</h3>
             </a>
         </div>

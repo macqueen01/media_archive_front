@@ -255,7 +255,7 @@
                             <div class="input-category-title">
                                 <h3>권한 정보</h3>
                             </div>
-                            <InputSelectValue placeholder="권한 종류" init={1} on:change={(e) => changeOptionHandle(e, user.authority)} conditions={condition_set.default_conditions} on:pass={passHandle} option_list={['비인가', '일반 유저', '관리자']} />
+                            <InputSelectValue placeholder="권한 종류" init={1} on:change={(e) => changeOptionHandle(e, user.authority)} conditions={condition_set.select_conditions} on:pass={passHandle} option_list={['비인가', '일반 유저', '관리자']} />
                             <InputSingleValue placeholder="등록 IP" on:change={(e) => changeHandle(e, user.ip_address)} conditions={condition_set.default_conditions} on:pass={passHandle} />
                         </div>
                 </div>

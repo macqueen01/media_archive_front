@@ -75,7 +75,9 @@
     import Footer from "./components/Footer.svelte";
     
     /* Imports pages */
-    import UserMain from "./pages/UserMain.svelte"
+    import UserMain from "./pages/UserMain.svelte";
+    import Login from "./pages/Auth/Login.svelte";
+    //import Signin from "./pages/Auth/Signin.svelte";
     import Browse from "./pages/Browse.svelte";
     import ManageMain from "./pages/ManageMain.svelte";
     import ManageBrowse from './pages/ManageBrowse/ManageBrowse.svelte';
@@ -93,6 +95,17 @@
 
         <UserMain />
         
+    </Route>
+
+    <Route path="/auth/*">
+        
+        <Route path="/login">
+            <Login />
+        </Route>
+
+        <!--<Route path="/signin">
+            <Signin />
+        </Route>-->
     </Route>
 
     <Route path="/user/*">

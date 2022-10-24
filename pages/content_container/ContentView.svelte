@@ -464,14 +464,14 @@
                             </div>
                         </div>
                         {/if}
-                        {#if file.type == '영상'}
+                        {#if file.type == 1}
                             <video bind:this={image} controls on:mouseover={hoverHandle}>
                                 <source src={curr} />
                             </video>
-                        {:else if file.type == '사진'}
+                        {:else if file.type == 0}
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                             <img src={curr} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
-                        {:else if file.type == '문서'}
+                        {:else if file.type == 2}
                             <h1>아직 문서지원 준비중입니다</h1>
                         {/if}
                         {#if img_hover}
