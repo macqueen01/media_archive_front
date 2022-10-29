@@ -2399,23 +2399,23 @@ var app = (function () {
     			div2 = element("div");
     			create_component(usersearch.$$.fragment);
     			attr_dev(h30, "class", "svelte-3zwetz");
-    			add_location(h30, file$4, 121, 16, 2739);
+    			add_location(h30, file$4, 131, 16, 2873);
     			attr_dev(a0, "href", "/manage");
     			attr_dev(a0, "class", "manage-nav svelte-3zwetz");
-    			add_location(a0, file$4, 120, 12, 2684);
+    			add_location(a0, file$4, 130, 12, 2818);
     			attr_dev(h31, "class", "svelte-3zwetz");
-    			add_location(h31, file$4, 124, 16, 2841);
+    			add_location(h31, file$4, 134, 16, 2975);
     			attr_dev(a1, "href", "/auth/login");
     			attr_dev(a1, "class", "login-nav svelte-3zwetz");
-    			add_location(a1, file$4, 123, 12, 2783);
+    			add_location(a1, file$4, 133, 12, 2917);
     			attr_dev(div0, "class", "user-panel svelte-3zwetz");
-    			add_location(div0, file$4, 119, 8, 2646);
+    			add_location(div0, file$4, 129, 8, 2780);
     			attr_dev(div1, "class", "user-panel-wrap svelte-3zwetz");
-    			add_location(div1, file$4, 118, 4, 2607);
+    			add_location(div1, file$4, 128, 4, 2741);
     			attr_dev(div2, "class", "search-wrap svelte-3zwetz");
-    			add_location(div2, file$4, 128, 4, 2905);
+    			add_location(div2, file$4, 138, 4, 3039);
     			attr_dev(div3, "class", "main-view-home svelte-3zwetz");
-    			add_location(div3, file$4, 117, 0, 2573);
+    			add_location(div3, file$4, 127, 0, 2707);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2464,13 +2464,23 @@ var app = (function () {
     function instance$5($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('UserMain', slots, []);
+    	let image_src_lst = ["1.jpg", "2.jpg", "3.jpg", "4.JPG", "5.jpg"];
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<UserMain> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ UserSearch });
+    	$$self.$capture_state = () => ({ UserSearch, image_src_lst });
+
+    	$$self.$inject_state = $$props => {
+    		if ('image_src_lst' in $$props) image_src_lst = $$props.image_src_lst;
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
     	return [];
     }
 
@@ -8406,19 +8416,197 @@ var app = (function () {
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[9] = list[i];
-    	child_ctx[11] = i;
+    	child_ctx[11] = list[i];
+    	child_ctx[13] = i;
     	return child_ctx;
     }
 
     function get_each_context$3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[9] = list[i];
-    	child_ctx[11] = i;
+    	child_ctx[11] = list[i];
+    	child_ctx[13] = i;
     	return child_ctx;
     }
 
-    // (221:29) 
+    // (296:4) {:catch error}
+    function create_catch_block$1(ctx) {
+    	let div1;
+    	let div0;
+    	let svg;
+    	let path;
+    	let path_intro;
+    	let t0;
+    	let h4;
+    	let t2;
+    	let h5;
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			svg = svg_element("svg");
+    			path = svg_element("path");
+    			t0 = space();
+    			h4 = element("h4");
+    			h4.textContent = "조회에 실패했습니다";
+    			t2 = space();
+    			h5 = element("h5");
+    			h5.textContent = "인터넷 연결을 확인해주세요";
+    			attr_dev(path, "stroke-linecap", "round");
+    			attr_dev(path, "stroke-linejoin", "round");
+    			attr_dev(path, "d", "M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z");
+    			add_location(path, file$a, 299, 16, 7935);
+    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
+    			attr_dev(svg, "fill", "none");
+    			attr_dev(svg, "viewBox", "0 0 24 24");
+    			attr_dev(svg, "stroke-width", "0.8");
+    			attr_dev(svg, "stroke", "rgb(226, 41, 41)");
+    			attr_dev(svg, "height", "100");
+    			attr_dev(svg, "width", "100");
+    			add_location(svg, file$a, 298, 12, 7776);
+    			attr_dev(div0, "class", "svg-wrap");
+    			add_location(div0, file$a, 297, 8, 7741);
+    			attr_dev(h4, "class", "svelte-15516wd");
+    			add_location(h4, file$a, 302, 8, 8249);
+    			attr_dev(h5, "class", "svelte-15516wd");
+    			add_location(h5, file$a, 303, 8, 8277);
+    			attr_dev(div1, "class", "fetch-fail-page svelte-15516wd");
+    			add_location(div1, file$a, 296, 4, 7703);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, svg);
+    			append_dev(svg, path);
+    			append_dev(div1, t0);
+    			append_dev(div1, h4);
+    			append_dev(div1, t2);
+    			append_dev(div1, h5);
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (!path_intro) {
+    				add_render_callback(() => {
+    					path_intro = create_in_transition(path, draw, { duration: 700, speed: 1 });
+    					path_intro.start();
+    				});
+    			}
+    		},
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_catch_block$1.name,
+    		type: "catch",
+    		source: "(296:4) {:catch error}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (251:4) {:then result}
+    function create_then_block$1(ctx) {
+    	let current_block_type_index;
+    	let if_block;
+    	let if_block_anchor;
+    	let current;
+    	const if_block_creators = [create_if_block$6, create_if_block_1$4];
+    	const if_blocks = [];
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*view*/ ctx[1] == 'box') return 0;
+    		if (/*view*/ ctx[1] == 'list') return 1;
+    		return -1;
+    	}
+
+    	if (~(current_block_type_index = select_block_type(ctx))) {
+    		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    	}
+
+    	const block = {
+    		c: function create() {
+    			if (if_block) if_block.c();
+    			if_block_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			if (~current_block_type_index) {
+    				if_blocks[current_block_type_index].m(target, anchor);
+    			}
+
+    			insert_dev(target, if_block_anchor, anchor);
+    			current = true;
+    		},
+    		p: function update(ctx, dirty) {
+    			let previous_block_index = current_block_type_index;
+    			current_block_type_index = select_block_type(ctx);
+
+    			if (current_block_type_index === previous_block_index) {
+    				if (~current_block_type_index) {
+    					if_blocks[current_block_type_index].p(ctx, dirty);
+    				}
+    			} else {
+    				if (if_block) {
+    					group_outros();
+
+    					transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    						if_blocks[previous_block_index] = null;
+    					});
+
+    					check_outros();
+    				}
+
+    				if (~current_block_type_index) {
+    					if_block = if_blocks[current_block_type_index];
+
+    					if (!if_block) {
+    						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    						if_block.c();
+    					} else {
+    						if_block.p(ctx, dirty);
+    					}
+
+    					transition_in(if_block, 1);
+    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				} else {
+    					if_block = null;
+    				}
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (~current_block_type_index) {
+    				if_blocks[current_block_type_index].d(detaching);
+    			}
+
+    			if (detaching) detach_dev(if_block_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_then_block$1.name,
+    		type: "then",
+    		source: "(251:4) {:then result}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (258:29) 
     function create_if_block_1$4(ctx) {
     	let div13;
     	let div10;
@@ -8445,7 +8633,7 @@ var app = (function () {
     	let div12;
     	let div11;
     	let current;
-    	let each_value_1 = /*curr_page_items*/ ctx[2];
+    	let each_value_1 = /*result*/ ctx[10];
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -8493,44 +8681,44 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(h30, "class", "svelte-d0bewu");
-    			add_location(h30, file$a, 225, 24, 5675);
-    			attr_dev(div0, "class", "header-container svelte-d0bewu");
-    			add_location(div0, file$a, 224, 20, 5620);
-    			attr_dev(div1, "class", "header-id-container svelte-d0bewu");
-    			add_location(div1, file$a, 223, 16, 5566);
-    			attr_dev(h31, "class", "svelte-d0bewu");
-    			add_location(h31, file$a, 230, 24, 5868);
-    			attr_dev(div2, "class", "header-container svelte-d0bewu");
-    			add_location(div2, file$a, 229, 20, 5813);
-    			attr_dev(div3, "class", "header-snapshot-container svelte-d0bewu");
-    			add_location(div3, file$a, 228, 16, 5753);
-    			attr_dev(h32, "class", "svelte-d0bewu");
-    			add_location(h32, file$a, 235, 24, 6059);
-    			attr_dev(div4, "class", "header-container svelte-d0bewu");
-    			add_location(div4, file$a, 234, 20, 6004);
-    			attr_dev(div5, "class", "header-title-container svelte-d0bewu");
-    			add_location(div5, file$a, 233, 16, 5947);
-    			attr_dev(h33, "class", "svelte-d0bewu");
-    			add_location(h33, file$a, 240, 24, 6254);
-    			attr_dev(div6, "class", "header-container svelte-d0bewu");
-    			add_location(div6, file$a, 239, 20, 6199);
-    			attr_dev(div7, "class", "header-associate-container svelte-d0bewu");
-    			add_location(div7, file$a, 238, 16, 6138);
-    			attr_dev(h34, "class", "svelte-d0bewu");
-    			add_location(h34, file$a, 245, 24, 6444);
-    			attr_dev(div8, "class", "header-container svelte-d0bewu");
-    			add_location(div8, file$a, 244, 20, 6389);
-    			attr_dev(div9, "class", "header-date-container svelte-d0bewu");
-    			add_location(div9, file$a, 243, 16, 6333);
-    			attr_dev(div10, "class", "table-header svelte-d0bewu");
-    			add_location(div10, file$a, 222, 12, 5523);
-    			attr_dev(div11, "class", "table svelte-d0bewu");
-    			add_location(div11, file$a, 250, 16, 6580);
-    			attr_dev(div12, "class", "list-frame svelte-d0bewu");
-    			add_location(div12, file$a, 249, 12, 6539);
-    			attr_dev(div13, "class", "upload-view svelte-d0bewu");
-    			add_location(div13, file$a, 221, 8, 5485);
+    			attr_dev(h30, "class", "svelte-15516wd");
+    			add_location(h30, file$a, 262, 24, 6533);
+    			attr_dev(div0, "class", "header-container svelte-15516wd");
+    			add_location(div0, file$a, 261, 20, 6478);
+    			attr_dev(div1, "class", "header-id-container svelte-15516wd");
+    			add_location(div1, file$a, 260, 16, 6424);
+    			attr_dev(h31, "class", "svelte-15516wd");
+    			add_location(h31, file$a, 267, 24, 6726);
+    			attr_dev(div2, "class", "header-container svelte-15516wd");
+    			add_location(div2, file$a, 266, 20, 6671);
+    			attr_dev(div3, "class", "header-snapshot-container svelte-15516wd");
+    			add_location(div3, file$a, 265, 16, 6611);
+    			attr_dev(h32, "class", "svelte-15516wd");
+    			add_location(h32, file$a, 272, 24, 6917);
+    			attr_dev(div4, "class", "header-container svelte-15516wd");
+    			add_location(div4, file$a, 271, 20, 6862);
+    			attr_dev(div5, "class", "header-title-container svelte-15516wd");
+    			add_location(div5, file$a, 270, 16, 6805);
+    			attr_dev(h33, "class", "svelte-15516wd");
+    			add_location(h33, file$a, 277, 24, 7112);
+    			attr_dev(div6, "class", "header-container svelte-15516wd");
+    			add_location(div6, file$a, 276, 20, 7057);
+    			attr_dev(div7, "class", "header-associate-container svelte-15516wd");
+    			add_location(div7, file$a, 275, 16, 6996);
+    			attr_dev(h34, "class", "svelte-15516wd");
+    			add_location(h34, file$a, 282, 24, 7302);
+    			attr_dev(div8, "class", "header-container svelte-15516wd");
+    			add_location(div8, file$a, 281, 20, 7247);
+    			attr_dev(div9, "class", "header-date-container svelte-15516wd");
+    			add_location(div9, file$a, 280, 16, 7191);
+    			attr_dev(div10, "class", "table-header svelte-15516wd");
+    			add_location(div10, file$a, 259, 12, 6381);
+    			attr_dev(div11, "class", "table svelte-15516wd");
+    			add_location(div11, file$a, 287, 16, 7438);
+    			attr_dev(div12, "class", "list-frame svelte-15516wd");
+    			add_location(div12, file$a, 286, 12, 7397);
+    			attr_dev(div13, "class", "upload-view svelte-15516wd");
+    			add_location(div13, file$a, 258, 8, 6343);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div13, anchor);
@@ -8565,8 +8753,8 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*curr_page_items, passFocus*/ 12) {
-    				each_value_1 = /*curr_page_items*/ ctx[2];
+    			if (dirty & /*fetch_items, page, passFocus*/ 25) {
+    				each_value_1 = /*result*/ ctx[10];
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -8621,18 +8809,18 @@ var app = (function () {
     		block,
     		id: create_if_block_1$4.name,
     		type: "if",
-    		source: "(221:29) ",
+    		source: "(258:29) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (215:4) {#if view == 'box'}
+    // (252:4) {#if view == 'box'}
     function create_if_block$6(ctx) {
     	let div;
     	let current;
-    	let each_value = /*curr_page_items*/ ctx[2];
+    	let each_value = /*result*/ ctx[10];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -8652,8 +8840,8 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(div, "class", "browse-contents-list-view svelte-d0bewu");
-    			add_location(div, file$a, 215, 8, 5256);
+    			attr_dev(div, "class", "browse-contents-list-view svelte-15516wd");
+    			add_location(div, file$a, 252, 8, 6123);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -8665,8 +8853,8 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*curr_page_items, passFocus*/ 12) {
-    				each_value = /*curr_page_items*/ ctx[2];
+    			if (dirty & /*fetch_items, page, passFocus*/ 25) {
+    				each_value = /*result*/ ctx[10];
     				validate_each_argument(each_value);
     				let i;
 
@@ -8721,24 +8909,24 @@ var app = (function () {
     		block,
     		id: create_if_block$6.name,
     		type: "if",
-    		source: "(215:4) {#if view == 'box'}",
+    		source: "(252:4) {#if view == 'box'}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (252:20) {#each curr_page_items as item, index}
+    // (289:20) {#each result as item, index}
     function create_each_block_1(ctx) {
     	let contentitemlist;
     	let current;
 
     	contentitemlist = new ContentItemList({
-    			props: { item: /*item*/ ctx[9] },
+    			props: { item: /*item*/ ctx[11] },
     			$$inline: true
     		});
 
-    	contentitemlist.$on("click", /*passFocus*/ ctx[3]);
+    	contentitemlist.$on("click", /*passFocus*/ ctx[4]);
 
     	const block = {
     		c: function create() {
@@ -8750,7 +8938,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const contentitemlist_changes = {};
-    			if (dirty & /*curr_page_items*/ 4) contentitemlist_changes.item = /*item*/ ctx[9];
+    			if (dirty & /*page*/ 1) contentitemlist_changes.item = /*item*/ ctx[11];
     			contentitemlist.$set(contentitemlist_changes);
     		},
     		i: function intro(local) {
@@ -8771,24 +8959,24 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(252:20) {#each curr_page_items as item, index}",
+    		source: "(289:20) {#each result as item, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (217:12) {#each curr_page_items as item, index}
+    // (254:12) {#each result as item, index}
     function create_each_block$3(ctx) {
     	let contentitem;
     	let current;
 
     	contentitem = new ContentItem({
-    			props: { item: /*item*/ ctx[9] },
+    			props: { item: /*item*/ ctx[11] },
     			$$inline: true
     		});
 
-    	contentitem.$on("click", /*passFocus*/ ctx[3]);
+    	contentitem.$on("click", /*passFocus*/ ctx[4]);
 
     	const block = {
     		c: function create() {
@@ -8800,7 +8988,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const contentitem_changes = {};
-    			if (dirty & /*curr_page_items*/ 4) contentitem_changes.item = /*item*/ ctx[9];
+    			if (dirty & /*page*/ 1) contentitem_changes.item = /*item*/ ctx[11];
     			contentitem.$set(contentitem_changes);
     		},
     		i: function intro(local) {
@@ -8821,24 +9009,56 @@ var app = (function () {
     		block,
     		id: create_each_block$3.name,
     		type: "each",
-    		source: "(217:12) {#each curr_page_items as item, index}",
+    		source: "(254:12) {#each result as item, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (259:4) <Route path="/:_id">
+    // (249:30)      <h3>로딩 중...</h3>     {:then result}
+    function create_pending_block$1(ctx) {
+    	let h3;
+
+    	const block = {
+    		c: function create() {
+    			h3 = element("h3");
+    			h3.textContent = "로딩 중...";
+    			add_location(h3, file$a, 249, 4, 6055);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h3, anchor);
+    		},
+    		p: noop,
+    		i: noop,
+    		o: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h3);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_pending_block$1.name,
+    		type: "pending",
+    		source: "(249:30)      <h3>로딩 중...</h3>     {:then result}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (307:4) <Route path="/:_id">
     function create_default_slot(ctx) {
     	let contentview;
     	let current;
 
     	contentview = new ContentView({
-    			props: { file: /*focus*/ ctx[1] },
+    			props: { file: /*focus*/ ctx[2] },
     			$$inline: true
     		});
 
-    	contentview.$on("escape", /*undoFocus*/ ctx[4]);
+    	contentview.$on("escape", /*undoFocus*/ ctx[5]);
 
     	const block = {
     		c: function create() {
@@ -8850,7 +9070,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const contentview_changes = {};
-    			if (dirty & /*focus*/ 2) contentview_changes.file = /*focus*/ ctx[1];
+    			if (dirty & /*focus*/ 4) contentview_changes.file = /*focus*/ ctx[2];
     			contentview.$set(contentview_changes);
     		},
     		i: function intro(local) {
@@ -8871,7 +9091,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(259:4) <Route path=\\\"/:_id\\\">",
+    		source: "(307:4) <Route path=\\\"/:_id\\\">",
     		ctx
     	});
 
@@ -8880,23 +9100,25 @@ var app = (function () {
 
     function create_fragment$d(ctx) {
     	let div;
-    	let current_block_type_index;
-    	let if_block;
+    	let promise;
     	let t;
     	let route;
     	let current;
-    	const if_block_creators = [create_if_block$6, create_if_block_1$4];
-    	const if_blocks = [];
 
-    	function select_block_type(ctx, dirty) {
-    		if (/*view*/ ctx[0] == 'box') return 0;
-    		if (/*view*/ ctx[0] == 'list') return 1;
-    		return -1;
-    	}
+    	let info = {
+    		ctx,
+    		current: null,
+    		token: null,
+    		hasCatch: true,
+    		pending: create_pending_block$1,
+    		then: create_then_block$1,
+    		catch: create_catch_block$1,
+    		value: 10,
+    		error: 15,
+    		blocks: [,,,]
+    	};
 
-    	if (~(current_block_type_index = select_block_type(ctx))) {
-    		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    	}
+    	handle_promise(promise = /*fetch_items*/ ctx[3](/*page*/ ctx[0]), info);
 
     	route = new Route({
     			props: {
@@ -8910,65 +9132,35 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div = element("div");
-    			if (if_block) if_block.c();
+    			info.block.c();
     			t = space();
     			create_component(route.$$.fragment);
-    			attr_dev(div, "class", "browse-content-container svelte-d0bewu");
-    			add_location(div, file$a, 213, 0, 5185);
+    			attr_dev(div, "class", "browse-content-container svelte-15516wd");
+    			add_location(div, file$a, 247, 0, 5981);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-
-    			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].m(div, null);
-    			}
-
+    			info.block.m(div, info.anchor = null);
+    			info.mount = () => div;
+    			info.anchor = t;
     			append_dev(div, t);
     			mount_component(route, div, null);
     			current = true;
     		},
-    		p: function update(ctx, [dirty]) {
-    			let previous_block_index = current_block_type_index;
-    			current_block_type_index = select_block_type(ctx);
+    		p: function update(new_ctx, [dirty]) {
+    			ctx = new_ctx;
+    			info.ctx = ctx;
 
-    			if (current_block_type_index === previous_block_index) {
-    				if (~current_block_type_index) {
-    					if_blocks[current_block_type_index].p(ctx, dirty);
-    				}
-    			} else {
-    				if (if_block) {
-    					group_outros();
-
-    					transition_out(if_blocks[previous_block_index], 1, 1, () => {
-    						if_blocks[previous_block_index] = null;
-    					});
-
-    					check_outros();
-    				}
-
-    				if (~current_block_type_index) {
-    					if_block = if_blocks[current_block_type_index];
-
-    					if (!if_block) {
-    						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    						if_block.c();
-    					} else {
-    						if_block.p(ctx, dirty);
-    					}
-
-    					transition_in(if_block, 1);
-    					if_block.m(div, t);
-    				} else {
-    					if_block = null;
-    				}
+    			if (dirty & /*page*/ 1 && promise !== (promise = /*fetch_items*/ ctx[3](/*page*/ ctx[0])) && handle_promise(promise, info)) ; else {
+    				update_await_block_branch(info, ctx, dirty);
     			}
 
     			const route_changes = {};
 
-    			if (dirty & /*$$scope, focus*/ 8194) {
+    			if (dirty & /*$$scope, focus*/ 65540) {
     				route_changes.$$scope = { dirty, ctx };
     			}
 
@@ -8976,22 +9168,24 @@ var app = (function () {
     		},
     		i: function intro(local) {
     			if (current) return;
-    			transition_in(if_block);
+    			transition_in(info.block);
     			transition_in(route.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
-    			transition_out(if_block);
+    			for (let i = 0; i < 3; i += 1) {
+    				const block = info.blocks[i];
+    				transition_out(block);
+    			}
+
     			transition_out(route.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
-
-    			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].d();
-    			}
-
+    			info.block.d();
+    			info.token = null;
+    			info = null;
     			destroy_component(route);
     		}
     	};
@@ -9017,14 +9211,23 @@ var app = (function () {
     	let focus = null;
     	let fetched_items = [];
 
+    	async function fetch_items(page) {
+    		$$invalidate(6, fetched_items = await axios$1({
+    			url: `http://localhost:8000/drf/cases/browse?_page=${page}`,
+    			method: 'get'
+    		}));
+
+    		return fetched_items;
+    	}
+
     	function passFocus(e) {
-    		$$invalidate(1, focus = e.detail.item);
+    		$$invalidate(2, focus = e.detail.item);
     		dispatch('focus', { focus: true });
     		f.goto(`/manage/cases/browse/${focus._id}`);
     	}
 
     	function undoFocus() {
-    		$$invalidate(1, focus = null);
+    		$$invalidate(2, focus = null);
     		dispatch('focus', { focus: false });
     	}
 
@@ -9072,8 +9275,8 @@ var app = (function () {
     	});
 
     	$$self.$$set = $$props => {
-    		if ('page' in $$props) $$invalidate(5, page = $$props.page);
-    		if ('view' in $$props) $$invalidate(0, view = $$props.view);
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('view' in $$props) $$invalidate(1, view = $$props.view);
     	};
 
     	$$self.$capture_state = () => ({
@@ -9083,14 +9286,17 @@ var app = (function () {
     		draw,
     		fade,
     		createEventDispatcher,
+    		onMount,
     		ContentItem,
     		ContentView,
     		ContentItemList,
+    		axios: axios$1,
     		page,
     		view,
     		dispatch,
     		focus,
     		fetched_items,
+    		fetch_items,
     		passFocus,
     		undoFocus,
     		user,
@@ -9098,13 +9304,13 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('page' in $$props) $$invalidate(5, page = $$props.page);
-    		if ('view' in $$props) $$invalidate(0, view = $$props.view);
+    		if ('page' in $$props) $$invalidate(0, page = $$props.page);
+    		if ('view' in $$props) $$invalidate(1, view = $$props.view);
     		if ('dispatch' in $$props) dispatch = $$props.dispatch;
-    		if ('focus' in $$props) $$invalidate(1, focus = $$props.focus);
+    		if ('focus' in $$props) $$invalidate(2, focus = $$props.focus);
     		if ('fetched_items' in $$props) $$invalidate(6, fetched_items = $$props.fetched_items);
     		if ('user' in $$props) user = $$props.user;
-    		if ('curr_page_items' in $$props) $$invalidate(2, curr_page_items = $$props.curr_page_items);
+    		if ('curr_page_items' in $$props) curr_page_items = $$props.curr_page_items;
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -9112,18 +9318,18 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*fetched_items, page*/ 96) {
-    			 $$invalidate(2, curr_page_items = fetched_items.slice((page - 1) * 12, page * 12));
+    		if ($$self.$$.dirty & /*fetched_items, page*/ 65) {
+    			 curr_page_items = fetched_items.slice((page - 1) * 12, page * 12);
     		}
     	};
 
-    	return [view, focus, curr_page_items, passFocus, undoFocus, page, fetched_items];
+    	return [page, view, focus, fetch_items, passFocus, undoFocus, fetched_items];
     }
 
     class ContentContainer extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$d, create_fragment$d, safe_not_equal, { page: 5, view: 0 });
+    		init(this, options, instance$d, create_fragment$d, safe_not_equal, { page: 0, view: 1 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -34492,7 +34698,7 @@ img.ProseMirror-separator {
     	return child_ctx;
     }
 
-    // (676:25) 
+    // (720:25) 
     function create_if_block_7$1(ctx) {
     	let preview;
     	let current;
@@ -34553,14 +34759,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_7$1.name,
     		type: "if",
-    		source: "(676:25) ",
+    		source: "(720:25) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (674:25) 
+    // (718:25) 
     function create_if_block_6$1(ctx) {
     	let tiptap;
     	let current;
@@ -34603,14 +34809,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_6$1.name,
     		type: "if",
-    		source: "(674:25) ",
+    		source: "(718:25) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (599:25) 
+    // (643:25) 
     function create_if_block_1$c(ctx) {
     	let div16;
     	let div1;
@@ -34736,51 +34942,51 @@ img.ProseMirror-separator {
     			}
 
     			attr_dev(h30, "class", "svelte-s4xuyl");
-    			add_location(h30, file$p, 611, 91, 17340);
+    			add_location(h30, file$p, 655, 91, 18816);
     			attr_dev(label, "for", "file-input");
     			attr_dev(label, "class", "file-input-label svelte-s4xuyl");
-    			add_location(label, file$p, 611, 20, 17269);
+    			add_location(label, file$p, 655, 20, 18745);
     			attr_dev(input, "id", "file-input");
     			attr_dev(input, "name", "file-input");
     			attr_dev(input, "class", "file-input svelte-s4xuyl");
     			attr_dev(input, "type", "file");
-    			add_location(input, file$p, 612, 24, 17386);
+    			add_location(input, file$p, 656, 24, 18862);
     			attr_dev(h31, "class", "svelte-s4xuyl");
-    			add_location(h31, file$p, 613, 52, 17541);
+    			add_location(h31, file$p, 657, 52, 19017);
     			attr_dev(button0, "class", "svelte-s4xuyl");
-    			add_location(button0, file$p, 613, 20, 17509);
+    			add_location(button0, file$p, 657, 20, 18985);
     			attr_dev(h32, "class", "svelte-s4xuyl");
-    			add_location(h32, file$p, 614, 50, 17613);
+    			add_location(h32, file$p, 658, 50, 19089);
     			attr_dev(button1, "class", "svelte-s4xuyl");
-    			add_location(button1, file$p, 614, 20, 17583);
+    			add_location(button1, file$p, 658, 20, 19059);
     			attr_dev(div0, "class", "control-panel svelte-s4xuyl");
-    			add_location(div0, file$p, 610, 16, 17220);
+    			add_location(div0, file$p, 654, 16, 18696);
     			attr_dev(div1, "class", "header svelte-s4xuyl");
-    			add_location(div1, file$p, 600, 12, 16873);
+    			add_location(div1, file$p, 644, 12, 18349);
 
     			attr_dev(button2, "class", button2_class_value = "" + (null_to_empty(/*all_checked*/ ctx[11]
     			? 'check-btn-clicked'
     			: 'check-btn') + " svelte-s4xuyl"));
 
-    			add_location(button2, file$p, 619, 20, 17796);
+    			add_location(button2, file$p, 663, 20, 19272);
     			attr_dev(div2, "class", "header-checkbox-container svelte-s4xuyl");
-    			add_location(div2, file$p, 618, 16, 17735);
+    			add_location(div2, file$p, 662, 16, 19211);
     			attr_dev(h33, "class", "svelte-s4xuyl");
-    			add_location(h33, file$p, 629, 24, 18465);
+    			add_location(h33, file$p, 673, 24, 19941);
     			attr_dev(div3, "class", "header-container svelte-s4xuyl");
-    			add_location(div3, file$p, 628, 20, 18409);
+    			add_location(div3, file$p, 672, 20, 19885);
     			attr_dev(div4, "class", "header-snapshot-container svelte-s4xuyl");
-    			add_location(div4, file$p, 627, 16, 18348);
+    			add_location(div4, file$p, 671, 16, 19824);
     			attr_dev(h34, "class", "svelte-s4xuyl");
-    			add_location(h34, file$p, 634, 24, 18661);
+    			add_location(h34, file$p, 678, 24, 20137);
     			attr_dev(div5, "class", "header-container svelte-s4xuyl");
-    			add_location(div5, file$p, 633, 20, 18605);
+    			add_location(div5, file$p, 677, 20, 20081);
     			attr_dev(div6, "class", "header-title-container svelte-s4xuyl");
-    			add_location(div6, file$p, 632, 16, 18547);
+    			add_location(div6, file$p, 676, 16, 20023);
     			attr_dev(path0, "stroke-linecap", "round");
     			attr_dev(path0, "stroke-linejoin", "round");
     			attr_dev(path0, "d", "M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3");
-    			add_location(path0, file$p, 641, 32, 19080);
+    			add_location(path0, file$p, 685, 32, 20556);
     			attr_dev(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg0, "fill", "none");
     			attr_dev(svg0, "viewBox", "0 0 24 24");
@@ -34788,17 +34994,17 @@ img.ProseMirror-separator {
     			attr_dev(svg0, "stroke", "currentColor");
     			attr_dev(svg0, "height", "18");
     			attr_dev(svg0, "width", "18");
-    			add_location(svg0, file$p, 640, 28, 18912);
+    			add_location(svg0, file$p, 684, 28, 20388);
     			attr_dev(div7, "class", "svg-wrap");
-    			add_location(div7, file$p, 639, 24, 18860);
+    			add_location(div7, file$p, 683, 24, 20336);
     			attr_dev(div8, "class", "header-container svelte-s4xuyl");
-    			add_location(div8, file$p, 638, 20, 18804);
+    			add_location(div8, file$p, 682, 20, 20280);
     			attr_dev(div9, "class", "header-download-container svelte-s4xuyl");
-    			add_location(div9, file$p, 637, 16, 18743);
+    			add_location(div9, file$p, 681, 16, 20219);
     			attr_dev(path1, "stroke-linecap", "round");
     			attr_dev(path1, "stroke-linejoin", "round");
     			attr_dev(path1, "d", "M6 18L18 6M6 6l12 12");
-    			add_location(path1, file$p, 650, 32, 19717);
+    			add_location(path1, file$p, 694, 32, 21193);
     			attr_dev(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg1, "fill", "none");
     			attr_dev(svg1, "viewBox", "0 0 24 24");
@@ -34806,21 +35012,21 @@ img.ProseMirror-separator {
     			attr_dev(svg1, "stroke", "currentColor");
     			attr_dev(svg1, "height", "18");
     			attr_dev(svg1, "width", "18");
-    			add_location(svg1, file$p, 649, 28, 19549);
+    			add_location(svg1, file$p, 693, 28, 21025);
     			attr_dev(div10, "class", "svg-wrap");
-    			add_location(div10, file$p, 648, 24, 19497);
+    			add_location(div10, file$p, 692, 24, 20973);
     			attr_dev(div11, "class", "header-container svelte-s4xuyl");
-    			add_location(div11, file$p, 647, 20, 19441);
+    			add_location(div11, file$p, 691, 20, 20917);
     			attr_dev(div12, "class", "header-delete-container svelte-s4xuyl");
-    			add_location(div12, file$p, 646, 16, 19382);
+    			add_location(div12, file$p, 690, 16, 20858);
     			attr_dev(div13, "class", "table-header svelte-s4xuyl");
-    			add_location(div13, file$p, 617, 12, 17691);
+    			add_location(div13, file$p, 661, 12, 19167);
     			attr_dev(div14, "class", "table svelte-s4xuyl");
-    			add_location(div14, file$p, 657, 16, 19987);
+    			add_location(div14, file$p, 701, 16, 21463);
     			attr_dev(div15, "class", "body svelte-s4xuyl");
-    			add_location(div15, file$p, 656, 12, 19951);
+    			add_location(div15, file$p, 700, 12, 21427);
     			attr_dev(div16, "class", "upload-view svelte-s4xuyl");
-    			add_location(div16, file$p, 599, 8, 16834);
+    			add_location(div16, file$p, 643, 8, 18310);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div16, anchor);
@@ -34973,14 +35179,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_1$c.name,
     		type: "if",
-    		source: "(599:25) ",
+    		source: "(643:25) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (569:4) {#if stage == 1}
+    // (613:4) {#if stage == 1}
     function create_if_block$f(ctx) {
     	let div1;
     	let div0;
@@ -35141,27 +35347,27 @@ img.ProseMirror-separator {
     			t13 = space();
     			create_component(inputsinglevalue4.$$.fragment);
     			attr_dev(h30, "class", "svelte-s4xuyl");
-    			add_location(h30, file$p, 571, 16, 14939);
+    			add_location(h30, file$p, 615, 16, 16415);
     			attr_dev(div0, "class", "input-category-title svelte-s4xuyl");
-    			add_location(div0, file$p, 570, 12, 14887);
+    			add_location(div0, file$p, 614, 12, 16363);
     			attr_dev(div1, "class", "single-input-wrap svelte-s4xuyl");
-    			add_location(div1, file$p, 569, 8, 14842);
+    			add_location(div1, file$p, 613, 8, 16318);
     			attr_dev(div2, "class", "padding svelte-s4xuyl");
-    			add_location(div2, file$p, 577, 12, 15382);
+    			add_location(div2, file$p, 621, 12, 16858);
     			attr_dev(div3, "class", "single-input-wrap svelte-s4xuyl");
-    			add_location(div3, file$p, 576, 8, 15337);
+    			add_location(div3, file$p, 620, 8, 16813);
     			attr_dev(div4, "class", "padding svelte-s4xuyl");
-    			add_location(div4, file$p, 582, 12, 15845);
+    			add_location(div4, file$p, 626, 12, 17321);
     			attr_dev(div5, "class", "single-input-wrap svelte-s4xuyl");
-    			add_location(div5, file$p, 581, 8, 15800);
+    			add_location(div5, file$p, 625, 8, 17276);
     			attr_dev(div6, "class", "buffer svelte-s4xuyl");
-    			add_location(div6, file$p, 587, 8, 16275);
+    			add_location(div6, file$p, 631, 8, 17751);
     			attr_dev(h31, "class", "svelte-s4xuyl");
-    			add_location(h31, file$p, 592, 16, 16412);
+    			add_location(h31, file$p, 636, 16, 17888);
     			attr_dev(div7, "class", "input-category-title svelte-s4xuyl");
-    			add_location(div7, file$p, 591, 12, 16360);
+    			add_location(div7, file$p, 635, 12, 17836);
     			attr_dev(div8, "class", "single-input-wrap svelte-s4xuyl");
-    			add_location(div8, file$p, 590, 8, 16315);
+    			add_location(div8, file$p, 634, 8, 17791);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -35271,14 +35477,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block$f.name,
     		type: "if",
-    		source: "(569:4) {#if stage == 1}",
+    		source: "(613:4) {#if stage == 1}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (608:16) {:else}
+    // (652:16) {:else}
     function create_else_block$d(ctx) {
     	let h3;
 
@@ -35287,7 +35493,7 @@ img.ProseMirror-separator {
     			h3 = element("h3");
     			h3.textContent = "다시 시도해 주세요";
     			attr_dev(h3, "class", "svelte-s4xuyl");
-    			add_location(h3, file$p, 608, 20, 17160);
+    			add_location(h3, file$p, 652, 20, 18636);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -35301,14 +35507,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_else_block$d.name,
     		type: "else",
-    		source: "(608:16) {:else}",
+    		source: "(652:16) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (606:36) 
+    // (650:36) 
     function create_if_block_5$1(ctx) {
     	let h3;
 
@@ -35317,7 +35523,7 @@ img.ProseMirror-separator {
     			h3 = element("h3");
     			h3.textContent = "문서 업로드";
     			attr_dev(h3, "class", "svelte-s4xuyl");
-    			add_location(h3, file$p, 606, 20, 17098);
+    			add_location(h3, file$p, 650, 20, 18574);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -35331,14 +35537,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_5$1.name,
     		type: "if",
-    		source: "(606:36) ",
+    		source: "(650:36) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (604:36) 
+    // (648:36) 
     function create_if_block_4$2(ctx) {
     	let h3;
 
@@ -35347,7 +35553,7 @@ img.ProseMirror-separator {
     			h3 = element("h3");
     			h3.textContent = "영상 업로드";
     			attr_dev(h3, "class", "svelte-s4xuyl");
-    			add_location(h3, file$p, 604, 20, 17023);
+    			add_location(h3, file$p, 648, 20, 18499);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -35361,14 +35567,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_4$2.name,
     		type: "if",
-    		source: "(604:36) ",
+    		source: "(648:36) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (602:16) {#if type == 0}
+    // (646:16) {#if type == 0}
     function create_if_block_3$3(ctx) {
     	let h3;
 
@@ -35377,7 +35583,7 @@ img.ProseMirror-separator {
     			h3 = element("h3");
     			h3.textContent = "사진 업로드";
     			attr_dev(h3, "class", "svelte-s4xuyl");
-    			add_location(h3, file$p, 602, 20, 16948);
+    			add_location(h3, file$p, 646, 20, 18424);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -35391,14 +35597,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_3$3.name,
     		type: "if",
-    		source: "(602:16) {#if type == 0}",
+    		source: "(646:16) {#if type == 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (621:24) {#if all_checked}
+    // (665:24) {#if all_checked}
     function create_if_block_2$7(ctx) {
     	let svg;
     	let path;
@@ -35410,7 +35616,7 @@ img.ProseMirror-separator {
     			attr_dev(path, "stroke-linecap", "round");
     			attr_dev(path, "stroke-linejoin", "round");
     			attr_dev(path, "d", "M4.5 12.75l6 6 9-13.5");
-    			add_location(path, file$p, 622, 32, 18126);
+    			add_location(path, file$p, 666, 32, 19602);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "fill", "none");
     			attr_dev(svg, "viewBox", "0 0 24 24");
@@ -35418,7 +35624,7 @@ img.ProseMirror-separator {
     			attr_dev(svg, "stroke", "white");
     			attr_dev(svg, "height", "17");
     			attr_dev(svg, "width", "17");
-    			add_location(svg, file$p, 621, 28, 17963);
+    			add_location(svg, file$p, 665, 28, 19439);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, svg, anchor);
@@ -35433,14 +35639,14 @@ img.ProseMirror-separator {
     		block,
     		id: create_if_block_2$7.name,
     		type: "if",
-    		source: "(621:24) {#if all_checked}",
+    		source: "(665:24) {#if all_checked}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (659:20) {#each item_objs as item, index}
+    // (703:20) {#each item_objs as item, index}
     function create_each_block$b(ctx) {
     	let managecreateitem;
     	let current;
@@ -35494,7 +35700,7 @@ img.ProseMirror-separator {
     		block,
     		id: create_each_block$b.name,
     		type: "each",
-    		source: "(659:20) {#each item_objs as item, index}",
+    		source: "(703:20) {#each item_objs as item, index}",
     		ctx
     	});
 
@@ -35526,7 +35732,7 @@ img.ProseMirror-separator {
     			div = element("div");
     			if (if_block) if_block.c();
     			attr_dev(div, "class", "browse-content-container svelte-s4xuyl");
-    			add_location(div, file$p, 567, 0, 14772);
+    			add_location(div, file$p, 611, 0, 16248);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -35624,6 +35830,16 @@ img.ProseMirror-separator {
     	});
 
     	return result;
+    }
+
+    function parseToString(lst) {
+    	let result_list = [];
+
+    	lst.forEach(item => {
+    		result_list.push("'" + item + "'");
+    	});
+
+    	return `${result_list}`;
     }
 
     function passCheck(lst) {
@@ -35864,22 +36080,45 @@ img.ProseMirror-separator {
 
     	async function fileUpload() {
     		if (item_objs && !file_uploading) {
-    			let files = [];
-
-    			item_objs.forEach(item => {
-    				files = [...files, item.file];
-    			});
-
+    			let result = null;
+    			let formData = new FormData();
     			file_uploading = true;
 
     			try {
-    				let result = await axios$1.post('http://localhost:4000/post/file', { files });
+    				let index = 0;
+    				formData.append("title", title);
+    				formData.append('file_index', item_objs.length - 1);
+    				formData.append('content', content);
+    				formData.append('attendee', attendee_list);
+    				formData.append('location', location);
+    				formData.append('affiliation', affiliation);
+    				formData.append('associate', associate);
+    				formData.append('produced', produced);
+    				formData.append('private', 1);
+    				formData.append('type', type);
+
+    				//file should be sent seperately -> don't send in form of list !
+    				item_objs.forEach(item => {
+    					formData.append(`${index}`, item.file);
+    					index += 1;
+    				});
+
+    				result = await axios$1({
+    					headers: { "Content-Type": "multipart/form-data" },
+    					url: `http://localhost:8000/drf/cases/create/${type}`,
+    					method: "POST",
+    					data: formData
+    				});
+
+    				console.log(result.data);
     			} catch(error) {
+    				result = error;
     				console.log(error);
     			}
 
     			file_uploading = false;
     			console.log('file_uploading procedure ended');
+    			return result;
     		}
     	}
 
@@ -35961,6 +36200,7 @@ img.ProseMirror-separator {
     		getItemList,
     		fileUpload,
     		parseToList,
+    		parseToString,
     		passCheck
     	});
 
@@ -36010,8 +36250,9 @@ img.ProseMirror-separator {
     						passCheck(pass_list);
     						$$invalidate(7, attendee_list = parseToList(attendee));
     					}
-    				} else if (stage == 3) {
-    					let result = fileUpload();
+    				} else if (stage == 3) ; else //console.log(result)
+    				if (stage == 5) {
+    					let result = fileUpload(); //let result = fileUpload();
     					console.log(result);
     				}
     			}
@@ -38996,7 +39237,7 @@ img.ProseMirror-separator {
     const file$A = "pages/content_container/AccountView.svelte";
 
     // (330:8) {:catch error}
-    function create_catch_block$1(ctx) {
+    function create_catch_block$2(ctx) {
     	let div;
     	let svg;
     	let path;
@@ -39047,7 +39288,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_catch_block$1.name,
+    		id: create_catch_block$2.name,
     		type: "catch",
     		source: "(330:8) {:catch error}",
     		ctx
@@ -39057,7 +39298,7 @@ img.ProseMirror-separator {
     }
 
     // (321:8) {:then result}
-    function create_then_block$1(ctx) {
+    function create_then_block$2(ctx) {
     	let div;
     	let svg;
     	let path;
@@ -39119,7 +39360,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_then_block$1.name,
+    		id: create_then_block$2.name,
     		type: "then",
     		source: "(321:8) {:then result}",
     		ctx
@@ -39129,7 +39370,7 @@ img.ProseMirror-separator {
     }
 
     // (315:39)              <div class="approved-mark-wrap">             </div>             <h3>                 파일을 받아오는 중입니다             </h3>         {:then result}
-    function create_pending_block$1(ctx) {
+    function create_pending_block$2(ctx) {
     	let div;
     	let t0;
     	let h3;
@@ -39162,7 +39403,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_pending_block$1.name,
+    		id: create_pending_block$2.name,
     		type: "pending",
     		source: "(315:39)              <div class=\\\"approved-mark-wrap\\\">             </div>             <h3>                 파일을 받아오는 중입니다             </h3>         {:then result}",
     		ctx
@@ -39852,9 +40093,9 @@ img.ProseMirror-separator {
     		current: null,
     		token: null,
     		hasCatch: true,
-    		pending: create_pending_block$1,
-    		then: create_then_block$1,
-    		catch: create_catch_block$1,
+    		pending: create_pending_block$2,
+    		then: create_then_block$2,
+    		catch: create_catch_block$2,
     		value: 28,
     		error: 29
     	};
@@ -41610,7 +41851,7 @@ img.ProseMirror-separator {
     }
 
     // (537:8) {:catch error}
-    function create_catch_block$2(ctx) {
+    function create_catch_block$3(ctx) {
     	let div;
     	let svg;
     	let path;
@@ -41661,7 +41902,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_catch_block$2.name,
+    		id: create_catch_block$3.name,
     		type: "catch",
     		source: "(537:8) {:catch error}",
     		ctx
@@ -41671,7 +41912,7 @@ img.ProseMirror-separator {
     }
 
     // (528:8) {:then result}
-    function create_then_block$2(ctx) {
+    function create_then_block$3(ctx) {
     	let div;
     	let svg;
     	let path;
@@ -41735,7 +41976,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_then_block$2.name,
+    		id: create_then_block$3.name,
     		type: "then",
     		source: "(528:8) {:then result}",
     		ctx
@@ -41745,7 +41986,7 @@ img.ProseMirror-separator {
     }
 
     // (522:46)               <div class="approved-mark-wrap">              </div>              <h3>                  파일을 받아오는 중입니다              </h3>          {:then result}
-    function create_pending_block$2(ctx) {
+    function create_pending_block$3(ctx) {
     	let div;
     	let t0;
     	let h3;
@@ -41778,7 +42019,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_pending_block$2.name,
+    		id: create_pending_block$3.name,
     		type: "pending",
     		source: "(522:46)               <div class=\\\"approved-mark-wrap\\\">              </div>              <h3>                  파일을 받아오는 중입니다              </h3>          {:then result}",
     		ctx
@@ -43197,9 +43438,9 @@ img.ProseMirror-separator {
     		current: null,
     		token: null,
     		hasCatch: true,
-    		pending: create_pending_block$2,
-    		then: create_then_block$2,
-    		catch: create_catch_block$2,
+    		pending: create_pending_block$3,
+    		then: create_then_block$3,
+    		catch: create_catch_block$3,
     		value: 28,
     		error: 29
     	};
@@ -44621,9 +44862,9 @@ img.ProseMirror-separator {
     		current: null,
     		token: null,
     		hasCatch: true,
-    		pending: create_pending_block$3,
-    		then: create_then_block$3,
-    		catch: create_catch_block$3,
+    		pending: create_pending_block$4,
+    		then: create_then_block$4,
+    		catch: create_catch_block$4,
     		value: 16,
     		error: 17
     	};
@@ -44948,7 +45189,7 @@ img.ProseMirror-separator {
     }
 
     // (292:8) {:catch error}
-    function create_catch_block$3(ctx) {
+    function create_catch_block$4(ctx) {
     	let div1;
     	let div0;
     	let svg;
@@ -45053,7 +45294,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_catch_block$3.name,
+    		id: create_catch_block$4.name,
     		type: "catch",
     		source: "(292:8) {:catch error}",
     		ctx
@@ -45063,7 +45304,7 @@ img.ProseMirror-separator {
     }
 
     // (273:8) {:then result}
-    function create_then_block$3(ctx) {
+    function create_then_block$4(ctx) {
     	let div1;
     	let div0;
     	let svg;
@@ -45159,7 +45400,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_then_block$3.name,
+    		id: create_then_block$4.name,
     		type: "then",
     		source: "(273:8) {:then result}",
     		ctx
@@ -45169,7 +45410,7 @@ img.ProseMirror-separator {
     }
 
     // (264:31)           <div class="uploading-landing-page">              <div class="svg-wrap">                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(31, 32, 88)" height="100" width="100">                      <path in:draw={{duration:700, speed: 1}}
-    function create_pending_block$3(ctx) {
+    function create_pending_block$4(ctx) {
     	let div1;
     	let div0;
     	let svg;
@@ -45231,7 +45472,7 @@ img.ProseMirror-separator {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_pending_block$3.name,
+    		id: create_pending_block$4.name,
     		type: "pending",
     		source: "(264:31)           <div class=\\\"uploading-landing-page\\\">              <div class=\\\"svg-wrap\\\">                  <svg xmlns=\\\"http://www.w3.org/2000/svg\\\" fill=\\\"none\\\" viewBox=\\\"0 0 24 24\\\" stroke-width=\\\"0.8\\\" stroke=\\\"rgb(31, 32, 88)\\\" height=\\\"100\\\" width=\\\"100\\\">                      <path in:draw={{duration:700, speed: 1}}",
     		ctx

@@ -469,19 +469,48 @@
 
     async function fileUpload() {
         if (item_objs && !file_uploading) {
-            let files = [];
-            item_objs.forEach((item) => {
-                files = [...files, item.file]
-            })
+            let result = null;
+            let formData = new FormData();
             file_uploading = true;
+            
             try {
-                let result = await axios.post('http://localhost:4000/post/file', {files: files})
+                let index = 0;
+                formData.append("title", title);
+                formData.append('file_index', item_objs.length - 1);
+                formData.append('content', content);
+                formData.append('attendee', attendee_list);
+                formData.append('location', location);
+                formData.append('affiliation', affiliation);
+                formData.append('associate', associate);
+                formData.append('produced', produced);
+                formData.append('private', 1);
+                formData.append('type', type);
+
+                //file should be sent seperately -> don't send in form of list !
+                item_objs.forEach((item) => {
+                    formData.append(`${index}`, item.file);
+                    index += 1;
+                })
+
+                result = await axios({
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    },
+                    url: `http://localhost:8000/drf/cases/create/${type}`,
+                    method: "POST",
+                    data: formData
+                })
+
+                console.log(result.data)
+
             } catch(error) {
+                result = error
                 console.log(error);
             }
 
             file_uploading = false;
             console.log('file_uploading procedure ended')
+            return result
 
         }
     }
@@ -496,6 +525,14 @@
         })
 
         return result;
+    }
+
+    function parseToString(lst) {
+        let result_list = [];
+        lst.forEach((item) => {
+            result_list.push("'" + item + "'");
+        })
+        return `${result_list}`
     }
 
     function passCheck(lst) {
@@ -526,7 +563,9 @@
                 item_objs = [];
             }
 
-        } else if (stage == 2) {
+        } 
+        
+        else if (stage == 2) {
             // parse ATTENDEE in form of list (ATTENDEE -> ATTENDEE_LIST)
             if (attendee) {
                 passCheck(pass_list);
@@ -535,6 +574,11 @@
         }
         
         else if (stage == 3) {
+            //let result = fileUpload();
+            //console.log(result)
+        }
+
+        else if (stage == 5) {
             let result = fileUpload();
             console.log(result)
         }

@@ -117,16 +117,42 @@
         color:#1e1c3b;
     }
 
+    .fetch-fail-page {
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fetch-fail-page > h4 {
+        font-family: 'goth';
+        font-size: 30px;
+        width: 400px;
+        color: rgb(226, 41, 41);
+        text-align: center;
+    }
+
+    .fetch-fail-page > h5 {
+        font-family: 'goth';
+        font-size: 23px;
+        width: 500px;
+        color: rgb(214 39 39);
+        text-align: center;
+    }
+
 </style>
 
 <script>
     import { Route, meta, router } from 'tinro';
     import { draw, fade } from 'svelte/transition';
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
 
     import ContentItem from "./ContentItem.svelte";
     import ContentView from "./ContentView.svelte";
     import ContentItemList from './ContentItemList.svelte';
+    import axios from 'axios';
 
 
     /* Page starts from 1.
@@ -150,6 +176,14 @@
 
 
     $: curr_page_items = fetched_items.slice((page - 1) * 12, page * 12);
+
+    async function fetch_items(page) {
+        fetched_items = await axios({
+            url: `http://localhost:8000/drf/cases/browse?_page=${page}`,
+            method: 'get',
+        })
+        return fetched_items
+    }
 
 
     function passFocus(e) {
@@ -212,9 +246,12 @@
            
 
 <div class="browse-content-container">
+    {#await fetch_items(page)}
+    <h3>로딩 중...</h3>
+    {:then result}
     {#if view == 'box'}
         <div class="browse-contents-list-view">
-            {#each curr_page_items as item, index}
+            {#each result as item, index}
                 <ContentItem item={item} on:click={passFocus} />
             {/each}
         </div>
@@ -249,13 +286,24 @@
             </div>
             <div class="list-frame">
                 <div class="table">
-                    {#each curr_page_items as item, index}
+                    {#each result as item, index}
                         <ContentItemList item={item} on:click={passFocus} />
                     {/each}
                 </div>
             </div>
         </div>
     {/if}
+    {:catch error}
+    <div class="fetch-fail-page">
+        <div class="svg-wrap">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(226, 41, 41)" height="100" width="100">
+                <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+            </svg>
+        </div>
+        <h4>조회에 실패했습니다</h4>
+        <h5>인터넷 연결을 확인해주세요</h5>
+    </div>
+    {/await}
     <Route path="/:_id">
         <ContentView file={focus} on:escape={undoFocus}/>
     </Route>
