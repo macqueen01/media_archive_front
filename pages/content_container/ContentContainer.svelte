@@ -174,9 +174,6 @@
     
     let fetched_items = [];
 
-
-    $: curr_page_items = fetched_items.slice((page - 1) * 12, page * 12);
-
     async function fetch_items(page) {
         fetched_items = await axios({
             url: `http://localhost:8000/drf/cases/browse?_page=${page}`,

@@ -341,6 +341,7 @@
 
 
     let image;
+    let video;
     let preview_source;
     let name;
 
@@ -357,6 +358,15 @@
             }
         }
         console.log(file_copy.length)
+
+        if (video) {
+
+            if (video.offsetHeight > video.offsetWidth) {
+                image.height = 450;
+            } else {
+                video.width = 450;
+            }
+        }
     }
 
 </script>
@@ -416,7 +426,7 @@
             <div class="body-content-wrap">
                 <div class="media-wrap">
                     <div class="photo-container">
-                        {#if img_hover}
+                        {#if img_hover && (type == 0)}
                         <div class="facad">
                             <div class="left-arrow-wrap" on:click={imageNavigateBack}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
@@ -431,17 +441,28 @@
                         </div>
                         {/if}
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                        {#if curr}
-                            <img src={curr.src} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
-                            {#if img_hover}
-                                <div class="caption">
-                                    <h4>{name}</h4>
-                                </div>
+                        {#if type == 0}
+                            {#if curr}
+                                <img src={curr.src} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
+                                {#if img_hover}
+                                    <div class="caption">
+                                        <h4>{name}</h4>
+                                    </div>
+                                {:else}
+                                    <div class="caption-placeholder"></div>
+                                {/if}
                             {:else}
-                                <div class="caption-placeholder"></div>
+                                <h1>이미지가 없습니다</h1>
                             {/if}
-                        {:else}
-                            <h1>이미지가 없습니다</h1>
+                        {:else if type == 1}
+                            {#if curr}
+                                <video controls bind:this={video}>
+                                    <source src={curr.src} type="video/mp4">
+                                </video>
+                                <div class="caption-placeholder"></div>
+                            {:else}
+                                <h1>영상이 없습니다</h1>
+                            {/if}
                         {/if}
                     </div>
                 </div>

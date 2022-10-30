@@ -154,6 +154,7 @@
                     <source src={src} type="video/mp4"/>
                 </video>
             {:else}
+                <h4>미리보기를 지원하지 않습니다</h4>
             {/if}
         </div>
     </div>
