@@ -57,11 +57,7 @@
     }
 
     function dataRefresh(e) {
-        if (e.detail.cleared) {
-            data.unclear_list = [];
-        } else {
-            data.unclear_list = [2,3,4,5];
-        }
+        data.unclear_list = e.detail.uncleared;
     }
 
 

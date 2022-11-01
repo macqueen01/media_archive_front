@@ -155,6 +155,18 @@
         position: relative;
     }
 
+    .photo-container > h1, .photo-container > h2 {
+        font-family: 'goth';
+    }
+
+    .photo-container > h1 {
+        font-size: 35px;
+    }
+
+    .photo-container > h2 {
+        font-size: 20px;
+    }
+
     .caption {
         display: flex;
         justify-content: end;
@@ -189,6 +201,13 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .left-arrow-wrap, .right-arrow-wrap {
+        z-index: 10;
+        border: none;
+        outline: none;
+        background: transparent;
     }
 
     .info-header, .content-header {
@@ -261,6 +280,7 @@
 </style>
 
 <script>
+    import axios from 'axios';
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { draw } from 'svelte/transition';
 
@@ -275,12 +295,13 @@
     export let type;
     export let content;
 
-    let img_hover = false;
+    let media_hover = false;
     let curr;
+    let changed = true;
     let file_copy = [...item_objs];
 
 
-    curr = getPhotoFromFront();
+    curr = getMediaFromFront();
     console.log(curr);
     
 
@@ -289,17 +310,18 @@
 
 
     function hoverHandle() {
-        img_hover = true;
+        media_hover = true;
         console.log('hover');
         setTimeout(() => {
-            if (img_hover) {
-                img_hover = false;
+            if (media_hover) {
+                media_hover = false;
             }
         }, 4000)
     }
 
 
-    function getPhotoFromFront() {
+    function getMediaFromFront() {
+        console.log(file_copy.length)
         if (file_copy) {
             let result = file_copy.shift();
             file_copy = [... file_copy, result];
@@ -309,22 +331,64 @@
         }
     }
 
-    function getPhotoFromBack() {
+    function getMediaFromBack() {
         if (file_copy) {
             let result = file_copy.pop();
             file_copy = [result, ... file_copy];
             return result;
         } else {
             console.log("No file object detected")
-        }  
+        }
     }
 
-    function imageNavigateBack() {
-        curr = getPhotoFromBack();
+    function NavigateBack() {
+        curr = getMediaFromBack();
     }
 
-    function imageNavigateForth() {
-        curr = getPhotoFromFront();
+    function NavigateForth() {
+        curr = getMediaFromFront();
+    }
+
+    async function videoCodecCheck() {
+        if (item_objs) {
+            let result = null;
+            let formData = new FormData();
+            formData.append('file_index', item_objs.length - 1);
+            let index = 0;
+
+            //file should be sent seperately -> don't send in form of list !
+            item_objs.forEach((item) => {
+                formData.append(`${index}`, item.file);
+                index += 1;
+            })
+
+            result = await axios({
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+                url: `http://localhost:8000/drf/cases/codec`,
+                method: "POST",
+                data: formData
+            })
+
+            return result
+        } 
+        return null
+    }
+
+    function codecCheck(lst) {
+        let result = false;
+        if (lst) {
+            result = true;
+            lst.forEach((codec) => {
+                if (codec != 'h264') {
+                    result = false;
+                    console.log(codec)
+                }
+            })
+        }
+
+        return result;
     }
 
     /* Test variables to be fetched from server when online */
@@ -357,17 +421,24 @@
                 image.width = 450;
             }
         }
-        console.log(file_copy.length)
+    }
 
+    
+    $:{
         if (video) {
 
+            name = curr.file.name;
+            console.log(name)
+            console.log(changed)
+
             if (video.offsetHeight > video.offsetWidth) {
-                image.height = 450;
+                vedio.height = 450;
             } else {
                 video.width = 450;
             }
         }
     }
+
 
 </script>
 
@@ -426,25 +497,25 @@
             <div class="body-content-wrap">
                 <div class="media-wrap">
                     <div class="photo-container">
-                        {#if img_hover && (type == 0)}
+                        {#if media_hover}
                         <div class="facad">
-                            <div class="left-arrow-wrap" on:click={imageNavigateBack}>
+                            <button class="left-arrow-wrap" on:click={NavigateBack}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                                 </svg>
-                            </div>
-                            <div class="right-arrow-wrap" on:click={imageNavigateForth}>
+                            </button>
+                            <button class="right-arrow-wrap" on:click={NavigateForth}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                 </svg>
-                            </div>
+                            </button>
                         </div>
                         {/if}
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                         {#if type == 0}
                             {#if curr}
                                 <img src={curr.src} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
-                                {#if img_hover}
+                                {#if media_hover}
                                     <div class="caption">
                                         <h4>{name}</h4>
                                     </div>
@@ -455,14 +526,33 @@
                                 <h1>이미지가 없습니다</h1>
                             {/if}
                         {:else if type == 1}
-                            {#if curr}
-                                <video controls bind:this={video}>
-                                    <source src={curr.src} type="video/mp4">
-                                </video>
-                                <div class="caption-placeholder"></div>
-                            {:else}
-                                <h1>영상이 없습니다</h1>
-                            {/if}
+                            {#await videoCodecCheck()}
+                                <h1>코덱 확인중...</h1>
+                            {:then result}
+                                {#if result}
+                                    {#if codecCheck(eval(result.data.data))}
+                                        {#key curr.src}
+                                            <video controls bind:this={video} on:mouseover={hoverHandle}>
+                                                <source src={curr.src} type="video/mp4">
+                                            </video>
+                                        {/key}
+                                        {#if media_hover}
+                                            <div class="caption">
+                                                <h4>{name}</h4>
+                                            </div>
+                                        {:else}
+                                            <div class="caption-placeholder"></div>
+                                        {/if}
+                                    {:else}
+                                        <h1>코덱 변환이 필요합니다</h1>
+                                        <h2>변환하려면 저장해주세요</h2>
+                                    {/if}
+                                {:else}
+                                    <h1>영상이 없습니다</h1>
+                                {/if}
+                            {:catch e}
+                                <h1>연결이 끊겼습니다</h1>
+                            {/await}
                         {/if}
                     </div>
                 </div>

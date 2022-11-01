@@ -219,6 +219,23 @@
         font-size: 14px;
         color:#1e1c3b;
     }
+
+    .user-fetch-spinner-page {
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .user-fetch-spinner-page > h4 {
+        font-family: 'goth';
+        font-size: 30px;
+        width: 400px;
+        color: rgb(31, 32, 88);
+        text-align: center;
+    }
 </style>
 
 
@@ -228,7 +245,7 @@
 
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { writable } from 'svelte/store';
-    import { crossfade } from 'svelte/transition';
+    import { crossfade, draw } from 'svelte/transition';
     import { flip } from 'svelte/animate';
     
     import InputSingleValue from '../../components/manager/Input/InputSingleValue.svelte';
@@ -578,20 +595,29 @@
             //console.log(result)
         }
 
+        else if (stage == 4) {
+            dispatch('data', {
+                uncleared: []
+            })
+        }
+
         else if (stage == 5) {
-            let result = fileUpload();
-            console.log(result)
+            dispatch('data', {
+                uncleared: [1,2,3,4]
+            })
+            fileUpload();
+            setTimeout(() => router.goto("/manage/cases/browse"), 1000)
         }
     }
 
     $: {
         if (passCheck(pass_list)) {
             dispatch('data', {
-                cleared: true
+                uncleared: [5]
             })
         } else {
             dispatch('data', {
-                cleared: false
+                uncleared: [2,3,4,5]
             })
         }
     }
@@ -728,5 +754,16 @@
                  produced={produced}
                  type={type}
                  content={content} />
+    {:else if stage == 5}
+
+            <div class="user-fetch-spinner-page">
+                <div class="svg-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(31, 32, 88)" height="100" width="100">
+                        <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0116.35 15m.002 0h-.002" />
+                    </svg>
+                </div>
+                <h4>영상을 인코딩 중입니다</h4>
+            </div>
+
     {/if}
 </div>
