@@ -175,11 +175,14 @@
     let fetched_items = [];
 
     async function fetch_items(page) {
+        let result_items
         fetched_items = await axios({
-            url: `http://localhost:8000/drf/cases/browse?_page=${page}`,
+            url: `http://localhost:8000/drf/cases/browse?page=${page}`,
             method: 'get',
         })
-        return fetched_items
+        console.log(fetched_items)
+        result_items = fetched_items.data.results
+        return result_items
     }
 
 
@@ -248,9 +251,11 @@
     {:then result}
     {#if view == 'box'}
         <div class="browse-contents-list-view">
+            
             {#each result as item, index}
                 <ContentItem item={item} on:click={passFocus} />
             {/each}
+            
         </div>
     {:else if view == 'list'}
         <div class="upload-view">

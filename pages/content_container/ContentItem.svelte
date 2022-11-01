@@ -90,7 +90,7 @@
 <div class="browse-contents-list-item" on:click={clickHandle}>
     <div class="content-item-folder">
         <div class="img-container">
-            <img src="{item.src[0]}" width="100%">
+            <img src="http://localhost:8000{item.include[0].url}" width="100%">
         </div>
                             
         <div class="title-container">
@@ -100,7 +100,7 @@
             <h3>{item.created_at}</h3>
         </div>
         <div class="creater-container">
-            <h3>촬영자: {item.associate}</h3>
+            <h3>촬영자: {item.associate.title}</h3>
         </div>
     </div>
 </div>
