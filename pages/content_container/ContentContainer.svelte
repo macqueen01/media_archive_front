@@ -180,7 +180,6 @@
             url: `http://localhost:8000/drf/cases/browse?page=${page}`,
             method: 'get',
         })
-        console.log(fetched_items)
         result_items = fetched_items.data.results
         return result_items
     }
@@ -191,7 +190,7 @@
         dispatch('focus', {
             focus: true
         })
-        router.goto(`/manage/cases/browse/${focus._id}`)
+        router.goto(`/manage/cases/browse/${focus.form}/${focus.id}`)
     }
 
     function undoFocus() {
@@ -213,33 +212,6 @@
         name: "Kim"
     }
 
-    /* ITEM object:
-            @authority - Show the contents to authorized personal only. 
-                         Set false at default.
-            @name      - Name of the logged in user.  
-    */
-
-    for (let i = 0; i < 40; i++) {
-        fetched_items = [...fetched_items, 
-        {
-            type: 0,
-            _id: i,
-            uploader_id: 2,
-            associate: "김재우",
-            location: "학술정보원",
-            collected: true,
-            private: false,
-            attendee: ["교장", "부교장", "대통령", "국방부장관", "생도"],
-            created_at: "22년 2월 3일",
-            title: "이인호 동상 앞에서",
-            src: [
-                "/public/main_page_bg.JPG",
-                "/public/nama_logo.png",
-                "/public/navy-logo.JPG"
-            ],
-            content: "<h4>This is sample content of the post.<h4>"
-        }]
-    }
 
     
 </script>            
@@ -306,7 +278,7 @@
         <h5>인터넷 연결을 확인해주세요</h5>
     </div>
     {/await}
-    <Route path="/:_id">
+    <Route path="/:form/:id">
         <ContentView file={focus} on:escape={undoFocus}/>
     </Route>
 </div>

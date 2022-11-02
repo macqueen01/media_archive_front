@@ -78,6 +78,12 @@
 
     export let item;
 
+    let src = item.include[0].url;
+    let title = item.title;
+    let created_at = item.created_at.split('T')[0];
+    let associate = item.associate.title;
+
+
     function clickHandle() {
         dispatch('click', {
             item: item
@@ -90,17 +96,17 @@
 <div class="browse-contents-list-item" on:click={clickHandle}>
     <div class="content-item-folder">
         <div class="img-container">
-            <img src="http://localhost:8000{item.include[0].url}" width="100%">
+            <img src="http://localhost:8000{src}" width="100%">
         </div>
                             
         <div class="title-container">
-            <h3>{item.title}</h3>
+            <h3>{title}</h3>
         </div>
         <div class="date-container">
-            <h3>{item.created_at}</h3>
+            <h3>{created_at}</h3>
         </div>
         <div class="creater-container">
-            <h3>촬영자: {item.associate.title}</h3>
+            <h3>촬영자: {associate}</h3>
         </div>
     </div>
 </div>

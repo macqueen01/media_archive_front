@@ -78,7 +78,13 @@
 
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 
-    export let item = item;
+    export let item;
+
+    let srcs = item.include;
+    let id = item.id
+    let title = item.title;
+    let created_at = item.created_at.split('T')[0];
+    let associate = item.associate.title;
 
     var dispatch = createEventDispatcher();
 
@@ -94,16 +100,16 @@
 <div class="table-content" on:click={clickCall}>
     <div class="id-wrap wrap">
         <div class="id-container container">
-            <h3>{item._id}</h3>
+            <h3>{id}</h3>
         </div>
     </div>
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
-            {#if item.type == 0}
-                <img src="{item.src[0]}" height="85px" alt="test-img">
-            {:else if item.type == 1}
+            {#if item.form == 0}
+                <img src="{srcs[0].url}" height="85px" alt="test-img">
+            {:else if item.form == 1}
                 <video height="85px" controls>
-                    <source src={item.src[0]} type="video/mp4"/>
+                    <source src={srcs[0].url} type="video/mp4"/>
                 </video>
             {:else}
             {/if}
@@ -111,17 +117,17 @@
     </div>
     <div class="title-wrap">
         <div class="title-container container">
-            <h3>{item.title}</h3>
+            <h3>{title}</h3>
         </div>
     </div>
     <div class="associate-wrap">
         <div class="associate-container container">
-            <h3>{item.associate}</h3>
+            <h3>{associate}</h3>
         </div>
     </div>
     <div class="date-wrap">
         <div class="date-container container">
-            <h3>{item.date}</h3>
+            <h3>{created_at}</h3>
         </div>
     </div>
 </div>

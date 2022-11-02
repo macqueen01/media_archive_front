@@ -89,7 +89,7 @@
     export let src = '/public/main_page_bg.JPG';
     export let file;
     export let index = 0;
-    export let type = '사진';
+    export let type = 0;
 
     let element;
     let editor;

@@ -258,18 +258,19 @@
     */
 
     export let file;
+    
 
     const route = meta();
 
-    let file_id = route.params._id;
+    let file_id = route.params.id;
+    let file_form = route.params.form;
     let img_hover = false;
     let curr;
     let status = 0;
+    let fetched;
 
 
-    curr = getPhotoFromFront();
-    console.log(curr);
-    
+  
 
 
 
@@ -297,9 +298,9 @@
     /* copies file.src into fileLst */
 
     function getPhotoFromFront() {
-        if (file) {
-            let result = file.src.shift();
-            file.src = [... file.src, result];
+        if (fetched) {
+            let result = fetched.include.shift();
+            fetched.include = [... fetched.include, result];
             return result;
         } else {
             console.log("No file object detected")
@@ -307,9 +308,9 @@
     }
 
     function getPhotoFromBack() {
-        if (file) {
-            let result = file.src.pop();
-            file.src = [result, ... file.src];
+        if (fetched) {
+            let result = fetched.include.pop();
+            fetched.include = [result, ... fetched.include];
             return result;
         } else {
             console.log("No file object detected")
@@ -325,14 +326,17 @@
     }
 
 
-    async function getDataFromId(id) {
-        file = await axios.get(`http://localhost:8000/users/cases/${id}`);
-        if (file) {
-            console.log(file.data[0])
-            return file.data[0]
+    async function getDataFromId(id, form) {
+        status = 0;
+        fetched = await axios.get(`http://localhost:8000/drf/cases/browse/${form}/${id}`);
+        if (fetched.data.title) {
+            curr = getPhotoFromFront();
+            console.log(curr)
+            status = 1;
         } else {
-            throw 'Error 404'
+            status = 2;
         }
+        return fetched.data
     }
 
     /* Test variables to be fetched from server when online */
@@ -378,7 +382,7 @@
                 </svg>
             </button>
         </div>
-        {#await getDataFromId(file_id)}
+        {#await getDataFromId(file_id, file_form)}
             <div class="approved-mark-wrap">
             </div>
             <h3>
@@ -405,21 +409,21 @@
         {/await}
 
 
-        {#if status == 1}
+        {#if fetched}
             <div class="info-wrap">
                 <div class="name-wrap">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="11" width="11">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                     </svg>
                     <div class="space"></div>
-                    <h3>{file.associate}</h3>
+                    <h3>{fetched.data.associate}</h3>
                 </div>
                 <div class="date-wrap">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="11" width="11">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                     <div class="space"></div>
-                    <h3>{file.created_at}</h3>
+                    <h3>{fetched.data.created_at}</h3>
                 </div>
             </div>
 
@@ -447,7 +451,7 @@
         {#if user.authority}
             <div class="body-content-wrap">
                 <!-- awaits until file is fetched from the server -->
-                {#if status == 0}
+                {#if fetched}
                 <div class="media-wrap">
                     <div class="photo-container">
                         {#if img_hover}
@@ -464,14 +468,16 @@
                             </div>
                         </div>
                         {/if}
-                        {#if file.type == 1}
+                        {#if file_form == 1}
                             <video bind:this={image} controls on:mouseover={hoverHandle}>
-                                <source src={curr} />
+                                <source src={"http://localhost:8000" + curr.url} />
                             </video>
-                        {:else if file.type == 0}
+                        {:else if file_form == 0}
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-                            <img src={curr} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
-                        {:else if file.type == 2}
+                            {#if curr}
+                                <img src={"http://localhost:8000" + curr.url} alt="main_pg_bg" bind:this={image} on:mouseover={hoverHandle}>
+                            {/if}
+                        {:else if file_form == 2}
                             <h1>아직 문서지원 준비중입니다</h1>
                         {/if}
                         {#if img_hover}
@@ -494,7 +500,7 @@
                                 <h5>대표장소:</h5>
                             </div>
                             <div class="location info-item-content">
-                                <h5>@{file.location}
+                                <h5>@{fetched.data.location.title}
                                 </h5>
                             </div>
                         </div>
@@ -503,7 +509,7 @@
                                 <h5>촬영자:</h5>
                             </div>
                             <div class="associate info-item-content">
-                                <h5>#{file.associate}</h5>
+                                <h5>#{fetched.data.associate.title}</h5>
                             </div>
                         </div>
                         <div class="attendee-wrap info-item">
@@ -511,15 +517,15 @@
                                 <h5>주요참석자:</h5>
                             </div>
                             <div class="attendees info-item-content">
-                                {#each file.attendee as attendee, index}
-                                    <h5>#{attendee}</h5>
+                                {#each fetched.data.attendee as attendee, index}
+                                    <h5>#{attendee.title}</h5>
                                 {:else}
                                     <h4>주요 참석자가 없습니다.</h4>
                                 {/each}
                             </div>
                         </div>
                         <div class="collected-wrap info-item">
-                            {#if file.collected}
+                            {#if !fetched.data.produced}
                                 <h5>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -536,7 +542,7 @@
                             {/if}
                         </div>
                         <div class="private-wrap info-item">
-                            {#if file.private}
+                            {#if fetched.data.private}
                                 <h5>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="black" width="14" height="14">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
@@ -556,7 +562,7 @@
                     <div class="content-header">
                         <h5>설명</h5>
                     </div>
-                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={file.content}>
+                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={fetched.data.content}>
                     </div>
                 </div>
                 {:else if status == 2}
