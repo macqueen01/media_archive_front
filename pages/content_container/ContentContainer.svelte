@@ -166,7 +166,9 @@
     */
 
     export let page = 1;
+    export let type = 0;
     export let view = 'box';
+
 
     var dispatch = createEventDispatcher();
 
@@ -174,14 +176,13 @@
     
     let fetched_items = [];
 
-    async function fetch_items(page) {
-        let result_items
+    async function fetch_items(page, type) {
         fetched_items = await axios({
-            url: `http://localhost:8000/drf/cases/browse?page=${page}`,
+            // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
+            url: `http://localhost:8000/drf/cases/browse/${type}?page=${page}`,
             method: 'get',
         })
-        result_items = fetched_items.data.results
-        return result_items
+        return fetched_items.data.results
     }
 
 
@@ -213,21 +214,21 @@
     }
 
 
+
+
     
-</script>            
+</script>
            
 
 <div class="browse-content-container">
-    {#await fetch_items(page)}
+    {#await fetch_items(page, type)}
     <h3>로딩 중...</h3>
     {:then result}
     {#if view == 'box'}
         <div class="browse-contents-list-view">
-            
             {#each result as item, index}
                 <ContentItem item={item} on:click={passFocus} />
             {/each}
-            
         </div>
     {:else if view == 'list'}
         <div class="upload-view">

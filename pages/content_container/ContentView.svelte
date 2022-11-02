@@ -299,8 +299,8 @@
 
     function getPhotoFromFront() {
         if (fetched) {
-            let result = fetched.include.shift();
-            fetched.include = [... fetched.include, result];
+            let result = fetched.data.include.shift();
+            fetched.data.include = [... fetched.data.include, result];
             return result;
         } else {
             console.log("No file object detected")
@@ -309,8 +309,8 @@
 
     function getPhotoFromBack() {
         if (fetched) {
-            let result = fetched.include.pop();
-            fetched.include = [result, ... fetched.include];
+            let result = fetched.data.include.pop();
+            fetched.data.include = [result, ... fetched.data.include];
             return result;
         } else {
             console.log("No file object detected")
@@ -327,15 +327,8 @@
 
 
     async function getDataFromId(id, form) {
-        status = 0;
         fetched = await axios.get(`http://localhost:8000/drf/cases/browse/${form}/${id}`);
-        if (fetched.data.title) {
-            curr = getPhotoFromFront();
-            console.log(curr)
-            status = 1;
-        } else {
-            status = 2;
-        }
+        curr = getPhotoFromFront();
         return fetched.data
     }
 
@@ -353,14 +346,16 @@
 
 
     let image;
+    let video;
     let source;
     let name;
 
     $: {
-        if (image) {
+        if (curr && image) {
             
-            source = curr.split('/');
+            source = curr.url.split('/');
             name = source.pop();
+
 
             if (image.offsetHeight > image.offsetWidth) {
                 image.height = 450;
@@ -369,6 +364,22 @@
             }
         }
     }
+
+    $:{
+        if (curr && video) {
+
+            source = curr.url.split("/");
+            name = source.pop();
+
+            if (video.offsetHeight > video.offsetWidth) {
+                vedio.height = 450;
+            } else {
+                video.width = 450;
+            }
+        }
+    }
+
+
     
 </script>            
            
@@ -409,21 +420,21 @@
         {/await}
 
 
-        {#if fetched}
+        {#if fetched && fetched.data}
             <div class="info-wrap">
                 <div class="name-wrap">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="11" width="11">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                     </svg>
                     <div class="space"></div>
-                    <h3>{fetched.data.associate}</h3>
+                    <h3>{fetched.data.associate.title}</h3>
                 </div>
                 <div class="date-wrap">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="11" width="11">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
                     </svg>
                     <div class="space"></div>
-                    <h3>{fetched.data.created_at}</h3>
+                    <h3>{fetched.data.created_at.split('T')[0]}</h3>
                 </div>
             </div>
 
@@ -469,9 +480,11 @@
                         </div>
                         {/if}
                         {#if file_form == 1}
-                            <video bind:this={image} controls on:mouseover={hoverHandle}>
-                                <source src={"http://localhost:8000" + curr.url} />
-                            </video>
+                            {#key curr.src}
+                                <video controls bind:this={video} on:mouseover={hoverHandle}>
+                                    <source src={"http://localhost:8000" + curr.url} type="video/mp4">
+                                </video>
+                            {/key}
                         {:else if file_form == 0}
                         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                             {#if curr}

@@ -13,7 +13,7 @@
     let selected_index = null;
 
     let page = 1;
-    let stage = 1;
+    let form = 0
     let focus = false;
     let view = "box";
 
@@ -74,6 +74,13 @@
     function viewHandle(e) {
         view = e.detail.view;
     }
+
+    function formHandle(e) {
+        if (form != e.detail.form) {
+            form = e.detail.form;
+            page = 1;
+        }
+    }
 </script>
 
 <Route path="/*">
@@ -85,12 +92,13 @@
             <Route path="/" redirect="/manage/cases/browse" />
 
             <Route path="/browse/*">
-                <BrowseTitle on:viewChange={viewHandle} />
+                <BrowseTitle on:viewChange={viewHandle} on:formChange={formHandle} {form} />
                 <ContentContainer
                     {page}
                     on:pageChange={pageHandle}
                     on:focus={focusHandle}
                     {view}
+                    type = {form}
                 />
                 <div class="bottom-bar">
                     <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />

@@ -236,6 +236,14 @@
         color: rgb(31, 32, 88);
         text-align: center;
     }
+
+    .user-fetch-spinner-page > h5 {
+        font-family: 'goth';
+        font-size: 20px;
+        width: 400px;
+        color: rgb(31, 32, 88);
+        text-align: center;
+    }
 </style>
 
 
@@ -605,8 +613,7 @@
             dispatch('data', {
                 uncleared: [1,2,3,4]
             })
-            fileUpload();
-            setTimeout(() => router.goto("/manage/cases/browse"), 1000)
+            fileUpload().then(() => router.goto("/manage/cases/browse"))
         }
     }
 
@@ -764,7 +771,7 @@
                 </div>
                 {#if type == 1}
                     <h4>영상을 인코딩 중입니다</h4>
-                    <h5>업로드가 완료되면 알림이 갑니다</h5>
+                    <h5>페이지를 나가면 다시 시작해야 합니다</h5>
                 {:else}
                     <h4>업로드가 성공적으로 끝났습니다!</h4>
                 {/if}

@@ -106,10 +106,10 @@
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
             {#if item.form == 0}
-                <img src="{srcs[0].url}" height="85px" alt="test-img">
+                <img src="{"http://localhost:8000" + srcs[0].url}" height="85px" alt="test-img">
             {:else if item.form == 1}
                 <video height="85px" controls>
-                    <source src={srcs[0].url} type="video/mp4"/>
+                    <source src={"http://localhost:8000" + srcs[0].url} type="video/mp4"/>
                 </video>
             {:else}
             {/if}
