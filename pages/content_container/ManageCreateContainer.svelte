@@ -306,6 +306,7 @@
     let received_file = false;
     let content = "";
     let item_objs = []
+    let accept_list = "";
 
     var dispatch = createEventDispatcher();
 
@@ -629,6 +630,16 @@
         }
     }
 
+    $: {
+        if (type == 0) {
+            accept_list = ".png, .jpg, .jpeg, .svg, .JPEG, .JPG"
+        } else if (type == 1) {
+            accept_list = ".wmv, .mp4, .mpg, .mpeg4, .mp3, .mov"
+        } else if (type == 2) {
+            accept_list = ".hwp, .pdf, .doc, .txt, .ai"
+        }
+    }
+
 
 
 
@@ -687,7 +698,7 @@
                 {/if}
                 <div class="control-panel">
                     <label for="file-input" class="file-input-label" on:click={uploadCall}><h3>업로드</h3></label>
-                        <input id="file-input" name="file-input" class="file-input" type="file" bind:files={received_file} />
+                        <input id="file-input" name="file-input" class="file-input" type="file" bind:files={received_file} accept={accept_list}/>
                     <button on:click={downloadCall}><h3>저장</h3></button>
                     <button on:click={deleteCall}><h3>삭제</h3></button>
                 </div>

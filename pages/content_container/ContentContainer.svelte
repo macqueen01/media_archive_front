@@ -148,6 +148,8 @@
     import { Route, meta, router } from 'tinro';
     import { draw, fade } from 'svelte/transition';
     import { createEventDispatcher, onMount } from 'svelte';
+    import { Circle } from 'svelte-loading-spinners';
+
 
     import ContentItem from "./ContentItem.svelte";
     import ContentView from "./ContentView.svelte";
@@ -222,7 +224,7 @@
 
 <div class="browse-content-container">
     {#await fetch_items(page, type)}
-    <h3>로딩 중...</h3>
+        <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
     {:then result}
     {#if view == 'box'}
         <div class="browse-contents-list-view">

@@ -1086,6 +1086,11 @@
   "resolved" "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   "version" "1.0.0"
 
+"svelte-loading-spinners@^0.3.4":
+  "integrity" "sha512-vKaW71QMCBcTNijAGc0mUl8k3DQ66iYmp6MB8BMGCXyWk82bTrcLy8FOnSm9fE+8q6TwzD6PLUoYFHt0II93Xw=="
+  "resolved" "https://registry.npmjs.org/svelte-loading-spinners/-/svelte-loading-spinners-0.3.4.tgz"
+  "version" "0.3.4"
+
 "svelte@*", "svelte@^3.32.3":
   "integrity" "sha512-bS4odcsdj5D5jEg6riZuMg5NKelzPtmsCbD9RG+8umU03TeNkdWnP6pqbCm0s8UQNBkqk29w/Bdubn3C+HWSwA=="
   "resolved" "https://registry.npmjs.org/svelte/-/svelte-3.50.1.tgz"
