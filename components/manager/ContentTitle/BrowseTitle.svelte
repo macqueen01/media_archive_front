@@ -102,7 +102,7 @@
     import { createEventDispatcher } from 'svelte';
 
     export let form = 0;
-    let view = 'box';
+    export let view = 'box';
 
     var dispatch = createEventDispatcher()
 

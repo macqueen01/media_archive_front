@@ -92,7 +92,7 @@
             <Route path="/" redirect="/manage/cases/browse" />
 
             <Route path="/browse/*">
-                <BrowseTitle on:viewChange={viewHandle} on:formChange={formHandle} {form} />
+                <BrowseTitle on:viewChange={viewHandle} on:formChange={formHandle} {form} {view} />
                 <ContentContainer
                     {page}
                     on:pageChange={pageHandle}

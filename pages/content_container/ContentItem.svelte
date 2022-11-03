@@ -78,7 +78,17 @@
 
     export let item;
 
-    let src = item.include[0].url;
+    let src;
+    let thumbnail;
+
+    if (!item.include[0]) {
+        src = null;
+        thumbnail = null;
+    } else {
+        src = item.include[0].url;
+        thumbnail = item.include[0].thumbnail;
+    }
+
     let title = item.title;
     let created_at = item.created_at.split('T')[0];
     let associate = item.associate.title;
@@ -96,9 +106,12 @@
 <div class="browse-contents-list-item" on:click={clickHandle}>
     <div class="content-item-folder">
         <div class="img-container">
-            <img src="http://localhost:8000{src}" width="100%">
-        </div>
-                            
+            {#if item.form == 0}
+                <img src="http://localhost:8000{src}" width="100%">
+            {:else}
+                <img src="http://localhost:8000{thumbnail}" width="100%">
+            {/if}
+        </div>    
         <div class="title-container">
             <h3>{title}</h3>
         </div>
