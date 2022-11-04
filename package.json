@@ -18,7 +18,8 @@
     "axios": "^0.27.2",
     "rollup-plugin-json": "^4.0.0",
     "svelte": "^3.32.3",
-    "svelte-loading-spinners": "^0.3.4"
+    "svelte-loading-spinners": "^0.3.4",
+    "youtube-dl": "^3.5.0"
   },
   "scripts": {
     "build": "rollup -c",

@@ -80,11 +80,12 @@
 
     export let item;
 
-    let srcs = item.include;
+    let src = '';
     let id = item.id
     let title = item.title;
     let created_at = item.created_at.split('T')[0];
     let associate = item.associate.title;
+    let type = item.type;
 
     var dispatch = createEventDispatcher();
 
@@ -92,6 +93,14 @@
         dispatch('click', {
             item: item
         })
+    }
+
+    $: {
+        if (type == 0) {
+            src = item.include[0].url;
+        } else {
+            src = item.include[0].thumbnail;
+        }
     }
 
 </script>
@@ -105,14 +114,7 @@
     </div>
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
-            {#if item.form == 0}
-                <img src="{"http://localhost:8000" + srcs[0].url}" height="85px" alt="test-img">
-            {:else if item.form == 1}
-                <video height="85px" controls>
-                    <source src={"http://localhost:8000" + srcs[0].url} type="video/mp4"/>
-                </video>
-            {:else}
-            {/if}
+            <img src="{"http://localhost:8000" + src}" height="85px" alt="test-img">
         </div>
     </div>
     <div class="title-wrap">

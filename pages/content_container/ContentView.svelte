@@ -1,13 +1,11 @@
 <style>
-
     .focus {
         width: 100%;
         height: 100%;
-        z-index: 3;
+        z-index: 2;
         position: relative;
         overflow-y: auto;
         overflow-x: hidden;
-        position: absolute;
     }
 
     .header {
@@ -20,14 +18,23 @@
         z-index: 4;
     }
 
-    .header > h3 {
+    .title-wrap {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        left: 90px;
+        bottom: 18px;
+    }
+
+    .title-wrap > h3 {
         font-family: 'goth';
         font-size: 17px;
         color:#1e1c3b;
         font-weight: 900;
-        position: absolute;
-        left: 90px;
-        bottom: 18px;
     }
 
     .body {
@@ -58,11 +65,11 @@
     }
 
     .approved-mark-wrap {
-        position: absolute;
+        position: relative;
         width: fit-content;
         height: fit-content;
-        left: 235px;
-        bottom: 16px;
+        left: 6px;
+        bottom: -2px;
     }
 
     .icons-wrap {
@@ -157,6 +164,18 @@
         position: relative;
     }
 
+    .photo-container > h1, .photo-container > h2 {
+        font-family: 'goth';
+    }
+
+    .photo-container > h1 {
+        font-size: 35px;
+    }
+
+    .photo-container > h2 {
+        font-size: 20px;
+    }
+
     .caption {
         display: flex;
         justify-content: end;
@@ -191,6 +210,13 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .left-arrow-wrap, .right-arrow-wrap {
+        z-index: 10;
+        border: none;
+        outline: none;
+        background: transparent;
     }
 
     .info-header, .content-header {
@@ -233,11 +259,28 @@
 
     .detail-wrap-content {
         padding-top: 10px;
-        font-size: 12px;
         font-family: 'goth';
+        padding-right: 15px;
+        padding-bottom: 20px;
     }
 
+    :global(.detail-wrap-content > p) {
+        min-height: 15px;
+        font-family: 'goth';
+        font-size: 14px;
+    }
 
+    :global(.detail-wrap-content > h1) {
+        font-size: 17px;
+    }
+
+    :global(.detail-wrap-content > h2) {
+        font-size: 16px;
+    }
+
+    :global(.detail-wrap-content > h3) {
+        font-size: 15px;
+    }
 
 
     
@@ -264,7 +307,7 @@
 
     let file_id = route.params.id;
     let file_form = route.params.form;
-    let img_hover = false;
+    let media_hover = false;
     let curr;
     let status = 0;
     let fetched;
@@ -279,10 +322,10 @@
 
 
     function hoverHandle() {
-        img_hover = true;
+        media_hover = true;
         setTimeout(() => {
-            if (img_hover) {
-                img_hover = false;
+            if (media_hover) {
+                media_hover = false;
             }
         }, 4000)
     }
@@ -297,7 +340,7 @@
 
     /* copies file.src into fileLst */
 
-    function getPhotoFromFront() {
+    function getMediaFromFront() {
         if (fetched) {
             let result = fetched.data.include.shift();
             fetched.data.include = [... fetched.data.include, result];
@@ -307,7 +350,7 @@
         }
     }
 
-    function getPhotoFromBack() {
+    function getMediaFromBack() {
         if (fetched) {
             let result = fetched.data.include.pop();
             fetched.data.include = [result, ... fetched.data.include];
@@ -317,18 +360,18 @@
         }  
     }
 
-    function imageNavigateBack() {
-        curr = getPhotoFromBack();
+    function NavigateBack() {
+        curr = getMediaFromBack();
     }
 
-    function imageNavigateForth() {
-        curr = getPhotoFromFront();
+    function NavigateForth() {
+        curr = getMediaFromFront();
     }
 
 
     async function getDataFromId(id, form) {
         fetched = await axios.get(`http://localhost:8000/drf/cases/browse/${form}/${id}`);
-        curr = getPhotoFromFront();
+        curr = getMediaFromFront();
         return fetched.data
     }
 
@@ -400,14 +443,16 @@
                 파일을 받아오는 중입니다
             </h3>
         {:then result}
-            <div class="approved-mark-wrap">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="rgb(99, 228, 99)" height="18" width="18">
-                    <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div class="title-wrap">
+                <h3>
+                    {result.title}
+                </h3>
+                <div class="approved-mark-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="rgb(99, 228, 99)" height="18" width="18">
+                        <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
             </div>
-            <h3>
-                {result.title}
-            </h3>
         {:catch error}
             <div class="approved-mark-wrap">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="rgb(226, 41, 41)" height="18" width="18">
@@ -465,18 +510,18 @@
                 {#if fetched}
                 <div class="media-wrap">
                     <div class="photo-container">
-                        {#if img_hover}
+                        {#if media_hover}
                         <div class="facad">
-                            <div class="left-arrow-wrap" on:click={imageNavigateBack}>
+                            <button class="left-arrow-wrap" on:click={NavigateBack}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                                 </svg>
-                            </div>
-                            <div class="right-arrow-wrap" on:click={imageNavigateForth}>
+                            </button>
+                            <button class="right-arrow-wrap" on:click={NavigateForth}>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" height="60" width="60">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                 </svg>
-                            </div>
+                            </button>
                         </div>
                         {/if}
                         {#if file_form == 1}
@@ -493,7 +538,7 @@
                         {:else if file_form == 2}
                             <h1>아직 문서지원 준비중입니다</h1>
                         {/if}
-                        {#if img_hover}
+                        {#if media_hover}
                             <div class="caption">
                                 <h4>{name}</h4>
                             </div>
@@ -575,7 +620,7 @@
                     <div class="content-header">
                         <h5>설명</h5>
                     </div>
-                    <div class="detail-wrap-content" contenteditable="true" bind:innerHTML={fetched.data.content}>
+                    <div class="detail-wrap-content" contenteditable="false" bind:innerHTML={fetched.data.content}>
                     </div>
                 </div>
                 {:else if status == 2}

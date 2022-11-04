@@ -223,6 +223,7 @@
            
 
 <div class="browse-content-container">
+    <Route path="/">
     {#await fetch_items(page, type)}
         <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
     {:then result}
@@ -281,6 +282,7 @@
         <h5>인터넷 연결을 확인해주세요</h5>
     </div>
     {/await}
+    </Route>
     <Route path="/:form/:id">
         <ContentView file={focus} on:escape={undoFocus}/>
     </Route>

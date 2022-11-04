@@ -85,6 +85,25 @@
     import Help from "./pages/Help.svelte";
     import Stats from "./pages/Stats.svelte";
 
+    // These are axios test for backends
+
+    import axios from 'axios';
+
+    axios.post(
+        'http://localhost:8000/drf/user/create',
+        {
+            name: 'kimjae',
+            username: 'jaekimontheroadhey',
+            position: '상병',
+            standing: '멀티병',
+            password: 'aidan1004!'
+        }
+    ).then((result) => {
+        console.log(result)
+    }).catch((e) => {
+        console.error(e)
+    })
+
     
   
 
