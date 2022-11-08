@@ -149,6 +149,7 @@
     import { draw, fade } from 'svelte/transition';
     import { createEventDispatcher, onMount } from 'svelte';
     import { Circle } from 'svelte-loading-spinners';
+    import { token } from '../../utilities/store';
 
 
     import ContentItem from "./ContentItem.svelte";
@@ -183,6 +184,9 @@
             // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
             url: `http://localhost:8000/drf/cases/browse/${type}?page=${page}`,
             method: 'get',
+            headers: {
+                'Authorization': `Token ${$token}`
+            }
         })
         return fetched_items.data.results
     }

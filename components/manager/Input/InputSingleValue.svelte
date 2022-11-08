@@ -133,6 +133,7 @@
     export let init = '';
     export let immutable = false;
     export let placeholder = null;
+    export let value = '';
     export let conditions = [
         {
             condition: () => {},
@@ -156,7 +157,6 @@
 
     let focused = false;
     let condition_result = false;
-    let value = '';
 
     
     onMount(() => {

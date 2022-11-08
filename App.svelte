@@ -68,6 +68,7 @@
     /* Main entrance to Naval Academy Media Archive */
 
     import { Route } from "tinro";
+    import { token } from './utilities/store';
     
     /* Imports control panel */
     import UserNavbar from "./components/user/UserNavbar.svelte";
@@ -89,20 +90,14 @@
 
     import axios from 'axios';
 
-    axios.post(
-        'http://localhost:8000/drf/user/create',
-        {
-            name: 'kimjae',
-            username: 'jaekimontheroadhey',
-            position: '상병',
-            standing: '멀티병',
-            password: 'aidan1004!'
-        }
-    ).then((result) => {
-        console.log(result)
-    }).catch((e) => {
-        console.error(e)
-    })
+
+    let localToken = localStorage.getItem('token');
+
+    if ($token != localToken) {
+        token.set(localToken);
+    }
+
+
 
     
   
