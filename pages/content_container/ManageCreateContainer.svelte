@@ -1,3 +1,658 @@
+<script>
+    import { Route, router } from "tinro";
+    import axios from "axios";
+
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { writable } from "svelte/store";
+    import { crossfade, draw } from "svelte/transition";
+    import { flip } from "svelte/animate";
+
+    import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
+    import InputMultiValue from "../../components/manager/Input/InputMultiValue.svelte";
+    import InputCheckboxValue from "../../components/manager/Input/InputCheckboxValue.svelte";
+    import InputDateValue from "../../components/manager/Input/InputDateValue.svelte";
+    import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
+    import Tiptap from "../../components/manager/Tiptap/Tiptap.svelte";
+    import ManageCreateItem from "../../components/manager/ManageCreateItem.svelte";
+    import Preview from "../../components/manager/CreateViews/Preview.svelte";
+    import { condition_set } from "../../utilities/inputConditions";
+    import { token } from "../../utilities/store";
+    import DefaultModal from "../../components/modals/DefaultModal.svelte";
+
+    export let stage = 1;
+
+    let saved_data = {};
+    let title;
+    let location;
+    let affiliation;
+    let associate;
+    let attendee;
+    let attendee_list = [];
+    let date;
+    let produced = -1;
+    let created_at;
+    let type = -1;
+    let source;
+    let pass_list = {
+        length: () => {
+            let length = 0;
+            for (var item in this) {
+                length += 1;
+            }
+            return length;
+        },
+        title: false,
+        location: false,
+        affiliation: false,
+        associate: false,
+        attendee: false,
+        date: false,
+        produced: false,
+        type: false,
+    };
+
+    // FILE_UPLOADING is a flag for which to track if file is being
+    // transfered in that moment of time
+    let file_uploading = false;
+    let all_checked = false;
+    let received_file = false;
+    let content = "";
+    let item_objs = [];
+    let accept_list = "";
+
+    // Modals
+    // Upload Fail Modal Controller
+    let upload_fail = false;
+
+    var dispatch = createEventDispatcher();
+
+    function downloader(item) {
+        if (!item) {
+            console.log("cannot find item");
+        }
+
+        console.log("downloading from...", item.src);
+    }
+
+    function changeHandle(e, variable_name) {
+        if (variable_name == "title") {
+            title = e.detail.value;
+            pass_list.title = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "attendee") {
+            attendee = e.detail.value;
+            pass_list.attendee = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "location") {
+            location = e.detail.value;
+            pass_list.location = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "associate") {
+            associate = e.detail.value;
+            pass_list.associate = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "date") {
+            date = e.detail.value;
+            pass_list.date = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "affiliation") {
+            affiliation = e.detail.value;
+            pass_list.affiliation = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "produced") {
+            // Option input doesn't save renewed value without console.log call
+            // to KEY. The reason is left unanswered.
+            // DON'T REMOVE THE CONSOLE LOG BELOW!
+            console.log(e.detail.key);
+
+            produced = e.detail.key;
+            pass_list.produced = e.detail.pass;
+            pass_list = pass_list;
+        } else if (variable_name == "type") {
+            // DON'T REMOVE THE CONSOLE LOG BELOW!
+            console.log(e.detail.key);
+
+            type = e.detail.key;
+            pass_list.type = e.detail.pass;
+            pass_list = pass_list;
+        } else {
+            console.log("Change Error Occurred");
+        }
+    }
+
+    // Handler is received from components
+
+    function allCheckHandle(e) {
+        if (all_checked) {
+            all_checked = false;
+            item_objs.forEach((item) => {
+                item.checked = false;
+            });
+        } else {
+            all_checked = true;
+            item_objs.forEach((item) => {
+                item.checked = true;
+            });
+        }
+
+        item_objs = item_objs;
+    }
+
+    function downloadHandle(e) {
+        let index = e.detail.index;
+        downloader(item_objs[index]);
+    }
+
+    function deleteHandle(e) {
+        let index = e.detail.index;
+        if (item_objs[index]) {
+            let pop_obj = item_objs.splice(index, 1);
+            console.log(pop_obj[0].src);
+            console.log(item_objs);
+            if (pop_obj[0].src) {
+                console.log("revoking Url");
+                URL.revokeObjectURL(pop_obj[0].src);
+            } else {
+                console.log("Url revoking error");
+            }
+            item_objs = item_objs;
+        } else {
+            console.log(`item_objs[${index}] doesn't exist`);
+        }
+    }
+
+    function checkHandle(e) {
+        let index = e.detail.index;
+        let checked = e.detail.checked;
+        if (item_objs[index]) {
+            item_objs[index].checked = checked;
+        } else {
+            console.log(`item_objs[${index}] doesn't exist`);
+        }
+
+        item_objs = item_objs;
+    }
+
+    function contentHandle(e) {
+        content = e.detail.html;
+    }
+
+    // Call is received directly from buttons
+
+    function downloadCall() {
+        item_objs.forEach((item) => {
+            if (item.checked) {
+                downloader(item);
+                item.checked = false;
+            }
+        });
+
+        item_objs = item_objs;
+    }
+
+    function deleteCall() {
+        let result = getItemList();
+        console.log(result.length);
+        for (let i = 0; i < result.length; i++) {
+            console.log(i);
+            if (result[i].checked) {
+                let pop_obj = result.splice(i, 1);
+                if (pop_obj[0].src) {
+                    console.log("revoking Url");
+                    URL.revokeObjectURL(pop_obj[0].src);
+                } else {
+                    console.log("Url revoking error");
+                }
+                i = i - 1;
+            }
+        }
+
+        item_objs = result;
+    }
+
+    function uploadCall() {
+        console.log("uploading call received");
+        let index = getItemListLength();
+        waitFile(index);
+    }
+
+    function waitFile(index) {
+        if (!received_file) {
+            setTimeout(() => waitFile(index), 1000);
+        } else {
+            console.log("waitfile fired");
+            let src = URL.createObjectURL(received_file[0]);
+            let file = received_file[0];
+            console.log("received the file:", received_file, src);
+
+            let new_item = {
+                checked: false,
+                src: src,
+                file: file,
+            };
+
+            item_objs = [...item_objs, new_item];
+            received_file = false;
+        }
+    }
+
+    // Utility functions
+
+    function getItemListLength() {
+        return getItemList().length;
+    }
+
+    function getItemList() {
+        // returns copied list of ITEM_OBJS
+        return [...item_objs];
+    }
+
+    async function fileUpload() {
+        if (item_objs && !file_uploading) {
+            let result = null;
+            let formData = new FormData();
+            file_uploading = true;
+
+            try {
+                let index = 0;
+                formData.append("title", title);
+                formData.append("file_index", item_objs.length - 1);
+                formData.append("content", content);
+                formData.append("attendee", attendee_list);
+                formData.append("location", location);
+                formData.append("affiliation", affiliation);
+                formData.append("associate", associate);
+                formData.append("produced", produced);
+                formData.append("private", 1);
+                formData.append("type", type);
+
+                //file should be sent seperately -> don't send in form of list !
+                item_objs.forEach((item) => {
+                    formData.append(`${index}`, item.file);
+                    index += 1;
+                });
+
+                result = await axios({
+                    headers: {
+                        Authorization: `Token ${$token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                    url: `http://127.0.0.1:8000/drf/cases/create/${type}`,
+                    method: "POST",
+                    data: formData,
+                });
+
+                console.log(result.data);
+            } catch (error) {
+                result = error;
+                console.log(error);
+            }
+
+            file_uploading = false;
+            console.log("file_uploading procedure ended");
+            return result;
+        }
+    }
+
+    async function _afterFileUpload(result) {
+        if (result.response.status == 200) {
+            router.goto("/manage/cases/browse");
+        } else {
+            upload_fail = true;
+        }
+    }
+
+    async function processFileUpload() {
+        let result = await fileUpload();
+        _afterFileUpload(result);
+    }
+
+    function parseToList(str) {
+        // str = "#a #b #c ..."
+        let str_lst = str.split(" ");
+        let result = [];
+
+        str_lst.forEach((item) => {
+            result.push(item.replace(/['#']*/, ""));
+        });
+
+        return result;
+    }
+
+    function parseToString(lst) {
+        let result_list = [];
+        lst.forEach((item) => {
+            result_list.push("'" + item + "'");
+        });
+        return `${result_list}`;
+    }
+
+    function passCheck(lst) {
+        if (lst.length() == 1) {
+            return false;
+        }
+
+        for (var item in lst) {
+            console.log(item, ":", lst[item]);
+            if (!lst[item]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function modalCloseHandle(e, type) {
+        if (type == 0) {
+            upload_fail = e.detail.modalActive;
+            router.goto("/manage/cases/browse");
+        }
+    }
+
+    // stage manager
+    // stage manager manages the logic behind navigation within create-container
+
+    $: {
+        if (stage == 1) {
+            if (item_objs) {
+                item_objs.forEach((item) => {
+                    URL.revokeObjectURL(item.src);
+                });
+                item_objs = [];
+            }
+        } else if (stage == 2) {
+            // parse ATTENDEE in form of list (ATTENDEE -> ATTENDEE_LIST)
+            if (attendee) {
+                passCheck(pass_list);
+                attendee_list = parseToList(attendee);
+            }
+        } else if (stage == 3) {
+            //let result = fileUpload();
+            //console.log(result)
+        } else if (stage == 4) {
+            dispatch("data", {
+                uncleared: [],
+            });
+        } else if (stage == 5) {
+            dispatch("data", {
+                uncleared: [1, 2, 3, 4],
+            });
+            processFileUpload();
+        }
+    }
+
+    $: {
+        if (passCheck(pass_list)) {
+            dispatch("data", {
+                uncleared: [5],
+            });
+        } else {
+            dispatch("data", {
+                uncleared: [2, 3, 4, 5],
+            });
+        }
+    }
+
+    $: {
+        if (type == 0) {
+            accept_list = ".png, .jpg, .jpeg, .svg, .JPEG, .JPG";
+        } else if (type == 1) {
+            accept_list = ".wmv, .mp4, .mpg, .mpeg4, .mp3, .mov";
+        } else if (type == 2) {
+            accept_list = ".hwp, .pdf, .doc, .txt, .ai";
+        }
+    }
+</script>
+
+<div class="browse-content-container">
+    {#if stage == 1}
+        <div class="single-input-wrap">
+            <div class="input-category-title">
+                <h3>기본 등록 정보</h3>
+            </div>
+            <InputSingleValue
+                placeholder="제목을 입력해주세요"
+                init={title}
+                on:change={(e) => changeHandle(e, "title")}
+                conditions={condition_set.default_conditions}
+            />
+            <InputMultiValue
+                placeholder="주요 참석자들을 입력해주세요"
+                init={attendee}
+                on:change={(e) => changeHandle(e, "attendee")}
+                conditions={condition_set.attendee_conditions}
+            />
+        </div>
+        <div class="single-input-wrap">
+            <div class="padding" />
+            <InputSingleValue
+                placeholder="행사 장소를 입력해주세요"
+                init={location}
+                on:change={(e) => changeHandle(e, "location")}
+                conditions={condition_set.default_conditions}
+            />
+            <InputSelectValue
+                placeholder="기록 유형을 선택해주세요"
+                init={type}
+                on:change={(e) => changeHandle(e, "type")}
+                conditions={condition_set.select_conditions}
+                option_list={["사진", "영상", "문서"]}
+            />
+        </div>
+        <div class="single-input-wrap">
+            <div class="padding" />
+            <InputSelectValue
+                placeholder="생산물 여부를 선택해주세요"
+                init={produced}
+                on:change={(e) => changeHandle(e, "produced")}
+                conditions={condition_set.select_conditions}
+                option_list={["생산", "수집"]}
+            />
+            <InputSingleValue
+                placeholder="생산 부대를 입력해주세요"
+                init={affiliation}
+                on:change={(e) => changeHandle(e, "affiliation")}
+                conditions={condition_set.default_conditions}
+            />
+        </div>
+
+        <div class="buffer" />
+
+        <div class="single-input-wrap">
+            <div class="input-category-title">
+                <h3>생산 정보</h3>
+            </div>
+            <InputSingleValue
+                placeholder="촬영자를 입력해주세요"
+                init={associate}
+                on:change={(e) => changeHandle(e, "associate")}
+                conditions={condition_set.default_conditions}
+            />
+            <InputSingleValue
+                placeholder="생산연도를 입력해주세요"
+                init={date}
+                on:change={(e) => changeHandle(e, "date")}
+                conditions={condition_set.default_conditions}
+            />
+        </div>
+    {:else if stage == 2}
+        <div class="upload-view">
+            <div class="header">
+                {#if type == 0}
+                    <h3>사진 업로드</h3>
+                {:else if type == 1}
+                    <h3>영상 업로드</h3>
+                {:else if type == 2}
+                    <h3>문서 업로드</h3>
+                {:else}
+                    <h3>다시 시도해 주세요</h3>
+                {/if}
+                <div class="control-panel">
+                    <label
+                        for="file-input"
+                        class="file-input-label"
+                        on:click={uploadCall}><h3>업로드</h3></label
+                    >
+                    <input
+                        id="file-input"
+                        name="file-input"
+                        class="file-input"
+                        type="file"
+                        bind:files={received_file}
+                        accept={accept_list}
+                    />
+                    <button on:click={downloadCall}><h3>저장</h3></button>
+                    <button on:click={deleteCall}><h3>삭제</h3></button>
+                </div>
+            </div>
+            <div class="table-header">
+                <div class="header-checkbox-container">
+                    <button
+                        class={all_checked ? "check-btn-clicked" : "check-btn"}
+                        on:click={allCheckHandle}
+                    >
+                        {#if all_checked}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="white"
+                                height="17"
+                                width="17"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"
+                                />
+                            </svg>
+                        {/if}
+                    </button>
+                </div>
+                <div class="header-snapshot-container">
+                    <div class="header-container">
+                        <h3>스냅샷</h3>
+                    </div>
+                </div>
+                <div class="header-title-container">
+                    <div class="header-container">
+                        <h3>파일명</h3>
+                    </div>
+                </div>
+                <div class="header-download-container">
+                    <div class="header-container">
+                        <div class="svg-wrap">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                height="18"
+                                width="18"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-delete-container">
+                    <div class="header-container">
+                        <div class="svg-wrap">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="2"
+                                stroke="currentColor"
+                                height="18"
+                                width="18"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M6 18L18 6M6 6l12 12"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="table">
+                    {#each item_objs as item, index}
+                        <ManageCreateItem
+                            checked={item.checked}
+                            src={item.src}
+                            file={item.file}
+                            {index}
+                            {type}
+                            on:delete={deleteHandle}
+                            on:download={downloadHandle}
+                            on:check={checkHandle}
+                        />
+                    {/each}
+                </div>
+            </div>
+        </div>
+    {:else if stage == 3}
+        <Tiptap {content} on:change={contentHandle} />
+    {:else if stage == 4}
+        <Preview
+            {item_objs}
+            {title}
+            {location}
+            {affiliation}
+            {associate}
+            attendee={attendee_list}
+            {date}
+            {produced}
+            {type}
+            {content}
+        />
+    {:else if stage == 5}
+        <div class="user-fetch-spinner-page">
+            <div class="svg-wrap">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="0.8"
+                    stroke="rgb(31, 32, 88)"
+                    height="100"
+                    width="100"
+                >
+                    <path
+                        in:draw={{ duration: 700, speed: 1 }}
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0116.35 15m.002 0h-.002"
+                    />
+                </svg>
+            </div>
+            {#if type == 1}
+                <h4>영상을 인코딩 중입니다</h4>
+                <h5>페이지를 나가면 다시 시작해야 합니다</h5>
+            {:else}
+                <h4>업로드가 성공적으로 끝났습니다!</h4>
+            {/if}
+        </div>
+    {/if}
+</div>
+
+<DefaultModal
+    modalActive={upload_fail}
+    on:close={(e) => modalCloseHandle(e, 0)}
+>
+    <h3 class="modal-header" slot="header">권한이 없습니다</h3>
+    <h3 class="modal-content" slot="content">관리자 권한이 필요합니다</h3>
+</DefaultModal>
+
 <style>
     .browse-content-container {
         width: 960px;
@@ -8,7 +663,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);       
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);
     }
 
     .single-input-wrap {
@@ -38,7 +693,7 @@
     .input-category-title > h3 {
         position: absolute;
         font-size: 17px;
-        font-family: 'goth';
+        font-family: "goth";
         color: rgb(30, 42, 95);
         width: 100%;
         height: 20px;
@@ -70,9 +725,9 @@
     }
 
     .header > h3 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 17px;
-        color:#1e1c3b;
+        color: #1e1c3b;
         font-weight: 900;
         position: absolute;
         left: 90px;
@@ -91,7 +746,8 @@
         align-items: center;
     }
 
-    .control-panel > button, .file-input-label {
+    .control-panel > button,
+    .file-input-label {
         background: rgb(31, 32, 88);
         border: none;
         border-radius: 0;
@@ -103,8 +759,9 @@
         align-items: center;
     }
 
-    .control-panel > button > h3, .file-input-label > h3 {
-        font-family: 'goth';
+    .control-panel > button > h3,
+    .file-input-label > h3 {
+        font-family: "goth";
         font-size: 11px;
         color: whitesmoke;
     }
@@ -215,9 +872,9 @@
     }
 
     .header-container > h3 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 14px;
-        color:#1e1c3b;
+        color: #1e1c3b;
     }
 
     .user-fetch-spinner-page {
@@ -230,7 +887,7 @@
     }
 
     .user-fetch-spinner-page > h4 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 30px;
         width: 400px;
         color: rgb(31, 32, 88);
@@ -238,555 +895,10 @@
     }
 
     .user-fetch-spinner-page > h5 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 20px;
         width: 400px;
         color: rgb(31, 32, 88);
         text-align: center;
     }
 </style>
-
-
-<script>
-    import { Route, router } from 'tinro';
-    import axios from 'axios';
-
-    import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-    import { writable } from 'svelte/store';
-    import { crossfade, draw } from 'svelte/transition';
-    import { flip } from 'svelte/animate';
-    
-    import InputSingleValue from '../../components/manager/Input/InputSingleValue.svelte';
-    import InputMultiValue from '../../components/manager/Input/InputMultiValue.svelte';
-    import InputCheckboxValue from '../../components/manager/Input/InputCheckboxValue.svelte';
-    import InputDateValue from '../../components/manager/Input/InputDateValue.svelte';
-    import InputSelectValue from '../../components/manager/Input/InputSelectValue.svelte';
-    import Tiptap from '../../components/manager/Tiptap/Tiptap.svelte';
-    import ManageCreateItem from '../../components/manager/ManageCreateItem.svelte';
-    import Preview from '../../components/manager/CreateViews/Preview.svelte';
-    import { condition_set } from '../../utilities/inputConditions';
-
-    export let stage = 1;
-
-    let saved_data = {};
-    let title;
-    let location;
-    let affiliation;
-    let associate;
-    let attendee;
-    let attendee_list=[];
-    let date;
-    let produced = -1;
-    let created_at;
-    let type = -1;
-    let source;
-    let pass_list = {
-        length: () => {
-            let length = 0;
-            for (var item in this) {
-                length += 1;
-            }
-            return length
-        },
-        title: false,
-        location: false,
-        affiliation: false,
-        associate: false,
-        attendee: false,
-        date: false,
-        produced: false,
-        type: false,
-
-    };
-
-    // FILE_UPLOADING is a flag for which to track if file is being 
-    // transfered in that moment of time
-    let file_uploading = false;
-    let all_checked = false;
-    let received_file = false;
-    let content = "";
-    let item_objs = []
-    let accept_list = "";
-
-    var dispatch = createEventDispatcher();
-
-
-    function downloader(item) {
-        if (!item) {
-            console.log('cannot find item')
-        }
-
-        console.log("downloading from...", item.src)
-    }
-
-    function changeHandle(e, variable_name) {
-        if (variable_name == 'title') {
-            title = e.detail.value;
-            pass_list.title = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'attendee') {
-            attendee = e.detail.value;
-            pass_list.attendee = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'location') {
-            location = e.detail.value;
-            pass_list.location = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'associate') {
-            associate = e.detail.value;
-            pass_list.associate = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'date') {
-            date = e.detail.value;
-            pass_list.date = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'affiliation') {
-            affiliation = e.detail.value;
-            pass_list.affiliation = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'produced') {
-            // Option input doesn't save renewed value without console.log call
-            // to KEY. The reason is left unanswered.
-            // DON'T REMOVE THE CONSOLE LOG BELOW!
-            console.log(e.detail.key)
-
-            produced = e.detail.key;
-            pass_list.produced = e.detail.pass;
-            pass_list = pass_list
-        } else if (variable_name == 'type') {
-            // DON'T REMOVE THE CONSOLE LOG BELOW!
-            console.log(e.detail.key)
-
-            type = e.detail.key;
-            pass_list.type = e.detail.pass;
-            pass_list = pass_list
-        } else {
-            console.log('Change Error Occurred')
-        }
-    }
-
-
-    // Handler is received from components
-
-    function allCheckHandle(e) {
-        if (all_checked) {
-            all_checked = false;
-            item_objs.forEach((item) => {
-                item.checked = false;
-            })
-        } else {
-            all_checked = true;
-            item_objs.forEach((item) => {
-                item.checked = true;
-            })
-        }
-
-        item_objs = item_objs;
-    }
-
-    function downloadHandle(e) {
-        let index = e.detail.index;
-        downloader(item_objs[index]);
-    }
-
-    function deleteHandle(e) {
-        let index = e.detail.index;
-        if (item_objs[index]) {
-            let pop_obj = item_objs.splice(index, 1);
-            console.log(pop_obj[0].src);
-            console.log(item_objs);
-            if (pop_obj[0].src) {
-                console.log('revoking Url')
-                URL.revokeObjectURL(pop_obj[0].src);
-            } else {
-                console.log('Url revoking error');
-            }
-            item_objs = item_objs;
-        } else {
-            console.log(`item_objs[${index}] doesn't exist`)
-        }
-    }
-
-    function checkHandle(e) {
-        let index = e.detail.index;
-        let checked = e.detail.checked;
-        if (item_objs[index]) {
-            item_objs[index].checked = checked;
-        } else {
-            console.log(`item_objs[${index}] doesn't exist`);
-        }
-
-        item_objs = item_objs;
-    }
-
-    function contentHandle(e) {
-        content = e.detail.html
-    }
-    
-    // Call is received directly from buttons
-
-    function downloadCall() {
-        item_objs.forEach((item) => {
-            if (item.checked) {
-                downloader(item);
-                item.checked = false;
-            } 
-        })
-
-        item_objs = item_objs;
-    }
-
-    function deleteCall() {
-        let result = getItemList();
-        console.log(result.length)
-        for (let i = 0; i < result.length; i++) {
-            console.log(i)
-            if (result[i].checked) {
-                let pop_obj = result.splice(i, 1);
-                if (pop_obj[0].src) {
-                    console.log('revoking Url')
-                    URL.revokeObjectURL(pop_obj[0].src);
-                } else {
-                    console.log('Url revoking error');
-                }
-                i = i - 1;
-            }
-        }
-
-        item_objs = result;
-    }
-
-    function uploadCall() {
-        console.log('uploading call received');
-        let index = getItemListLength();
-        waitFile(index);
-    }
-
-    function waitFile(index) {
-        if (!received_file) {
-            setTimeout(() => waitFile(index), 1000);
-        } else {
-            console.log('waitfile fired')
-            let src = URL.createObjectURL(received_file[0]);
-            let file = received_file[0]
-            console.log('received the file:', received_file, src);
-            
-            let new_item = {
-                checked: false,
-                src: src,
-                file: file
-            }
-
-            item_objs = [...item_objs, new_item];
-            received_file = false;
-        }
-    }
-
-    // Utility functions
-
-    function getItemListLength() {
-        return getItemList().length;
-    }
-
-    function getItemList() {
-        // returns copied list of ITEM_OBJS
-        return [...item_objs];
-    }
-
-    async function fileUpload() {
-        if (item_objs && !file_uploading) {
-            let result = null;
-            let formData = new FormData();
-            file_uploading = true;
-            
-            try {
-                let index = 0;
-                formData.append("title", title);
-                formData.append('file_index', item_objs.length - 1);
-                formData.append('content', content);
-                formData.append('attendee', attendee_list);
-                formData.append('location', location);
-                formData.append('affiliation', affiliation);
-                formData.append('associate', associate);
-                formData.append('produced', produced);
-                formData.append('private', 1);
-                formData.append('type', type);
-
-                //file should be sent seperately -> don't send in form of list !
-                item_objs.forEach((item) => {
-                    formData.append(`${index}`, item.file);
-                    index += 1;
-                })
-
-                result = await axios({
-                    headers: {
-                        "Content-Type": "multipart/form-data"
-                    },
-                    url: `http://localhost:8000/drf/cases/create/${type}`,
-                    method: "POST",
-                    data: formData
-                })
-
-                console.log(result.data)
-
-            } catch(error) {
-                result = error
-                console.log(error);
-            }
-
-            file_uploading = false;
-            console.log('file_uploading procedure ended')
-            return result
-
-        }
-    }
-
-    function parseToList(str) {
-        // str = "#a #b #c ..."
-        let str_lst = str.split(' ');
-        let result = [];
-        
-        str_lst.forEach((item) => {
-            result.push(item.replace(/['#']*/, ''));
-        })
-
-        return result;
-    }
-
-    function parseToString(lst) {
-        let result_list = [];
-        lst.forEach((item) => {
-            result_list.push("'" + item + "'");
-        })
-        return `${result_list}`
-    }
-
-    function passCheck(lst) {
-        if (lst.length() == 1) {
-            return false
-        }
-
-        for (var item in lst) {
-            console.log(item, ':', lst[item])
-            if (!lst[item]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    // stage manager
-    // stage manager manages the logic behind navigation within create-container
-
-    $: {
-        if (stage == 1) {
-
-            if (item_objs) {
-                item_objs.forEach((item) => {
-                    URL.revokeObjectURL(item.src)
-                })
-                item_objs = [];
-            }
-
-        } 
-        
-        else if (stage == 2) {
-            // parse ATTENDEE in form of list (ATTENDEE -> ATTENDEE_LIST)
-            if (attendee) {
-                passCheck(pass_list);
-                attendee_list = parseToList(attendee);
-            }
-        }
-        
-        else if (stage == 3) {
-            //let result = fileUpload();
-            //console.log(result)
-        }
-
-        else if (stage == 4) {
-            dispatch('data', {
-                uncleared: []
-            })
-        }
-
-        else if (stage == 5) {
-            dispatch('data', {
-                uncleared: [1,2,3,4]
-            })
-            fileUpload().then(() => router.goto("/manage/cases/browse"))
-        }
-    }
-
-    $: {
-        if (passCheck(pass_list)) {
-            dispatch('data', {
-                uncleared: [5]
-            })
-        } else {
-            dispatch('data', {
-                uncleared: [2,3,4,5]
-            })
-        }
-    }
-
-    $: {
-        if (type == 0) {
-            accept_list = ".png, .jpg, .jpeg, .svg, .JPEG, .JPG"
-        } else if (type == 1) {
-            accept_list = ".wmv, .mp4, .mpg, .mpeg4, .mp3, .mov"
-        } else if (type == 2) {
-            accept_list = ".hwp, .pdf, .doc, .txt, .ai"
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-</script>
-
-
-<div class="browse-content-container">
-    {#if stage == 1}
-        <div class="single-input-wrap">
-            <div class="input-category-title">
-                <h3>기본 등록 정보</h3>
-            </div>
-            <InputSingleValue placeholder="제목을 입력해주세요" init={title} on:change={(e) => changeHandle(e, 'title')} conditions={condition_set.default_conditions} />
-            <InputMultiValue placeholder="주요 참석자들을 입력해주세요" init={attendee} on:change={(e) => changeHandle(e, 'attendee')} conditions={condition_set.attendee_conditions} />
-        </div>
-        <div class="single-input-wrap">
-            <div class="padding"></div>
-            <InputSingleValue placeholder="행사 장소를 입력해주세요" init={location} on:change={(e) => changeHandle(e,'location')} conditions={condition_set.default_conditions} />
-            <InputSelectValue placeholder="기록 유형을 선택해주세요" init={type} on:change={(e) => changeHandle(e, 'type')} conditions={condition_set.select_conditions} option_list={['사진', '영상', '문서']} />
-        </div>
-        <div class="single-input-wrap">
-            <div class="padding"></div>
-            <InputSelectValue placeholder="생산물 여부를 선택해주세요" init={produced} on:change={(e) => changeHandle(e, 'produced')} conditions={condition_set.select_conditions} option_list={['생산', '수집']} />
-            <InputSingleValue placeholder="생산 부대를 입력해주세요" init={affiliation} on:change={(e) => changeHandle(e, 'affiliation')} conditions={condition_set.default_conditions} />
-        </div>
-
-        <div class="buffer"></div>
-
-
-        <div class="single-input-wrap">
-            <div class="input-category-title">
-                <h3>생산 정보</h3>
-            </div>
-            <InputSingleValue placeholder="촬영자를 입력해주세요" init={associate} on:change={(e) => changeHandle(e, 'associate')} conditions={condition_set.default_conditions} />
-            <InputSingleValue placeholder="생산연도를 입력해주세요" init={date} on:change={(e) => changeHandle(e, 'date')} conditions={condition_set.default_conditions} />
-        </div>
-
-    {:else if stage == 2}
-        <div class="upload-view">
-            <div class="header">
-                {#if type == 0}
-                    <h3>사진 업로드</h3>
-                {:else if type == 1}
-                    <h3>영상 업로드</h3>
-                {:else if type == 2}
-                    <h3>문서 업로드</h3>
-                {:else}
-                    <h3>다시 시도해 주세요</h3>
-                {/if}
-                <div class="control-panel">
-                    <label for="file-input" class="file-input-label" on:click={uploadCall}><h3>업로드</h3></label>
-                        <input id="file-input" name="file-input" class="file-input" type="file" bind:files={received_file} accept={accept_list}/>
-                    <button on:click={downloadCall}><h3>저장</h3></button>
-                    <button on:click={deleteCall}><h3>삭제</h3></button>
-                </div>
-            </div>
-            <div class="table-header">
-                <div class="header-checkbox-container">
-                    <button class="{(all_checked) ? 'check-btn-clicked' : 'check-btn'}" on:click={allCheckHandle}>
-                        {#if all_checked}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" height="17" width="17">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                            </svg>
-                        {/if} 
-                    </button>
-                </div>
-                <div class="header-snapshot-container">
-                    <div class="header-container">
-                        <h3>스냅샷</h3>
-                    </div>
-                </div>
-                <div class="header-title-container">
-                    <div class="header-container">
-                        <h3>파일명</h3>
-                    </div>
-                </div>
-                <div class="header-download-container">
-                    <div class="header-container">
-                        <div class="svg-wrap">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="18" width="18">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-delete-container">
-                    <div class="header-container">
-                        <div class="svg-wrap">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" height="18" width="18">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="body">
-                <div class="table">
-                    {#each item_objs as item, index}
-                        <ManageCreateItem
-                            checked = {item.checked}
-                            src = {item.src}
-                            file = {item.file}
-                            index = {index}
-                            type = {type}
-                            on:delete = {deleteHandle}
-                            on:download = {downloadHandle}
-                            on:check = {checkHandle}
-                        />
-                    {/each}
-                </div>
-            </div>
-        </div>
-    {:else if stage == 3}
-        <Tiptap {content} on:change={contentHandle}/>
-    {:else if stage == 4}
-        <Preview item_objs={item_objs}
-                 title={title}
-                 location={location}
-                 affiliation={affiliation}
-                 associate={associate}
-                 attendee={attendee_list}
-                 date={date}
-                 produced={produced}
-                 type={type}
-                 content={content} />
-    {:else if stage == 5}
-
-            <div class="user-fetch-spinner-page">
-                <div class="svg-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(31, 32, 88)" height="100" width="100">
-                        <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0116.35 15m.002 0h-.002" />
-                    </svg>
-                </div>
-                {#if type == 1}
-                    <h4>영상을 인코딩 중입니다</h4>
-                    <h5>페이지를 나가면 다시 시작해야 합니다</h5>
-                {:else}
-                    <h4>업로드가 성공적으로 끝났습니다!</h4>
-                {/if}
-            </div>
-
-    {/if}
-</div>

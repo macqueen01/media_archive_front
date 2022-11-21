@@ -214,6 +214,10 @@
         }
     }
 
+    function modalCloseHandle(e) {
+        modalActive = e.detail.modalActive;
+    }
+
     function initialize() {
         _username_initialize = '';
         _password_initialize = '';
@@ -282,7 +286,7 @@
     {/await}
 </div>
 
-<DefaultModal modalActive={modalActive}>
+<DefaultModal modalActive={modalActive} on:close={modalCloseHandle}>
     <h3 slot="header">This is Header</h3>
     <h3 slot="content">This is Content</h3>
 </DefaultModal>

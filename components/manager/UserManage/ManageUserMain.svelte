@@ -7,6 +7,7 @@
     import NotReadyView from "../../../pages/DevViews/NotReadyView.svelte";
     import AccessControlView from "../../../pages/content_container/AccessControlView.svelte"
     import AccountCreateView from "../CreateViews/AccountCreateView.svelte";
+    import AccessRequestCreateView from "../CreateViews/AccessRequestCreateView.svelte";
 
     import { meta, Route } from "tinro";
     import { fly, fade } from 'svelte/transition';
@@ -28,6 +29,10 @@
                 {
                     name: "기록물 접근 관리",
                     path: "/manage/accounts/access-control"
+                },
+                {
+                    name: "권한 요청",
+                    path: "/manage/accounts/request"
                 }
             ],
         },
@@ -103,6 +108,10 @@
 
             <Route path="/create/*">
                 <AccountCreateView />
+            </Route>
+
+            <Route path="/request/*">
+                <AccessRequestCreateView />
             </Route>
         </div>
     </div>

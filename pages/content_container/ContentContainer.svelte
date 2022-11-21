@@ -180,6 +180,7 @@
     let fetched_items = [];
 
     async function fetch_items(page, type) {
+        let localToken = localStorage.getItem('token');
         fetched_items = await axios({
             // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
             url: `http://localhost:8000/drf/cases/browse/${type}?page=${page}`,
