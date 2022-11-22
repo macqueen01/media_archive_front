@@ -91,8 +91,12 @@
     export let index;
 
 
+
     var dispatch = createEventDispatcher();
 
+    let user_id = '';
+    let user_name = '';
+    let title = '';
     
     function checkHandle() {
         if (checked) {
@@ -125,6 +129,17 @@
         })
     }
 
+    if (data) {
+        if (data.request_form == 0) {
+            user_id = data.request_form0_requested_by.id;
+            user_name = data.request_form0_requested_by.name;
+        } else if (data.request_form == 1) {
+            user_id = data.request_form1_requested_by.id;
+            user_name = data.request_form1_requested_by.name;
+        }
+        title = data.title;
+    }
+
 </script>
 
 
@@ -142,17 +157,17 @@
     </div>
     <div class="id-wrap">
         <div class="container">
-            <h3>{data.user_id}</h3>
+            <h3>{user_id}</h3>
         </div>
     </div>
     <div class="name-wrap">
         <div class="container">
-            <h3>{data.name}</h3>
+            <h3>{user_name}</h3>
         </div>
     </div>
     <div class="detail-wrap">
         <div class="container">
-            <h3>{data.detail}</h3>
+            <h3>{title}</h3>
         </div>
     </div>
     <div class="accept-wrap">

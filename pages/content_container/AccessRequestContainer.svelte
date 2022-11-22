@@ -10,7 +10,7 @@
     /* 
         FILE inherits FOCUS obj from ContentContainer.
     */
-    let content = '';
+    let content = "";
     let check_input = false;
 
     var dispatch = createEventDispatcher();
@@ -31,7 +31,7 @@
                 doc_cases: $wishList[2],
                 request_form: 0,
                 title: "기록물 접근 권한신청",
-                comments: content
+                comments: content,
             },
             headers: {
                 Authorization: `Token ${$token}`,
@@ -40,10 +40,9 @@
         return result;
     }
 
-
     function deleteCall(i) {
-        let form = access_to[i].form
-        let id = access_to[i].id
+        let form = access_to[i].form;
+        let id = access_to[i].id;
         let index = $wishList[form].indexOf(id);
         $wishList[form].splice(index, 1);
         access_to = wishListWrapper($wishList);
@@ -73,10 +72,9 @@
 
     function modalCloseHandle(e, type) {
         if (type == 0) {
-            check_input = e.detail.modalActive
+            check_input = e.detail.modalActive;
         }
     }
-
 
     /* Test variables to be fetched from server when online */
 
@@ -86,8 +84,6 @@
             @name      - Name of the logged in user.  
     */
 
-
-
     let access_to = wishListWrapper($wishList);
     let hover = null;
 
@@ -96,12 +92,11 @@
 
         for (var i = 0; i < 3; i++) {
             lst[i].forEach((case_id) => {
-                result.push({form: i, id: case_id});
-            })
+                result.push({ form: i, id: case_id });
+            });
         }
         return result;
     }
-
 </script>
 
 <div class="focus">
@@ -130,164 +125,163 @@
     </div>
 
     <div class="body">
-
-            <div class="body-content-wrap">
-                <div class="single-input-wrap">
-                    <div class="input-category-title">
-                        <h3>접근 요청할 기록물</h3>
-                    </div>
-                    <div class="browsing-request-wrap ">
-                        {#each access_to as case_info, index}
-                            <div class="browsing-request-container">
-                                <div class="request-content-container">
-                                    <h3>등록 번호</h3>
-                                    <div class="whitespace" />
-                                    <h4>{case_info.id}</h4>
-                                    <div class="whitespace" />
-                                    <h3>의 기록물</h3>
-                                    <div class="whitespace" />
-                                    <h4>#이인호_동상_앞</h4>
-                                    <h5>(눌러서 이동)</h5>
-                                    <div class="whitespace" />
-                                    <h3>에 대한 열람 권한</h3>
-                                </div>
-                                <div class="select-wrap">
-                                    <div class={access_to.includes(case_info)
-                                            ? "accept-container-clicked container"
-                                            : "accept-container container"}
-                                    >
-                                        <div class="accept-svg">
-                                            {#if access_to.includes(index)}
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke-width="2"
-                                                    stroke="currentColor"
-                                                    height="18"
-                                                    width="18"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        d="M4.5 12.75l6 6 9-13.5"
-                                                    />
-                                                </svg>
-                                            {:else}
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke-width="2"
-                                                    stroke="white"
-                                                    height="18"
-                                                    width="18"
-                                                >
-                                                    <path
-                                                        stroke-linecapF="round"
-                                                        stroke-linejoin="round"
-                                                        d="M4.5 12.75l6 6 9-13.5"
-                                                    />
-                                                </svg>
-                                            {/if}
-                                        </div>
-                                        <h3 class={access_to.includes(case_info)
-                                                ? "clicked"
-                                                : "unclicked"}
-                                        >
-                                            선택
-                                        </h3>
-                                    </div>
-                                    <div class={(hover == index)
-                                            ? "decline-container-clicked container"
-                                            : "decline-container container"}
-                                        on:click={() => deleteCall(index)}
-                                        on:mouseenter={() => hover = index}
-                                        on:mouseleave={() => hover = null}
-                                    >
-                                        <div class="decline-svg">
-                                            {#if !(hover == index)}
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke-width="1.5"
-                                                    stroke="currentColor"
-                                                    height="18"
-                                                    width="18"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    />
-                                                </svg>
-                                            {:else}
-                                                <svg
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    fill="none"
-                                                    viewBox="0 0 24 24"
-                                                    stroke-width="1.5"
-                                                    stroke="white"
-                                                    height="18"
-                                                    width="18"
-                                                >
-                                                    <path
-                                                        stroke-linecap="round"
-                                                        stroke-linejoin="round"
-                                                        d="M6 18L18 6M6 6l12 12"
-                                                    />
-                                                </svg>
-                                            {/if}
-                                        </div>
-                                        <h3
-                                            class={(hover == index)
-                                                ? "clicked"
-                                                : "unclicked"}
-                                        >
-                                            보류
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                        {:else}
-                            <div class="no-case-id">
-                                <h3>요청이 비어있습니다</h3>
-                            </div>
-                        {/each}
-                    </div>
+        <div class="body-content-wrap">
+            <div class="single-input-wrap">
+                <div class="input-category-title">
+                    <h3>접근 요청할 기록물</h3>
                 </div>
-
-                <div class="buffer" />
-
-                <div class="single-input-wrap">
-                    <div class="input-category-title">
-                        <h3>사유</h3>
-                    </div>
-                    <div class="text-wrap">
-                        <div class="input-wrap">
-                            <textarea
-                                class="content-input"
-                                bind:value={content}
-                                placeholder="사유를 입력해 주세요"
-                            />
+                <div class="browsing-request-wrap ">
+                    {#each access_to as case_info, index}
+                        <div class="browsing-request-container">
+                            <div class="request-content-container">
+                                <h3>등록 번호</h3>
+                                <div class="whitespace" />
+                                <h4>{case_info.id}</h4>
+                                <div class="whitespace" />
+                                <h3>의 기록물</h3>
+                                <div class="whitespace" />
+                                <h4>#이인호_동상_앞</h4>
+                                <h5>(눌러서 이동)</h5>
+                                <div class="whitespace" />
+                                <h3>에 대한 열람 권한</h3>
+                            </div>
+                            <div class="select-wrap">
+                                <div
+                                    class={access_to.includes(case_info)
+                                        ? "accept-container-clicked container"
+                                        : "accept-container container"}
+                                >
+                                    <div class="accept-svg">
+                                        {#if access_to.includes(index)}
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                height="18"
+                                                width="18"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M4.5 12.75l6 6 9-13.5"
+                                                />
+                                            </svg>
+                                        {:else}
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="white"
+                                                height="18"
+                                                width="18"
+                                            >
+                                                <path
+                                                    stroke-linecapF="round"
+                                                    stroke-linejoin="round"
+                                                    d="M4.5 12.75l6 6 9-13.5"
+                                                />
+                                            </svg>
+                                        {/if}
+                                    </div>
+                                    <h3
+                                        class={access_to.includes(case_info)
+                                            ? "clicked"
+                                            : "unclicked"}
+                                    >
+                                        선택
+                                    </h3>
+                                </div>
+                                <div
+                                    class={hover == index
+                                        ? "decline-container-clicked container"
+                                        : "decline-container container"}
+                                    on:click={() => deleteCall(index)}
+                                    on:mouseenter={() => (hover = index)}
+                                    on:mouseleave={() => (hover = null)}
+                                >
+                                    <div class="decline-svg">
+                                        {#if !(hover == index)}
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="1.5"
+                                                stroke="currentColor"
+                                                height="18"
+                                                width="18"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        {:else}
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="1.5"
+                                                stroke="white"
+                                                height="18"
+                                                width="18"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12"
+                                                />
+                                            </svg>
+                                        {/if}
+                                    </div>
+                                    <h3
+                                        class={hover == index
+                                            ? "clicked"
+                                            : "unclicked"}
+                                    >
+                                        보류
+                                    </h3>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    {:else}
+                        <div class="no-case-id">
+                            <h3>요청이 비어있습니다</h3>
+                        </div>
+                    {/each}
                 </div>
-                <div class="btn-control-wrap">
-                    <div class="btn-container">
-                        <button
-                            class="withdraw-btn btn"
-                            on:click={withdrawCall}
-                        >
-                            <h3>취소하기</h3>
-                        </button>
-                        <button class="accept-btn btn" on:click={submitCall}>
-                            <h3>확인하기</h3>
-                        </button>
+            </div>
+
+            <div class="buffer" />
+
+            <div class="single-input-wrap">
+                <div class="input-category-title">
+                    <h3>사유</h3>
+                </div>
+                <div class="text-wrap">
+                    <div class="input-wrap">
+                        <textarea
+                            class="content-input"
+                            bind:value={content}
+                            placeholder="사유를 입력해 주세요"
+                        />
                     </div>
                 </div>
             </div>
+            <div class="btn-control-wrap">
+                <div class="btn-container">
+                    <button class="withdraw-btn btn" on:click={withdrawCall}>
+                        <h3>취소하기</h3>
+                    </button>
+                    <button class="accept-btn btn" on:click={submitCall}>
+                        <h3>확인하기</h3>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -298,8 +292,6 @@
     <h3 class="modal-header" slot="header">빠진 정보가 있습니다</h3>
     <h3 class="modal-content" slot="content">입력 정보를 다시 확인해주세요</h3>
 </DefaultModal>
-
-
 
 <style>
     .focus {

@@ -1,3 +1,370 @@
+<script>
+    import { Route, router } from "tinro";
+    import axios from "axios";
+
+    import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { token } from "../../utilities/store";
+
+    import AccessControlItem from "../../components/manager/AccessControlItem.svelte";
+    import AccessControlDetailView from "./AccessControlDetailView.svelte";
+    import { Circle } from "svelte-loading-spinners";
+
+    export let stage = 1;
+
+    let all_checked = false;
+    let focus = null;
+    let item_objs = [];
+
+    // Handler is received from components
+
+    function allCheckHandle(e) {
+        if (all_checked) {
+            all_checked = false;
+            item_objs.forEach((item) => {
+                item.checked = false;
+            });
+        } else {
+            all_checked = true;
+            item_objs.forEach((item) => {
+                item.checked = true;
+            });
+        }
+
+        console.log(item_objs);
+        item_objs = item_objs;
+    }
+
+    async function declineHandle(e) {
+        let index = e.detail.index;
+        if (item_objs[index]) {
+            try {
+                let result = await declineFromRequestId(item_objs[index].request_form, item_objs[index].id);
+                let pop_obj = item_objs.splice(index, 1);
+            } catch (e) {
+                console.log(e);
+            }
+            item_objs = item_objs;
+        } else {
+            console.log(`item_objs[#${index}] doesn't exist`);
+        }
+    }
+
+    async function acceptHandle(e) {
+        let index = e.detail.index;
+        if (item_objs[index]) {
+            try {
+                let result = await acceptFromRequestId(item_objs[index].request_form, item_objs[index].id);
+                let pop_obj = item_objs.splice(index, 1);
+            } catch (e) {
+                console.log(e);
+            }
+            item_objs = item_objs;
+        } else {
+            console.log(`item_objs[#${index}] doesn't exist`);
+        }
+    }
+
+    function checkHandle(e) {
+        let index = e.detail.index;
+        let checked = e.detail.checked;
+        if (item_objs[index]) {
+            item_objs[index].checked = checked;
+        } else {
+            console.log(`item_objs[#${index}] doesn't exist`);
+        }
+
+        item_objs = item_objs;
+    }
+
+    function focusHandle(e) {
+        let index = e.detail.index;
+        focus = item_objs[index];
+    }
+
+    function escapeHandle(e) {
+        focus = e.detail.focus;
+    }
+
+    // Call is received directly from buttons
+
+    async function declineCall() {
+        let result = getItemList();
+        let response = [];
+        console.log(result.length);
+        for (let i = 0; i < result.length; i++) {
+            console.log(i);
+            if (result[i].checked) {
+                let pop_obj = result.splice(i, 1);
+                let network_result = await declineFromRequestId(pop_obj[0].request_form, pop_obj[0].id, pop_obj[0]);
+                response = [...response, network_result];
+                i = i - 1;
+            }
+        }
+
+        try {
+            item_objs = await fetchRequests();
+        } catch (e) {
+            connection_warning = true;
+        }
+        console.log(response);
+    }
+
+    async function acceptCall() {
+        let result = getItemList();
+        let response = [];
+        console.log(result.length);
+        for (let i = 0; i < result.length; i++) {
+            console.log(i);
+            if (result[i].checked) {
+                let pop_obj = result.splice(i, 1);
+                let network_result = await acceptFromRequestId(pop_obj[0].request_form, pop_obj[0].id, pop_obj[0]);
+                response = [...response, network_result];
+                i = i - 1;
+            }
+        }
+
+        try {
+            item_objs = await fetchRequests();
+        } catch (e) {
+            connection_warning = true;
+        }
+        console.log(response);
+    }
+
+    // Networking functions
+
+    async function acceptFromRequestId(form, id, request_obj) {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = access_request_parser(request_obj, 1);
+            data.status = 1;
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = await axios({
+                url: "http://127.0.0.1:8000/drf/request/resolve",
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        } else {
+            post_result = await axios({
+                url: "http://127.0.0.1:8000/drf/request/resolve",
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 1,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+        return post_result;
+    }
+
+    async function declineFromRequestId(form, id, request_obj) {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = access_request_parser(request_obj, 0);
+            data.status = 0;
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = await axios({
+                url: "http://127.0.0.1:8000/drf/request/resolve",
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        } else {
+            post_result = await axios({
+                url: "http://127.0.0.1:8000/drf/request/resolve",
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 0,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+        return post_result;
+    }
+
+    async function fetchRequests() {
+        let result = await axios({
+            url: "http://127.0.0.1:8000/drf/request/browse",
+            method: "get",
+            headers: {
+                Authorization: `Token ${$token}`,
+            },
+        });
+
+        if (result.status != 200) {
+            return result;
+        }
+
+        item_objs = result.data;
+        item_objs.forEach((item) => {
+            item.checked = false;
+        });
+        return item_objs;
+    }
+
+    // Utility functions
+
+    function getItemListLength() {
+        return getItemList().length;
+    }
+
+    function getItemList() {
+        // returns copied list of ITEM_OBJS
+        return [...item_objs];
+    }
+
+    function access_request_parser(data, status) {
+        if ((data.request_form == 1) || !(status in [0,1,2])) {
+            return false;
+        }
+        let result = {};
+        result.image_case = {};
+        result.video_case = {};
+        result.doc_case = {};
+        data.request_components.forEach((comp) => {
+            if (comp.requesting_case_form == 0) {
+                result.image_case[comp.image_case.id] = status;
+            } else if (comp.requesting_case_form == 1) {
+                result.video_case[comp.video_case.id] = status;
+            } else if (comp.requesting_case_form == 2) {
+                result.doc_case[comp.doc_case.id] = status;
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+    // stage manager
+    // stage manager manages the logic behind navigation within create-container
+
+    $: {
+        if (stage == 1) {
+        } else if (stage == 2) {
+        } else if (stage == 3) {
+        }
+    }
+
+</script>
+
+<div class="browse-content-container">
+    <div class="upload-view">
+        {#await fetchRequests()}
+            <div class="spinner-wrap">
+                <Circle
+                    size="60"
+                    color="rgb(31, 32, 88)"
+                    unit="px"
+                    duration="1s"
+                />
+            </div>
+        {:then data}
+            <div class="header">
+                <h3>받은 요청</h3>
+                <div class="control-panel">
+                    <button on:click={acceptCall}><h3>수락</h3></button>
+                    <button on:click={declineCall}><h3>거절</h3></button>
+                </div>
+            </div>
+            <div class="table-header">
+                <div class="header-checkbox-container">
+                    <button
+                        class={all_checked ? "check-btn-clicked" : "check-btn"}
+                        on:click={allCheckHandle}
+                    >
+                        {#if all_checked}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="white"
+                                height="17"
+                                width="17"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4.5 12.75l6 6 9-13.5"
+                                />
+                            </svg>
+                        {/if}
+                    </button>
+                </div>
+                <div class="header-id-container">
+                    <div class="header-container">
+                        <h3>ID</h3>
+                    </div>
+                </div>
+                <div class="header-name-container">
+                    <div class="header-container">
+                        <h3>이름</h3>
+                    </div>
+                </div>
+                <div class="header-detail-container">
+                    <div class="header-container">
+                        <h3>요청사항</h3>
+                    </div>
+                </div>
+                <div class="header-accept-container">
+                    <div class="header-container">
+                        <h3>수락</h3>
+                    </div>
+                </div>
+                <div class="header-decline-container">
+                    <div class="header-container">
+                        <h3>거절</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="table">
+                    {#each item_objs as item, index}
+                        <AccessControlItem
+                            checked={item.checked}
+                            {index}
+                            data={item}
+                            on:delete={declineHandle}
+                            on:accept={acceptHandle}
+                            on:check={checkHandle}
+                            on:click={focusHandle}
+                        />
+                    {/each}
+                </div>
+            </div>
+        {:catch error}
+            <h3>
+                {error.response.status}
+            </h3>
+        {/await}
+    </div>
+    {#if focus}
+        <AccessControlDetailView request={focus} on:escape={escapeHandle} />
+    {/if}
+</div>
+
 <style>
     .browse-content-container {
         width: 960px;
@@ -8,7 +375,7 @@
         justify-content: center;
         align-items: center;
         position: relative;
-        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);       
+        box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);
     }
 
     .upload-view {
@@ -28,9 +395,9 @@
     }
 
     .header > h3 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 17px;
-        color:#1e1c3b;
+        color: #1e1c3b;
         font-weight: 900;
         position: absolute;
         left: 90px;
@@ -49,7 +416,8 @@
         align-items: center;
     }
 
-    .control-panel > button, .file-input-label {
+    .control-panel > button,
+    .file-input-label {
         background: rgb(31, 32, 88);
         border: none;
         border-radius: 0;
@@ -61,8 +429,9 @@
         align-items: center;
     }
 
-    .control-panel > button > h3, .file-input-label > h3 {
-        font-family: 'goth';
+    .control-panel > button > h3,
+    .file-input-label > h3 {
+        font-family: "goth";
         font-size: 11px;
         color: whitesmoke;
     }
@@ -189,297 +558,16 @@
     }
 
     .header-container > h3 {
-        font-family: 'goth';
+        font-family: "goth";
         font-size: 14px;
-        color:#1e1c3b;
+        color: #1e1c3b;
+    }
+
+    .spinner-wrap {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>
-
-
-<script>
-    import { Route, router } from 'tinro';
-    import axios from 'axios';
-
-    import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-    import { writable } from 'svelte/store';
-    import { crossfade } from 'svelte/transition';
-    import { flip } from 'svelte/animate';
-    
-    import AccessControlItem from '../../components/manager/AccessControlItem.svelte';
-    import AccessControlDetailView from './AccessControlDetailView.svelte';
-
-    export let stage = 1;
-
-
-
-    let all_checked = false;
-    let focus = null;
-    let item_objs = []
-
-    // Handler is received from components
-
-    function allCheckHandle(e) {
-        if (all_checked) {
-            all_checked = false;
-            item_objs.forEach((item) => {
-                item.checked = false;
-            })
-        } else {
-            all_checked = true;
-            item_objs.forEach((item) => {
-                item.checked = true;
-            })
-        }
-
-        item_objs = item_objs;
-    }
-
-
-    async function declineHandle(e) {
-        let index = e.detail.index;
-        if (item_objs[index]) {
-            try {
-                let result = await declineFromRequestId(item_objs[index]._id);
-                let pop_obj = item_objs.splice(index, 1);
-            } catch (e) {
-                console.log(e);
-            }
-            item_objs = item_objs;
-        } else {
-            console.log(`item_objs[#${index}] doesn't exist`)
-        }
-    }
-
-    async function acceptHandle(e) {
-        let index = e.detail.index;
-        if (item_objs[index]) {
-            try {
-                let result = await acceptFromRequestId(item_objs[index]._id);
-                let pop_obj = item_objs.splice(index, 1);
-            } catch (e) {
-                console.log(e);
-            }
-            item_objs = item_objs;
-        } else {
-            console.log(`item_objs[#${index}] doesn't exist`)
-        }
-    }
-
-    function checkHandle(e) {
-        let index = e.detail.index;
-        let checked = e.detail.checked;
-        if (item_objs[index]) {
-            item_objs[index].checked = checked;
-        } else {
-            console.log(`item_objs[#${index}] doesn't exist`);
-        }
-
-        item_objs = item_objs;
-    }
-
-    function focusHandle(e) {
-        let index = e.detail.index;
-        focus = item_objs[index];
-    }
-
-    function escapeHandle(e) {
-        focus = e.detail.focus;
-    }
-
-    
-    // Call is received directly from buttons
-
-    async function declineCall() {
-        let result = getItemList();
-        let response = [];
-        console.log(result.length)
-        for (let i = 0; i < result.length; i++) {
-            console.log(i)
-            if (result[i].checked) {
-                let pop_obj = result.splice(i, 1);
-                let network_result = await declineFromRequestId(pop_obj._id);
-                response = [...response, network_result];
-                i = i - 1;
-            }
-        }
-
-        console.log(response);
-        item_objs = result;
-    }
-
-    async function acceptCall() {
-        let result = getItemList();
-        let response = [];
-        console.log(result.length)
-        for (let i = 0; i < result.length; i++) {
-            console.log(i)
-            if (result[i].checked) {
-                let pop_obj = result.splice(i, 1);
-                let network_result = await acceptFromRequestId(pop_obj._id);
-                response = [...response, network_result];
-                i = i - 1;
-            }
-        }
-
-        console.log(response)
-        item_objs = result;
-    }
-
-    // Networking functions
-
-    async function acceptFromRequestId(id) {
-        let result = await axios.post(
-            `http://localhost:8000/request/accpet`,
-            {
-                request_id: id,
-            }
-        );
-        return result;
-    }
-
-    async function declineFromRequestId(id) {
-        let result = await axios.post(
-            `http://localhost:8000/request/decline`,
-            {
-                request_id: id,
-            }
-        );
-        return result;
-    }
-
-
-
-    // Utility functions
-
-    function getItemListLength() {
-        return getItemList().length;
-    }
-
-    function getItemList() {
-        // returns copied list of ITEM_OBJS
-        return [...item_objs];
-    }
-
-
-
-
-    // stage manager
-    // stage manager manages the logic behind navigation within create-container
-
-    $: {
-        if (stage == 1) {
-
-        } else if (stage == 2) {
-
-        }
-        
-        else if (stage == 3) {
-
-        }
-    }
-
-
-    // Dummy datas
-
-    for (let i = 0; i < 20; i++) {
-        item_objs = [...item_objs, {
-            checked: false,
-            _id: i,
-            user_id: i,
-            name: '김재우',
-            detail: '권한 수정 요청',
-            content: {
-                type: 0,
-                access_to: [
-                    0,1,3,4
-                ]
-            //  if type == 1,
-             //      {
-            //  type: 1,
-            //  change_to: 2
-            //}
-            },
-            reasons: "해사 역사 기록 연구 목적"
-
-        }]
-    }
-
-
-
-
-
-
-
-
-
-
-
-</script>
-
-
-<div class="browse-content-container">
-
-        <div class="upload-view">
-            <div class="header">
-                <h3>받은 요청</h3>
-                <div class="control-panel">
-                    <button on:click={acceptCall}><h3>수락</h3></button>
-                    <button on:click={declineCall}><h3>거절</h3></button>
-                </div>
-            </div>
-            <div class="table-header">
-                <div class="header-checkbox-container">
-                    <button class="{(all_checked) ? 'check-btn-clicked' : 'check-btn'}" on:click={allCheckHandle}>
-                        {#if all_checked}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" height="17" width="17">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                            </svg>
-                        {/if} 
-                    </button>
-                </div>
-                <div class="header-id-container">
-                    <div class="header-container">
-                        <h3>ID</h3>
-                    </div>
-                </div>
-                <div class="header-name-container">
-                    <div class="header-container">
-                        <h3>이름</h3>
-                    </div>
-                </div>
-                <div class="header-detail-container">
-                    <div class="header-container">
-                        <h3>요청사항</h3>
-                    </div>
-                </div>
-                <div class="header-accept-container">
-                    <div class="header-container">
-                        <h3>수락</h3>
-                    </div>
-                </div>
-                <div class="header-decline-container">
-                    <div class="header-container">
-                        <h3>거절</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="body">
-                <div class="table">
-                    {#each item_objs as item, index}
-                        <AccessControlItem
-                            checked = {item.checked}
-                            index = {index}
-                            data = {item}
-                            on:delete = {declineHandle}
-                            on:accept = {acceptHandle}
-                            on:check = {checkHandle}
-                            on:click = {focusHandle}
-                        />
-                    {/each}
-                </div>
-            </div>
-        </div>
-        {#if focus}
-            <AccessControlDetailView request={focus} on:escape={escapeHandle} />
-        {/if}
-</div>
