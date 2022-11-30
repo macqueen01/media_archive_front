@@ -78,7 +78,7 @@
     /* Imports pages */
     import UserMain from "./pages/UserMain.svelte";
     import Login from "./pages/Auth/Login.svelte";
-    //import Signin from "./pages/Auth/Signin.svelte";
+    import Signin from "./pages/Auth/Signin.svelte";
     import Browse from "./pages/Browse.svelte";
     import ManageMain from "./pages/ManageMain.svelte";
     import ManageBrowse from './pages/ManageBrowse/ManageBrowse.svelte';
@@ -117,9 +117,9 @@
             <Login />
         </Route>
 
-        <!--<Route path="/signin">
+        <Route path="/signin">
             <Signin />
-        </Route>-->
+        </Route>
     </Route>
 
     <Route path="/user/*">
