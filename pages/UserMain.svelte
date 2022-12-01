@@ -113,7 +113,7 @@
     }
 
     .info-container {
-        width: 1200px;
+        width: 1445px;
         height: 100%;
         display: flex;
         flex-direction: row;
@@ -183,10 +183,44 @@
         font-family: "goth";
     }
 
+    .all {
+        font-family: 'goth';
+        font-size: 20px;
+        color: #151d55;;
+    }
+
     .wall {
         height: 35px;
         border-right: solid 2px #6770ad;
     }
+
+    .wheel-wrap {
+        width: 30px;
+        height: fit-content;
+        display: flex;
+        z-index: 2;
+        position: absolute;
+        right: 20px;
+        bottom: 290px;
+    }
+
+    .wheel-container {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .wheel {
+        width: 13px;
+        height: 13px;
+        background: white;
+        margin-bottom: 20px;
+        border-radius: 15px;
+    }
+
 
 
 
@@ -203,17 +237,19 @@
     import UserSearch from '../components/user/UserSearch.svelte';
 
     let image_src_lst = [
-        "1.jpg",
-        "2.jpg",
-        "3.jpg",
-        "4.JPG",
-        "5.jpg"
+        "/public/1.jpg",
+        "/public/2.jpg",
+        "/public/3.jpg",
+        "/public/4.JPG",
+        "/public/5.jpg"
     ];
     let height;
     let width;
     let fit_width = true;
     let viewport;
     let background;
+    // curr is the index of image_src_lst
+    let curr = 0;
 
     $: {
         if (viewport && background) {
@@ -233,11 +269,17 @@
 <div class="main-view-home" bind:this={viewport}>
     <div class="background-img">
         {#if fit_width}
-            <img class="bg" src="/public/main_page_bg.JPG" width="100%" bind:this={background}/>
+            <img class="bg" src={image_src_lst[curr]} width="100%" bind:this={background}/>
         {:else}
-            <img class="bg" src="/public/main_page_bg.JPG" height="100%" bind:this={background}/>
+            <img class="bg" src={image_src_lst[curr]} height="100%" bind:this={background}/>
         {/if}
-        
+        <div class="wheel-wrap">
+            <div class="wheel-container">
+                {#each image_src_lst as img, index}
+                    <div class="wheel"></div>
+                {/each}
+            </div>
+        </div>
     </div>
     <div class="user-panel-wrap">
         <div class="user-panel">
