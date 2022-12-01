@@ -269,9 +269,7 @@
 <div class="main-view-home" bind:this={viewport}>
     <div class="background-img">
         {#if fit_width}
-            <img class="bg" src={image_src_lst[curr]} width="100%" bind:this={background}/>
         {:else}
-            <img class="bg" src={image_src_lst[curr]} height="100%" bind:this={background}/>
         {/if}
         <div class="wheel-wrap">
             <div class="wheel-container">

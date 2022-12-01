@@ -2465,40 +2465,20 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[11] = list[i];
-    	child_ctx[13] = i;
+    	child_ctx[9] = list[i];
+    	child_ctx[11] = i;
     	return child_ctx;
     }
 
-    // (273:8) {:else}
+    // (272:8) {:else}
     function create_else_block$1(ctx) {
-    	let img;
-    	let img_src_value;
-
-    	const block = {
-    		c: function create() {
-    			img = element("img");
-    			attr_dev(img, "class", "bg svelte-13o6vuc");
-    			if (!src_url_equal(img.src, img_src_value = /*image_src_lst*/ ctx[5][/*curr*/ ctx[6]])) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "height", "100%");
-    			add_location(img, file$4, 273, 12, 5779);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, img, anchor);
-    			/*img_binding_1*/ ctx[9](img);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(img);
-    			/*img_binding_1*/ ctx[9](null);
-    		}
-    	};
+    	const block = { c: noop, m: noop, d: noop };
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(273:8) {:else}",
+    		source: "(272:8) {:else}",
     		ctx
     	});
 
@@ -2507,27 +2487,7 @@ var app = (function () {
 
     // (271:8) {#if fit_width}
     function create_if_block$2(ctx) {
-    	let img;
-    	let img_src_value;
-
-    	const block = {
-    		c: function create() {
-    			img = element("img");
-    			attr_dev(img, "class", "bg svelte-13o6vuc");
-    			if (!src_url_equal(img.src, img_src_value = /*image_src_lst*/ ctx[5][/*curr*/ ctx[6]])) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "width", "100%");
-    			add_location(img, file$4, 271, 12, 5669);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, img, anchor);
-    			/*img_binding*/ ctx[8](img);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(img);
-    			/*img_binding*/ ctx[8](null);
-    		}
-    	};
+    	const block = { c: noop, m: noop, d: noop };
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
@@ -2540,7 +2500,7 @@ var app = (function () {
     	return block;
     }
 
-    // (278:16) {#each image_src_lst as img, index}
+    // (276:16) {#each image_src_lst as img, index}
     function create_each_block(ctx) {
     	let div;
 
@@ -2548,7 +2508,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			attr_dev(div, "class", "wheel svelte-13o6vuc");
-    			add_location(div, file$4, 278, 20, 6026);
+    			add_location(div, file$4, 276, 20, 5839);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2563,7 +2523,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(278:16) {#each image_src_lst as img, index}",
+    		source: "(276:16) {#each image_src_lst as img, index}",
     		ctx
     	});
 
@@ -2641,16 +2601,16 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	add_render_callback(/*onwindowresize*/ ctx[7]);
+    	add_render_callback(/*onwindowresize*/ ctx[5]);
 
     	function select_block_type(ctx, dirty) {
-    		if (/*fit_width*/ ctx[4]) return create_if_block$2;
+    		if (/*fit_width*/ ctx[3]) return create_if_block$2;
     		return create_else_block$1;
     	}
 
     	let current_block_type = select_block_type(ctx);
     	let if_block = current_block_type(ctx);
-    	let each_value = /*image_src_lst*/ ctx[5];
+    	let each_value = /*image_src_lst*/ ctx[4];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -2747,30 +2707,30 @@ var app = (function () {
     			h310 = element("h3");
     			h310.textContent = "개";
     			attr_dev(div0, "class", "wheel-container svelte-13o6vuc");
-    			add_location(div0, file$4, 276, 12, 5922);
+    			add_location(div0, file$4, 274, 12, 5735);
     			attr_dev(div1, "class", "wheel-wrap svelte-13o6vuc");
-    			add_location(div1, file$4, 275, 8, 5884);
+    			add_location(div1, file$4, 273, 8, 5697);
     			attr_dev(div2, "class", "background-img svelte-13o6vuc");
     			add_location(div2, file$4, 269, 4, 5602);
     			attr_dev(h30, "class", "svelte-13o6vuc");
-    			add_location(h30, file$4, 286, 16, 6262);
+    			add_location(h30, file$4, 284, 16, 6075);
     			attr_dev(a0, "href", "/manage");
     			attr_dev(a0, "class", "manage-nav svelte-13o6vuc");
-    			add_location(a0, file$4, 285, 12, 6207);
+    			add_location(a0, file$4, 283, 12, 6020);
     			attr_dev(h31, "class", "svelte-13o6vuc");
-    			add_location(h31, file$4, 289, 16, 6364);
+    			add_location(h31, file$4, 287, 16, 6177);
     			attr_dev(a1, "href", "/auth/login");
     			attr_dev(a1, "class", "login-nav svelte-13o6vuc");
-    			add_location(a1, file$4, 288, 12, 6306);
+    			add_location(a1, file$4, 286, 12, 6119);
     			attr_dev(div3, "class", "user-panel svelte-13o6vuc");
-    			add_location(div3, file$4, 284, 8, 6169);
+    			add_location(div3, file$4, 282, 8, 5982);
     			attr_dev(div4, "class", "user-panel-wrap svelte-13o6vuc");
-    			add_location(div4, file$4, 283, 4, 6130);
+    			add_location(div4, file$4, 281, 4, 5943);
     			attr_dev(div5, "class", "search-wrap svelte-13o6vuc");
-    			add_location(div5, file$4, 293, 4, 6428);
+    			add_location(div5, file$4, 291, 4, 6241);
     			attr_dev(path0, "stroke-linecap", "round");
     			attr_dev(path0, "d", "M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z");
-    			add_location(path0, file$4, 301, 26, 6834);
+    			add_location(path0, file$4, 299, 26, 6647);
     			attr_dev(svg0, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg0, "viewBox", "0 0 24 24");
     			attr_dev(svg0, "stroke-width", "1");
@@ -2779,25 +2739,25 @@ var app = (function () {
     			attr_dev(svg0, "height", "32px");
     			attr_dev(svg0, "width", "32px");
     			attr_dev(svg0, "fill", "none");
-    			add_location(svg0, file$4, 300, 20, 6657);
+    			add_location(svg0, file$4, 298, 20, 6470);
     			attr_dev(div6, "class", "info-title svelte-13o6vuc");
-    			add_location(div6, file$4, 299, 16, 6611);
+    			add_location(div6, file$4, 297, 16, 6424);
     			attr_dev(h32, "class", "number svelte-13o6vuc");
-    			add_location(h32, file$4, 306, 24, 7236);
+    			add_location(h32, file$4, 304, 24, 7049);
     			attr_dev(div7, "class", "number-container svelte-13o6vuc");
-    			add_location(div7, file$4, 305, 20, 7180);
+    			add_location(div7, file$4, 303, 20, 6993);
     			attr_dev(h33, "class", "count svelte-13o6vuc");
-    			add_location(h33, file$4, 310, 20, 7367);
+    			add_location(h33, file$4, 308, 20, 7180);
     			attr_dev(div8, "class", "statistics svelte-13o6vuc");
-    			add_location(div8, file$4, 304, 16, 7134);
+    			add_location(div8, file$4, 302, 16, 6947);
     			attr_dev(div9, "class", "info-item svelte-13o6vuc");
-    			add_location(div9, file$4, 298, 12, 6570);
+    			add_location(div9, file$4, 296, 12, 6383);
     			attr_dev(div10, "class", "wall svelte-13o6vuc");
-    			add_location(div10, file$4, 314, 12, 7451);
+    			add_location(div10, file$4, 312, 12, 7264);
     			attr_dev(path1, "stroke-linecap", "round");
     			attr_dev(path1, "stroke-linejoin", "round");
     			attr_dev(path1, "d", "M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z");
-    			add_location(path1, file$4, 319, 26, 7767);
+    			add_location(path1, file$4, 317, 26, 7580);
     			attr_dev(svg1, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg1, "viewBox", "0 0 24 24");
     			attr_dev(svg1, "stroke-width", "1");
@@ -2806,25 +2766,25 @@ var app = (function () {
     			attr_dev(svg1, "height", "32px");
     			attr_dev(svg1, "width", "32px");
     			attr_dev(svg1, "fill", "none");
-    			add_location(svg1, file$4, 318, 20, 7590);
+    			add_location(svg1, file$4, 316, 20, 7403);
     			attr_dev(div11, "class", "info-title svelte-13o6vuc");
-    			add_location(div11, file$4, 317, 16, 7544);
+    			add_location(div11, file$4, 315, 16, 7357);
     			attr_dev(h34, "class", "number svelte-13o6vuc");
-    			add_location(h34, file$4, 324, 24, 8296);
+    			add_location(h34, file$4, 322, 24, 8109);
     			attr_dev(div12, "class", "number-container svelte-13o6vuc");
-    			add_location(div12, file$4, 323, 20, 8240);
+    			add_location(div12, file$4, 321, 20, 8053);
     			attr_dev(h35, "class", "count svelte-13o6vuc");
-    			add_location(h35, file$4, 328, 20, 8427);
+    			add_location(h35, file$4, 326, 20, 8240);
     			attr_dev(div13, "class", "statistics svelte-13o6vuc");
-    			add_location(div13, file$4, 322, 16, 8194);
+    			add_location(div13, file$4, 320, 16, 8007);
     			attr_dev(div14, "class", "info-item svelte-13o6vuc");
-    			add_location(div14, file$4, 316, 12, 7503);
+    			add_location(div14, file$4, 314, 12, 7316);
     			attr_dev(div15, "class", "wall svelte-13o6vuc");
-    			add_location(div15, file$4, 332, 12, 8511);
+    			add_location(div15, file$4, 330, 12, 8324);
     			attr_dev(path2, "stroke-linecap", "round");
     			attr_dev(path2, "stroke-linejoin", "round");
     			attr_dev(path2, "d", "M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z");
-    			add_location(path2, file$4, 337, 10, 8811);
+    			add_location(path2, file$4, 335, 10, 8624);
     			attr_dev(svg2, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg2, "viewBox", "0 0 24 24");
     			attr_dev(svg2, "stroke-width", "1");
@@ -2833,39 +2793,39 @@ var app = (function () {
     			attr_dev(svg2, "height", "32px");
     			attr_dev(svg2, "width", "32px");
     			attr_dev(svg2, "fill", "none");
-    			add_location(svg2, file$4, 336, 20, 8650);
+    			add_location(svg2, file$4, 334, 20, 8463);
     			attr_dev(div16, "class", "info-title svelte-13o6vuc");
-    			add_location(div16, file$4, 335, 16, 8604);
+    			add_location(div16, file$4, 333, 16, 8417);
     			attr_dev(h36, "class", "number svelte-13o6vuc");
-    			add_location(h36, file$4, 342, 24, 9295);
+    			add_location(h36, file$4, 340, 24, 9108);
     			attr_dev(div17, "class", "number-container svelte-13o6vuc");
-    			add_location(div17, file$4, 341, 20, 9239);
+    			add_location(div17, file$4, 339, 20, 9052);
     			attr_dev(h37, "class", "count svelte-13o6vuc");
-    			add_location(h37, file$4, 346, 20, 9426);
+    			add_location(h37, file$4, 344, 20, 9239);
     			attr_dev(div18, "class", "statistics svelte-13o6vuc");
-    			add_location(div18, file$4, 340, 16, 9193);
+    			add_location(div18, file$4, 338, 16, 9006);
     			attr_dev(div19, "class", "info-item svelte-13o6vuc");
-    			add_location(div19, file$4, 334, 12, 8563);
+    			add_location(div19, file$4, 332, 12, 8376);
     			attr_dev(div20, "class", "wall svelte-13o6vuc");
-    			add_location(div20, file$4, 350, 12, 9510);
+    			add_location(div20, file$4, 348, 12, 9323);
     			attr_dev(h38, "class", "all svelte-13o6vuc");
-    			add_location(h38, file$4, 354, 20, 9637);
+    			add_location(h38, file$4, 352, 20, 9450);
     			attr_dev(div21, "class", "info-title svelte-13o6vuc");
-    			add_location(div21, file$4, 353, 16, 9591);
+    			add_location(div21, file$4, 351, 16, 9404);
     			attr_dev(h39, "class", "number svelte-13o6vuc");
-    			add_location(h39, file$4, 358, 24, 9803);
+    			add_location(h39, file$4, 356, 24, 9616);
     			attr_dev(div22, "class", "number-container svelte-13o6vuc");
-    			add_location(div22, file$4, 357, 20, 9747);
+    			add_location(div22, file$4, 355, 20, 9560);
     			attr_dev(h310, "class", "count svelte-13o6vuc");
-    			add_location(h310, file$4, 362, 20, 9934);
+    			add_location(h310, file$4, 360, 20, 9747);
     			attr_dev(div23, "class", "statistics svelte-13o6vuc");
-    			add_location(div23, file$4, 356, 16, 9701);
+    			add_location(div23, file$4, 354, 16, 9514);
     			attr_dev(div24, "class", "info-item svelte-13o6vuc");
-    			add_location(div24, file$4, 352, 12, 9550);
+    			add_location(div24, file$4, 350, 12, 9363);
     			attr_dev(div25, "class", "info-container svelte-13o6vuc");
-    			add_location(div25, file$4, 297, 8, 6528);
+    			add_location(div25, file$4, 295, 8, 6341);
     			attr_dev(div26, "class", "info-wrap svelte-13o6vuc");
-    			add_location(div26, file$4, 296, 4, 6495);
+    			add_location(div26, file$4, 294, 4, 6308);
     			attr_dev(div27, "class", "main-view-home svelte-13o6vuc");
     			add_location(div27, file$4, 268, 0, 5547);
     		},
@@ -2946,18 +2906,16 @@ var app = (function () {
     			append_dev(div22, h39);
     			append_dev(div23, t28);
     			append_dev(div23, h310);
-    			/*div27_binding*/ ctx[10](div27);
+    			/*div27_binding*/ ctx[6](div27);
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(window, "resize", /*onwindowresize*/ ctx[7]);
+    				dispose = listen_dev(window, "resize", /*onwindowresize*/ ctx[5]);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
-    				if_block.p(ctx, dirty);
-    			} else {
+    			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
     				if_block.d(1);
     				if_block = current_block_type(ctx);
 
@@ -2981,7 +2939,7 @@ var app = (function () {
     			if_block.d();
     			destroy_each(each_blocks, detaching);
     			destroy_component(usersearch);
-    			/*div27_binding*/ ctx[10](null);
+    			/*div27_binding*/ ctx[6](null);
     			mounted = false;
     			dispose();
     		}
@@ -3030,20 +2988,6 @@ var app = (function () {
     		$$invalidate(1, width = window.innerWidth);
     	}
 
-    	function img_binding($$value) {
-    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
-    			background = $$value;
-    			$$invalidate(3, background);
-    		});
-    	}
-
-    	function img_binding_1($$value) {
-    		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
-    			background = $$value;
-    			$$invalidate(3, background);
-    		});
-    	}
-
     	function div27_binding($$value) {
     		binding_callbacks[$$value ? 'unshift' : 'push'](() => {
     			viewport = $$value;
@@ -3063,13 +3007,13 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('image_src_lst' in $$props) $$invalidate(5, image_src_lst = $$props.image_src_lst);
+    		if ('image_src_lst' in $$props) $$invalidate(4, image_src_lst = $$props.image_src_lst);
     		if ('height' in $$props) $$invalidate(0, height = $$props.height);
     		if ('width' in $$props) $$invalidate(1, width = $$props.width);
-    		if ('fit_width' in $$props) $$invalidate(4, fit_width = $$props.fit_width);
+    		if ('fit_width' in $$props) $$invalidate(3, fit_width = $$props.fit_width);
     		if ('viewport' in $$props) $$invalidate(2, viewport = $$props.viewport);
-    		if ('background' in $$props) $$invalidate(3, background = $$props.background);
-    		if ('curr' in $$props) $$invalidate(6, curr = $$props.curr);
+    		if ('background' in $$props) $$invalidate(7, background = $$props.background);
+    		if ('curr' in $$props) curr = $$props.curr;
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -3077,13 +3021,13 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*viewport, background, width, height*/ 15) {
+    		if ($$self.$$.dirty & /*viewport, width, height*/ 7) {
     			 {
     				if (viewport && background) {
     					if (width / height >= background.offsetWidth / background.offsetHeight) {
-    						$$invalidate(4, fit_width = true);
+    						$$invalidate(3, fit_width = true);
     					} else {
-    						$$invalidate(4, fit_width = false);
+    						$$invalidate(3, fit_width = false);
     					}
     				}
     			}
@@ -3094,13 +3038,9 @@ var app = (function () {
     		height,
     		width,
     		viewport,
-    		background,
     		fit_width,
     		image_src_lst,
-    		curr,
     		onwindowresize,
-    		img_binding,
-    		img_binding_1,
     		div27_binding
     	];
     }
@@ -32625,6 +32565,7 @@ img.ProseMirror-separator {
             },
         });
     }
+    //# sourceMappingURL=tiptap-core.esm.js.map
 
     const inputRegex = /^\s*>\s$/;
     const Blockquote = Node$1.create({
@@ -32672,6 +32613,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-blockquote.esm.js.map
 
     const starInputRegex = /(?:^|\s)((?:\*\*)((?:[^*]+))(?:\*\*))$/;
     const starPasteRegex = /(?:^|\s)((?:\*\*)((?:[^*]+))(?:\*\*))/g;
@@ -32746,6 +32688,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-bold.esm.js.map
 
     const inputRegex$1 = /^\s*([-+*])\s$/;
     const BulletList = Node$1.create({
@@ -32789,6 +32732,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-bullet-list.esm.js.map
 
     const inputRegex$2 = /(?:^|\s)((?:`)((?:[^`]+))(?:`))$/;
     const pasteRegex = /(?:^|\s)((?:`)((?:[^`]+))(?:`))/g;
@@ -32845,6 +32789,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-code.esm.js.map
 
     const backtickInputRegex = /^```([a-z]+)?[\s\n]$/;
     const tildeInputRegex = /^~~~([a-z]+)?[\s\n]$/;
@@ -33047,12 +32992,14 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-code-block.esm.js.map
 
     const Document = Node$1.create({
         name: 'doc',
         topNode: true,
         content: 'block+',
     });
+    //# sourceMappingURL=tiptap-extension-document.esm.js.map
 
     /**
     Create a plugin that, when added to a ProseMirror instance,
@@ -33195,6 +33142,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-dropcursor.esm.js.map
 
     /**
     Gap cursor selections are represented using this class. Its
@@ -33445,6 +33393,7 @@ img.ProseMirror-separator {
             };
         },
     });
+    //# sourceMappingURL=tiptap-extension-gapcursor.esm.js.map
 
     const HardBreak = Node$1.create({
         name: 'hardBreak',
@@ -33505,6 +33454,7 @@ img.ProseMirror-separator {
             };
         },
     });
+    //# sourceMappingURL=tiptap-extension-hard-break.esm.js.map
 
     const Heading = Node$1.create({
         name: 'heading',
@@ -33575,6 +33525,7 @@ img.ProseMirror-separator {
             });
         },
     });
+    //# sourceMappingURL=tiptap-extension-heading.esm.js.map
 
     var GOOD_LEAF_SIZE = 200;
 
@@ -34224,6 +34175,7 @@ img.ProseMirror-separator {
             };
         },
     });
+    //# sourceMappingURL=tiptap-extension-history.esm.js.map
 
     const HorizontalRule = Node$1.create({
         name: 'horizontalRule',
@@ -34280,6 +34232,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-horizontal-rule.esm.js.map
 
     const starInputRegex$1 = /(?:^|\s)((?:\*)((?:[^*]+))(?:\*))$/;
     const starPasteRegex$1 = /(?:^|\s)((?:\*)((?:[^*]+))(?:\*))/g;
@@ -34353,6 +34306,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-italic.esm.js.map
 
     const ListItem = Node$1.create({
         name: 'listItem',
@@ -34381,6 +34335,7 @@ img.ProseMirror-separator {
             };
         },
     });
+    //# sourceMappingURL=tiptap-extension-list-item.esm.js.map
 
     const inputRegex$3 = /^(\d+)\.\s$/;
     const OrderedList = Node$1.create({
@@ -34443,6 +34398,7 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-ordered-list.esm.js.map
 
     const Paragraph = Node$1.create({
         name: 'paragraph',
@@ -34475,6 +34431,7 @@ img.ProseMirror-separator {
             };
         },
     });
+    //# sourceMappingURL=tiptap-extension-paragraph.esm.js.map
 
     const inputRegex$4 = /(?:^|\s)((?:~~)((?:[^~]+))(?:~~))$/;
     const pasteRegex$1 = /(?:^|\s)((?:~~)((?:[^~]+))(?:~~))/g;
@@ -34541,11 +34498,13 @@ img.ProseMirror-separator {
             ];
         },
     });
+    //# sourceMappingURL=tiptap-extension-strike.esm.js.map
 
     const Text = Node$1.create({
         name: 'text',
         group: 'inline',
     });
+    //# sourceMappingURL=tiptap-extension-text.esm.js.map
 
     const StarterKit = Extension.create({
         name: 'starterKit',
@@ -34609,6 +34568,7 @@ img.ProseMirror-separator {
             return extensions;
         },
     });
+    //# sourceMappingURL=tiptap-starter-kit.esm.js.map
 
     const toggleFunctions = [];
     const chainer = (editor, fn) => editor.chain().focus()[fn]().run();
