@@ -60,7 +60,7 @@
 
     .search-wrap {
         position: relative;
-        bottom: 100px;
+        bottom: 200px;
     }
 
     .user-panel-wrap {
@@ -213,12 +213,26 @@
         align-items: center;
     }
 
-    .wheel {
+    .wheel, .wheel-selected {
         width: 13px;
         height: 13px;
-        background: white;
+        background: rgba(255, 255, 255, 0.656);
         margin-bottom: 20px;
         border-radius: 15px;
+    }
+
+    .wheel-selected {
+        background: white;
+        animation-duration: 0.7s;
+        animation-name: focus;
+    }
+
+    @keyframes focus {
+        from {
+            background: rgba(255, 255, 255, 0.656);
+        } to {
+            background: white;
+        }
     }
 
 
@@ -237,11 +251,13 @@
     import UserSearch from '../components/user/UserSearch.svelte';
 
     let image_src_lst = [
-        "/public/1.jpg",
         "/public/2.jpg",
-        "/public/3.jpg",
-        "/public/4.JPG",
-        "/public/5.jpg"
+        "/public/5.jpg",
+        "/public/6.jpg",
+        "/public/8.jpg",
+        "/public/10.JPG",
+        "/public/11.jpg",
+        "/public/main_page_bg.JPG"
     ];
     let height;
     let width;
@@ -251,11 +267,18 @@
     // curr is the index of image_src_lst
     let curr = 0;
 
+    function bgChangeCall(index) {
+        if ((index < image_src_lst.length) && (0 <= index)) {
+            curr = index;
+        }
+    }
+
     $: {
-        if (viewport && background) {
-            if ((width / height) >= (background.offsetWidth / background.offsetHeight)) {
+        if (viewport && height && width) {
+            if ((width / height) >= 1.5) {
                 fit_width = true;
             } else {
+                console.log("fit-height")
                 fit_width = false;
             }
         }
@@ -269,12 +292,18 @@
 <div class="main-view-home" bind:this={viewport}>
     <div class="background-img">
         {#if fit_width}
+            <img class="bg" src="{image_src_lst[curr]}" width="100%" />
         {:else}
+            <img class="bg" src="{image_src_lst[curr]}" height="100%" />
         {/if}
         <div class="wheel-wrap">
             <div class="wheel-container">
                 {#each image_src_lst as img, index}
-                    <div class="wheel"></div>
+                    {#if curr == index}
+                        <div class="wheel-selected"></div>
+                    {:else}
+                        <div class="wheel" on:click={() => bgChangeCall(index)}></div>
+                    {/if}
                 {/each}
             </div>
         </div>
