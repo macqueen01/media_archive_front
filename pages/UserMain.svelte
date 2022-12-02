@@ -1,7 +1,10 @@
 <script>
     import UserSearch from "../components/user/UserSearch.svelte";
+    import { fade } from "svelte/transition";
+
 
     let image_src_lst = [
+        // add more images in the following format 
         {img: "/public/2.jpg", title: "사관생도들의 벛꽃길 학과 출장", detail: "해사 전경"},
         {img: "/public/5.jpg", title: "벛꽃 핀 생도대", detail: "해사 전경"},
         {img: "/public/6.jpg", title: "새병관에서 본 옥포만 노을", detail: "해사 전경"},
@@ -14,7 +17,6 @@
     let width;
     let fit_width = true;
     let viewport;
-    let background;
     // curr is the index of image_src_lst
     let curr = 0;
 
@@ -34,6 +36,18 @@
             }
         }
     }
+
+    function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    }
+
+    setInterval(() => {
+        // calls random index in image_src_lst and displays on screen
+        curr = getRandomInt(0, image_src_lst.length);
+    }, 5000);
+
 </script>
 
 <svelte:window bind:innerHeight={height} bind:innerWidth={width} />
@@ -41,9 +55,13 @@
 <div class="main-view-home" bind:this={viewport}>
     <div class="background-img">
         {#if fit_width}
-            <img class="bg" src={image_src_lst[curr].img} width="100%" />
+            {#key curr}
+                <img transition:fade class="bg" src={image_src_lst[curr].img} width="100%" />
+            {/key}
         {:else}
-            <img class="bg" src={image_src_lst[curr].img} height="100%" />
+            {#key curr}
+                <img transition:fade class="bg" src={image_src_lst[curr].img} height="100%" />
+            {/key}
         {/if}
         <div class="wheel-wrap">
             <div class="wheel-container">
@@ -333,7 +351,7 @@
         width: fit-content;
         height: 80px;
         position: relative;
-        padding: 10px;
+        padding: 50px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -387,7 +405,7 @@
     .all {
         font-family: "goth";
         font-size: 20px;
-        color: #151d55;
+        color: #293062;
     }
 
     .wall {
