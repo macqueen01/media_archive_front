@@ -366,7 +366,7 @@
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
-                url: `http://localhost:8000/drf/cases/codec`,
+                url: `http://${address}/drf/cases/codec`,
                 method: "POST",
                 data: formData
             })

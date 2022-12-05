@@ -7,6 +7,7 @@
     import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
     import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
     import { condition_set } from "../../utilities/inputConditions";
+    import { address } from "../../utilities/settings";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.

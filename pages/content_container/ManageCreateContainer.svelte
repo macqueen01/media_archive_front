@@ -18,6 +18,7 @@
     import { condition_set } from "../../utilities/inputConditions";
     import { token } from "../../utilities/store";
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
+    import { address } from "../../utilities/settings";
 
     export let stage = 1;
 
@@ -277,7 +278,7 @@
                         Authorization: `Token ${$token}`,
                         "Content-Type": "multipart/form-data",
                     },
-                    url: `http://127.0.0.1:8000/drf/cases/create/${type}`,
+                    url: `http://${address}/drf/cases/create/${type}`,
                     method: "POST",
                     data: formData,
                 });

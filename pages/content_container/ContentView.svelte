@@ -5,6 +5,7 @@
     import { createEventDispatcher, onMount } from "svelte";
     import { token, wishList } from "../../utilities/store";
     import { Circle } from "svelte-loading-spinners";
+    import { address } from "../../utilities/settings";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.
@@ -75,7 +76,7 @@
     async function getDataFromId(id, form) {
         console.log(id, form);
         fetched = await axios({
-            url: `http://localhost:8000/drf/cases/browse/detail?form=${form}&id=${id}`,
+            url: `http://${address}/drf/cases/browse/detail?form=${form}&id=${id}`,
             method: "get",
             headers: {
                 Authorization: `Token ${$token}`,
@@ -384,7 +385,7 @@
                                     on:mouseover={hoverHandle}
                                 >
                                     <source
-                                        src={"http://localhost:8000" + curr.url}
+                                        src="http://{address}{curr.url}"
                                         type="video/mp4"
                                     />
                                 </video>
@@ -393,7 +394,7 @@
                             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                             {#if curr}
                                 <img
-                                    src={"http://localhost:8000" + curr.url}
+                                    src="http://{address}{curr.url}"
                                     alt="main_pg_bg"
                                     bind:this={image}
                                     on:mouseover={hoverHandle}

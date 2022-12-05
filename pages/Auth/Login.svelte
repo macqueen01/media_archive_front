@@ -148,6 +148,7 @@
     import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
     import { condition_set } from "../../utilities/inputConditions";
+    import { address } from "../../utilities/settings";
 
 
     let username = '';
@@ -164,7 +165,7 @@
     async function loginCall() {
         try {
             let result = await axios({
-                url: 'http://localhost:8000/drf/user/login',
+                url: `http://${address}/drf/user/login`,
                 method: 'post',
                 data: {
                     username: username,
@@ -189,7 +190,7 @@
     async function check_status() {
         try {
             let result = await axios({
-                url: 'http://localhost:8000/drf/user/check-status',
+                url: `http://${address}/drf/user/check-status`,
                 method: 'get',
                 headers: {
                     'Authorization': `Token ${$token}`

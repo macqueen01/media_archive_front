@@ -321,18 +321,7 @@
         submit_data = e.detail.data
     }
 
-    async function postUser(user) {
-        //if (isValid(user)) {
-            fetching = true;
-            let result = await axios.get('http://localhost:4000')
-            initialize()
-            setTimeout(() => {
-                router.goto('/manage/accounts/browse')
-            }, 2000)
-            fetching = false;
-            return result
-        //}
-    }
+
 
 
     // stage manager

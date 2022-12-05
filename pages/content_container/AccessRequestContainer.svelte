@@ -6,6 +6,7 @@
 
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
     import { wishList, token } from "../../utilities/store";
+    import { address } from "../../utilities/settings";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.
@@ -23,7 +24,7 @@
 
     async function requestSubmit() {
         let result = await axios({
-            url: "http://127.0.0.1:8000/drf/request/open",
+            url: `http://${address}/drf/request/open`,
             method: "post",
             data: {
                 image_cases: $wishList[0],

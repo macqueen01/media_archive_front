@@ -150,6 +150,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import { Circle } from 'svelte-loading-spinners';
     import { token } from '../../utilities/store';
+    import { address } from "../../utilities/settings";
 
 
     import ContentItem from "./ContentItem.svelte";
@@ -180,10 +181,11 @@
     let fetched_items = [];
 
     async function fetch_items(page, type) {
+        console.log("fetching items")
         let localToken = localStorage.getItem('token');
         fetched_items = await axios({
             // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
-            url: `http://localhost:8000/drf/cases/browse/${type}?page=${page}`,
+            url: `http://${address}/drf/cases/browse/${type}?page=${page}`,
             method: 'get',
             headers: {
                 'Authorization': `Token ${$token}`

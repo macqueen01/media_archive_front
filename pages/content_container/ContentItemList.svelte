@@ -77,6 +77,7 @@
 <script>
 
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+    import { address } from '../../utilities/settings'; 
 
     export let item;
 
@@ -114,7 +115,7 @@
     </div>
     <div class="snapshot-wrap">
         <div class="snapshot-container container">
-            <img src="{"http://localhost:8000" + src}" height="85px" alt="test-img">
+            <img src="http://{address}{src}" height="85px" alt="test-img">
         </div>
     </div>
     <div class="title-wrap">

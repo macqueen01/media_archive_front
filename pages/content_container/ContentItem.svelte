@@ -73,6 +73,7 @@
 
 <script>
     import { createEventDispatcher } from 'svelte';
+    import { address } from "../../utilities/settings";
 
     var dispatch = createEventDispatcher();
 
@@ -107,9 +108,9 @@
     <div class="content-item-folder">
         <div class="img-container">
             {#if item.form == 0}
-                <img src="http://localhost:8000{src}" width="100%">
+                <img src="http://{address}{src}" width="100%">
             {:else}
-                <img src="http://localhost:8000{thumbnail}" width="100%">
+                <img src="http://{address}{thumbnail}" width="100%">
             {/if}
         </div>    
         <div class="title-container">
