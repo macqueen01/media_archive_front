@@ -143,6 +143,7 @@
     import axios from 'axios';
     import { router } from 'tinro';
     import { Circle } from 'svelte-loading-spinners'; 
+    import { scale, fade } from 'svelte/transition';
 
     import InputDateValue from "../../components/manager/Input/InputDateValue.svelte";
     import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
@@ -236,7 +237,7 @@
         <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
     {:then result}
     {:catch e}
-        <div class="login-form-wrap">
+        <div class="login-form-wrap" in:scale={{start: 0.8}}>
             <div class="title">
                 <h3>로그인</h3>
                 <h4>해사미디어아카이브에 오신 것을 환영합니다!</h4>

@@ -20,7 +20,7 @@
     
     .browse-content-container {
         width: 960px;
-        height: 550px;
+        height: 520px;
         background-color: white;
         display: flex;
         flex-direction: column;
@@ -28,6 +28,7 @@
         align-items: center;
         position: relative;
         box-shadow: -4px 5px 14px 0 rgb(197 197 197 / 50%);
+        overflow-x: hidden;
         
     }
 
@@ -81,6 +82,7 @@
         z-index: 3;
         padding-top: 55px;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     .body-content-wrap {
@@ -152,6 +154,7 @@
     import { writable } from 'svelte/store';
     import { crossfade, draw } from 'svelte/transition';
     import { flip } from 'svelte/animate';
+    import { linear, quadIn, quadOut } from 'svelte/easing';
     
     import SignInTitle from "../../components/manager/ContentTitle/SignInTitle.svelte";
     import InputSingleValue from '../../components/manager/Input/InputSingleValue.svelte';
@@ -228,6 +231,22 @@
         //}
     }
 
+    function loginToSignIn(node, {
+    delay = 0,
+    duration = 400,
+    easing: easing$1 = linear
+    } = {}) {
+        const w = +getComputedStyle(node).width;
+        return {
+            delay,
+            duration,
+            easing: easing$1,
+            css: t => `width: ${400 + t * 560}px`
+        }
+    }
+
+    
+
 
     // stage manager
     // stage manager manages the logic behind navigation within account create container
@@ -255,9 +274,9 @@
 </script>
 
 <div class="signin-container">
-    <div class="signin-wrap">
+    <div class="signin-wrap" transition:loginToSignIn={{easing: linear, duration: 100}}>
         <SignInTitle />
-        <div class="browse-content-container">
+        <div class="browse-content-container" transition:loginToSignIn={{easing: linear, duration: 100}}>
             {#if stage == 1}
                 <div class="body">
                         <div class="body-content-wrap">

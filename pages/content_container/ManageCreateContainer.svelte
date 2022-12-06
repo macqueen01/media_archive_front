@@ -275,7 +275,7 @@
 
                 result = await axios({
                     headers: {
-                        Authorization: `Token ${$token}`,
+                        'Authorization': `Token ${$token}`,
                         "Content-Type": "multipart/form-data",
                     },
                     url: `http://${address}/drf/cases/create/${type}`,
