@@ -54,7 +54,7 @@
 
 <div class="main-view-home" bind:this={viewport} out:fade>
     <div class="logo-main">
-        <img class="logo" src="/public/sub_logo.png" alt="Media Archive" height="45" />
+        <img class="logo" src="/public/main_header_logo.png" alt="Media Archive" height="48" />
     </div>
     <div class="background-img">
         {#if fit_width}

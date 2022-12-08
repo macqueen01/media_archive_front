@@ -180,7 +180,7 @@
             let recent_token = result.data.token;
             localStorage.setItem('token', recent_token)
             token.set(recent_token);
-            router.goto('/manage/')
+            router.goto('/manage/cases')
         } catch(e) {
             initialize();
             modalActive = true;
@@ -198,7 +198,7 @@
                 }
             })
             setTimeout(() => {
-                router.goto("/manage")
+                router.goto("/manage/cases")
             }, 1)
             return result;
         } catch(e) {
@@ -289,6 +289,6 @@
 </div>
 
 <DefaultModal modalActive={modalActive} on:close={modalCloseHandle}>
-    <h3 slot="header">This is Header</h3>
-    <h3 slot="content">This is Content</h3>
+    <h3 class="modal-header" slot="header">계정이 없습니다!</h3>
+    <h3 class="modal-content" slot="content">비활성화 상태일 수 있습니다</h3>
 </DefaultModal>

@@ -86,7 +86,7 @@
     let title = item.title;
     let created_at = item.created_at.split('T')[0];
     let associate = item.associate.title;
-    let type = item.type;
+    let type = item.form;
 
     var dispatch = createEventDispatcher();
 
@@ -100,6 +100,7 @@
         if (type == 0) {
             src = item.include[0].url;
         } else {
+            console.
             src = item.include[0].thumbnail;
         }
     }

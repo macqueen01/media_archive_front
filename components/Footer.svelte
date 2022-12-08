@@ -24,7 +24,7 @@
 
     .logo-holder {
         display: flex;
-        width: 300px;
+        width: 480px;
         justify-content: center;
         align-items: center;
 
@@ -58,7 +58,7 @@
 <div class="footer-wrap">
     <div class="footer">
         <div class="logo-holder">
-            <img src="/public/navy-logo.JPG" alt="navy" height="40">
+            <img src="/public/footer_logo.png" alt="navy" height="40">
         </div>
         <h3 class="copyright">
             Copyright by © 2022 해군사관학교 학술정보원. All Rights Reserved

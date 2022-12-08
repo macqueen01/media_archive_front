@@ -24,7 +24,10 @@
 
     import axios from "axios";
 
+    //axios.defaults.withCredentials = true;
+
     let localToken = localStorage.getItem("token");
+
 
     if ($token != localToken) {
         token.set(localToken);

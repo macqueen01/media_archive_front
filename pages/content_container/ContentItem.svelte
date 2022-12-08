@@ -15,6 +15,7 @@
         position: relative;
         display: flex;
         justify-content: center;
+        border-radius: 8px;
     }
     
     .img-container {
@@ -27,6 +28,8 @@
         overflow-x: hidden;
         overflow-y: hidden;
         top: 0;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
     }
     
     .title-container {
@@ -46,7 +49,7 @@
     
     .date-container {
         position: absolute;
-        bottom: 4px;
+        bottom: 8px;
         right: 8px;    
     }
     
@@ -59,7 +62,7 @@
     
     .creater-container {
         position: absolute;
-        bottom: 4px;
+        bottom: 8px;
         left: 8px;
     }
     

@@ -88,12 +88,12 @@
 
     function addToWishlist() {
         if (!$wishList[file_form].includes(file_id)) {
-            wishList.update(wishList => {
+            wishList.update((wishList) => {
                 wishList[file_form] = [...wishList[file_form], file_id];
                 return wishList;
             });
             wishlist_added = true;
-            console.log(true)
+            console.log(true);
         }
         wishlist_rejected = true;
     }
@@ -165,7 +165,9 @@
             </button>
         </div>
         {#await getDataFromId(file_id, file_form)}
-            <h3>파일을 받아오는 중입니다</h3>
+            <div class="title-wrap">
+                <h3>파일을 받아오는 중입니다</h3>
+            </div>
         {:then result}
             <div class="title-wrap">
                 <h3>
@@ -855,12 +857,10 @@
     @keyframes icon-focus {
         from {
             background: transparent;
-
         }
 
         to {
             background: rgb(137, 137, 213);
-
         }
     }
 </style>
