@@ -9,6 +9,8 @@
     import { condition_set } from "../../utilities/inputConditions";
     import { address } from "../../utilities/settings";
     import { token } from "../../utilities/store";
+    import DefaultModal from "../../components/modals/DefaultModal.svelte";
+    import ModalWithButton from "../../components/modals/ModalWithButton.svelte";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.
@@ -18,6 +20,11 @@
     let acceptList = [];
     let declineList = [];
     let fetched;
+    let item_objs = [];
+    let status = {};
+    let form;
+    let id;
+    let apply_fail = false;
 
     var dispatch = createEventDispatcher();
 
@@ -26,6 +33,128 @@
             focus: null,
         });
     }
+
+    async function withdrawCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = static_access_request_parser(fetched.data, 2);
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 2,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+    async function acceptCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = access_request_parser(fetched.data, status);
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 1,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+    async function rejectAllCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = static_access_request_parser(fetched.data, 0);
+            data.status = 0;
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 0,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+
 
     async function getRequestFromId(request) {
         console.log(request.id, request.request_form)
@@ -47,7 +176,16 @@
             }
             acceptList = [...acceptList, index];
             declineList = declineList;
-            console.log(acceptList);
+
+            let component = fetched.data.request_components[index];
+
+            if (component.requesting_case_form == 0) {
+                status.image_case[component.image_case.id] = 1;
+            } else if (component.requesting_case_form == 1) {
+                status.video_case[component.video_case.id] = 1;
+            } else {
+                status.doc_case[component.doc_case.id] = 1;
+            }
             return acceptList;
         } else if (type == 0 && !declineClicked(index)) {
             if (acceptClicked(index)) {
@@ -56,7 +194,16 @@
             }
             declineList = [...declineList, index];
             acceptList = acceptList;
-            console.log(declineList);
+
+            let component = fetched.data.request_components[index];
+
+            if (component.requesting_case_form == 0) {
+                status.image_case[component.image_case.id] = 1;
+            } else if (component.requesting_case_form == 1) {
+                status.video_case[component.video_case.id] = 1;
+            } else {
+                status.doc_case[component.doc_case.id] = 1;
+            }
             return declineList;
         }
     }
@@ -89,6 +236,75 @@
         }
     }
 
+    // Utility functions
+
+    function getItemListLength() {
+        return getItemList().length;
+    }
+
+    function getItemList() {
+        return [...item_objs];
+    }
+
+    function static_access_request_parser(data, status) {
+        if ((data.request_form == 1) || !(status in [0,1,2])) {
+            return false;
+        }
+        let result = {};
+        result.image_case = {};
+        result.video_case = {};
+        result.doc_case = {};
+        data.request_components.forEach((comp) => {
+            if (comp.requesting_case_form == 0) {
+                result.image_case[comp.image_case.id] = status;
+            } else if (comp.requesting_case_form == 1) {
+                result.video_case[comp.video_case.id] = status;
+            } else if (comp.requesting_case_form == 2) {
+                result.doc_case[comp.doc_case.id] = status;
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+    function access_request_parser(data, status) {
+        if (data.request_form == 1) {
+            return false;
+        }
+
+        let result = {};
+        result.image_case = {};
+        result.video_case = {};
+        result.doc_case = {};
+        data.request_components.forEach((comp) => {
+            if (comp.requesting_case_form == 0) {
+                result.image_case[comp.image_case.id] = status.image_case[comp.image_case.id];
+            } else if (comp.requesting_case_form == 1) {
+                result.video_case[comp.video_case.id] = status.video_case[comp.video_case.id];
+            } else if (comp.requesting_case_form == 2) {
+                result.doc_case[comp.doc_case.id] = status.doc_case[comp.doc_case.id];
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+    $: {
+        if (fetched && fetched.data && fetched.data.request_form == 0) {
+            // initializes status with all component's status as undecided == 2
+            status = static_access_request_parser(fetched.data, 2);
+            form = 0;
+            id = fetched.data.id;
+        } else if (fetched && fetched.data && fetched.data.request_form == 1) {
+            form = 1;
+            id = fetched.data.id;
+        }
+    }
+
     /* Test variables to be fetched from server when online */
 
     /* USER object:
@@ -114,7 +330,6 @@
     let registered_by = user.registered_by;
     let registered_id = user.registered_id;
     let affiliation = user.affiliation;
-    let id = user._id;
     let ip_address = user.ip_address;
     let date = user.date;
     let authority = user.authority;
@@ -607,13 +822,13 @@
                 </div>
                 <div class="btn-control-wrap">
                     <div class="btn-container">
-                        <button class="withdraw-btn btn">
+                        <button class="withdraw-btn btn" on:click={withdrawCall}>
                             <h3>보류하기</h3>
                         </button>
-                        <button class="accept-btn btn">
+                        <button class="accept-btn btn" on:click={acceptCall}>
                             <h3>적용하기</h3>
                         </button>
-                        <button class="decline-btn btn">
+                        <button class="decline-btn btn" on:click={rejectAllCall}>
                             <h3>거부하기</h3>
                         </button>
                     </div>
@@ -624,6 +839,16 @@
         </div>
     </div>
 </div>
+
+
+{#if apply_fail}
+<ModalWithButton>
+    <h3 class="modal-header" slot="header">Header</h3>
+    <h3 class="modal-content" slot="content">Content</h3>
+    <button class="modal-btn-1" slot="btn-1">BUTTON1</button>
+    <button class="modal-btn-2" slot="btn-2">BUTTON2</button>
+</ModalWithButton>
+{/if}
 
 <style>
     .focus {

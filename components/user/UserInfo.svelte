@@ -196,7 +196,7 @@
     </div>
     <div class="user-affiliation-wrap item">
         <h4>소속</h4>
-        <h3>학술정보원 멀티미디어교실</h3>
+        <h3>{result.user.affiliation}</h3>
     </div>
     <div class="user-ip-wrap item">
         <h4>접속 주소</h4>

@@ -3,9 +3,12 @@
     import axios from 'axios';
     import { draw, fade } from "svelte/transition";
     import { createEventDispatcher } from "svelte";
+    import { address } from "../../utilities/settings";
+    import { token } from "../../utilities/store";
 
     import UserListItem from "../../components/manager/UserManage/UserListItem.svelte";
     import AccountView from "./AccountView.svelte";
+    import { Circle } from "svelte-loading-spinners";
 
     /* Page starts from 1.
        Each page contains maximum 12 number of items.
@@ -19,8 +22,9 @@
 
     export let page = 1;
     export let keywords;
+    let last_keywords;
 
-    let debug = true;
+    let debug = false;
 
     var dispatch = createEventDispatcher();
 
@@ -31,29 +35,57 @@
     let fetched_items = [];
     let curr_page_items;
 
-    $: {
-        try {
-            curr_page_items = fetched_items.slice((page - 1) * 12, page * 12);
-        } catch (e) {
-            curr_page_items = null;
-        }
-    }
 
-    async function getUserFromKeywords(keywords) {
-        if (!fetching) {
-            fetched_items = [];
-            error = null;
+    async function getUserFromKeywords(page, keywords) {
+        console.log("fetching items")
+        if (keywords && (last_keywords != keywords)) {
             fetching = true;
-            try {
-                fetched_items = await axios.get('http://localhost:4000');
-                fetching = false;
-            } catch (e) {
-                error = 1;
-                fetching = false;
-            }
+
+            dispatch('page', {
+                page: 1
+            });
+
+            fetched_items = await axios({
+            // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
+            url: `http://${address}/drf/user/search?keyword=${keywords}&page=1`,
+            method: 'get',
+            headers: {
+                'Authorization': `Token ${$token}`
+                }
+            })
+            fetching = false;
+            last_keywords = keywords;
+            fetched_items = fetched_items.data.results;
+            return fetched_items
+        } else if (keywords && (keywords == last_keywords)) {
+            fetching = true;
+            fetched_items = await axios({
+            // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
+            url: `http://${address}/drf/user/search?keyword=${keywords}&page=${page}`,
+            method: 'get',
+            headers: {
+                'Authorization': `Token ${$token}`
+                }
+            })
+            fetching = false;
+            last_keywords = keywords;
+            fetched_items = fetched_items.data.results
+            return fetched_items
         }
 
-        console.log('fetch')
+        fetching = true;
+        fetched_items = await axios({
+            // Weirdly, query with two keys: ?page=1&type=1 malfunctions svelte... 
+            url: `http://${address}/drf/user/search?page=${page}`,
+            method: 'get',
+            headers: {
+                'Authorization': `Token ${$token}`
+            }
+        })
+        fetching = false;
+        last_keywords = null;
+        fetched_items = fetched_items.data.results
+        return fetched_items
     }
 
     function passFocus(e) {
@@ -105,7 +137,7 @@
     }
 
     $: {
-        getUserFromKeywords(keywords);
+        getUserFromKeywords(page, keywords);
     }
 
 
@@ -151,25 +183,13 @@
             </div>
         </div>
         <div class="list-frame">
-            {#if debug == true}
-                <div class="table">
-                    {#each curr_page_items as item, index}
-                        <UserListItem {item} on:click={passFocus} />
-                    {/each}
-                </div>
-            {:else}
                 {#if fetching}
                     <div class="user-fetch-spinner-page">
-                        <div class="svg-wrap">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(31, 32, 88)" height="100" width="100">
-                                <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M10.05 4.575a1.575 1.575 0 10-3.15 0v3m3.15-3v-1.5a1.575 1.575 0 013.15 0v1.5m-3.15 0l.075 5.925m3.075.75V4.575m0 0a1.575 1.575 0 013.15 0V15M6.9 7.575a1.575 1.575 0 10-3.15 0v8.175a6.75 6.75 0 006.75 6.75h2.018a5.25 5.25 0 003.712-1.538l1.732-1.732a5.25 5.25 0 001.538-3.712l.003-2.024a.668.668 0 01.198-.471 1.575 1.575 0 10-2.228-2.228 3.818 3.818 0 00-1.12 2.687M6.9 7.575V12m6.27 4.318A4.49 4.49 0 0116.35 15m.002 0h-.002" />
-                            </svg>
-                        </div>
-                        <h4>정보를 받아오고 있습니다</h4>
+                        <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
                     </div>
                 {:else if !error && !fetching}
                     <div class="table">
-                        {#each curr_page_items as item, index}
+                        {#each fetched_items as item, index}
                             <UserListItem {item} on:click={passFocus} />
                         {/each}
                     </div>
@@ -184,7 +204,7 @@
                         <h5>다시 한번 시도해보세요</h5>
                     </div>
                 {/if}
-            {/if}
+
 
         </div>
     </div>

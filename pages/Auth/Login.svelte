@@ -248,7 +248,7 @@
                         <InputSingleValue on:change={(e) => changeHandle(e, 'username')} value={_username_initialize} placeholder="아이디" conditions={condition_set.registered_id_conditions}/>
                     </div>
                     <div class="password">
-                        <InputSingleValue on:change={(e) => changeHandle(e, 'password')} value={_password_initialize} placeholder="비밀번호" conditions={condition_set.default_conditions}/>
+                        <InputSingleValue on:change={(e) => changeHandle(e, 'password')} value={_password_initialize} placeholder="비밀번호" hidden={true} conditions={condition_set.default_conditions}/>
                     </div>
                 </div>
                 <div class="form-btn">

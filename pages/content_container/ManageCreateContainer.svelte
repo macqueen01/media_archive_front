@@ -282,31 +282,20 @@
                     method: "POST",
                     data: formData,
                 });
-
-                console.log(result.data);
+                
             } catch (error) {
                 result = error;
                 console.log(error);
+                upload_fail = true;
             }
 
             file_uploading = false;
             console.log("file_uploading procedure ended");
-            return result;
+            router.goto("/manage/cases")
         }
     }
 
-    async function _afterFileUpload(result) {
-        if (result.response.status == 200) {
-            router.goto("/manage/cases/browse");
-        } else {
-            upload_fail = true;
-        }
-    }
 
-    async function processFileUpload() {
-        let result = await fileUpload();
-        _afterFileUpload(result);
-    }
 
     function parseToList(str) {
         // str = "#a #b #c ..."

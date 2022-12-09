@@ -100,7 +100,6 @@
         if (type == 0) {
             src = item.include[0].url;
         } else {
-            console.
             src = item.include[0].thumbnail;
         }
     }

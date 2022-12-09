@@ -23,6 +23,7 @@
     }
 
     async function requestSubmit() {
+        console.log($wishList[0], $wishList[1], $wishList[2])
         let result = await axios({
             url: `http://${address}/drf/request/open`,
             method: "post",
@@ -666,6 +667,13 @@
         width: fit-content;
         font-family: "goth";
         padding-top: 3px;
+    }
+
+    .no-case-id {
+        width: 300px;
+        padding-left: 10px;
+        font-size: 18px;
+        font-family: 'goth';
     }
 
     .input-wrap {
