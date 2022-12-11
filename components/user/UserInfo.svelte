@@ -200,7 +200,7 @@
     </div>
     <div class="user-ip-wrap item">
         <h4>접속 주소</h4>
-        <h3>192.168.0.11</h3>
+        <h3>{result.user.client_ip}</h3>
     </div>
     <div class="user-recent-wrap item">
         <h4>최근접속</h4>
