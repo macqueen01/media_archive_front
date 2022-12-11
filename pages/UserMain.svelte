@@ -1,13 +1,13 @@
 <script>
     import UserSearch from "../components/user/UserSearch.svelte";
-    import { fade } from "svelte/transition";
+    import { fade, scale, fly } from "svelte/transition";
 
 
     let image_src_lst = [
-        // add more images in the following format 
-        {img: "/public/2.jpg", title: "사관생도들의 벛꽃길 학과 출장", detail: "해사 전경"},
+        // add more images in the following format
         {img: "/public/5.jpg", title: "벛꽃 핀 생도대", detail: "해사 전경"},
         {img: "/public/6.jpg", title: "새병관에서 본 옥포만 노을", detail: "해사 전경"},
+        {img: "/public/2.jpg", title: "사관생도들의 벛꽃길 학과 출장", detail: "해사 전경"},
         {img: "/public/8.jpg", title: "옥포만 갯바위와 해무", detail: "해사 전경"},
         {img: "/public/10.JPG", title: "해사 반도와 저녁 노을", detail: "해사 전경"},
         {img: "/public/11.jpg", title: "백두산함 마스트와 북극성", detail: "해사 전경"},
@@ -52,7 +52,10 @@
 
 <svelte:window bind:innerHeight={height} bind:innerWidth={width} />
 
-<div class="main-view-home" bind:this={viewport}>
+<div class="main-view-home" bind:this={viewport} out:fade>
+    <div class="logo-main">
+        <img class="logo" src="/public/main_header_logo.png" alt="Media Archive" height="48" />
+    </div>
     <div class="background-img">
         {#if fit_width}
             {#key curr}
@@ -88,7 +91,7 @@
     </div>
     <div class="user-panel-wrap">
         <div class="user-panel">
-            <a href="/manage" class="manage-nav">
+            <a href="/manage/cases" class="manage-nav">
                 <h3>관리자</h3>
             </a>
             <a href="/auth/login" class="login-nav">
@@ -99,7 +102,7 @@
     <div class="search-wrap">
         <UserSearch />
     </div>
-    <div class="info-wrap">
+    <div class="info-wrap" transition:fly={{duration: 200, x: 0, y: +100}}>
         <div class="info-container">
             <div class="info-item">
                 <div class="info-title">
@@ -253,6 +256,18 @@
         font-family: rokafM;
         src: url("/fonts/ROKAF_Medium.woff") format("woff");
     }
+
+
+    .logo-main {
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        left: 40px;
+        top: 22px;
+        z-index:5;
+    }
+
+
 
     .main-view-home {
         width: 100%;

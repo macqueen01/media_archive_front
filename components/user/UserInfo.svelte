@@ -119,9 +119,64 @@
         font-size: 13px;
     }
 
+    .fetch-fail-page {
+        height: 100%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .fetch-fail-page > h4 {
+        font-family: 'goth';
+        font-size: 18px;
+        width: fit-content;
+        color: rgb(226, 41, 41);
+        text-align: center;
+    }
+
+    .fetch-fail-page > h5 {
+        font-family: 'goth';
+        font-size: 16px;
+        width: fit-content;
+        color: rgb(214 39 39);
+        text-align: center;
+    }
+
 </style>
 
 <script>
+    import axios from "axios";
+    import { router } from "tinro";
+    import { token } from "../../utilities/store";
+    import { address } from "../../utilities/settings";
+    import { Circle } from 'svelte-loading-spinners';
+    import { draw } from "svelte/transition";
+
+    async function fetch_user() {
+        let fetched_items = await axios({
+            url: `http://${address}/drf/user/info`,
+            method: 'get',
+            headers: {
+                "Authorization": `Token ${$token}`
+            }
+        })
+        console.log(fetched_items.data)
+        return fetched_items.data
+    }
+
+    async function logout() {
+        let result = await axios({
+            url: `http://${address}/drf/user/logout`,
+            method: "post",
+            headers: {
+                'Authorization': `Token ${$token}`
+            }
+        })
+
+        router.goto("/user");
+    }
 
 </script>
 
@@ -132,25 +187,28 @@
     <h3>회원정보</h3>
 </div>
 <div class="user-info-container">
+    {#await fetch_user()}
+        <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
+    {:then result}
     <div class="user-name-wrap">
-        <h3>안상철</h3>
+        <h3>{result.user.name}</h3>
         <h4>님</h4>
     </div>
     <div class="user-affiliation-wrap item">
         <h4>소속</h4>
-        <h3>학술정보원 멀티미디어교실</h3>
+        <h3>{result.user.affiliation}</h3>
     </div>
     <div class="user-ip-wrap item">
         <h4>접속 주소</h4>
-        <h3>192.168.0.10</h3>
+        <h3>{result.user.client_ip}</h3>
     </div>
     <div class="user-recent-wrap item">
         <h4>최근접속</h4>
-        <h3>4시간 전</h3>
+        <h3>{result.recent_visit.split('T')[0]}</h3>
     </div>
     <div class="user-btn-control-wrap">
-        <a class="logout-btn-wrap" href="/logout">
-            <h3 href="/logout">
+        <a class="logout-btn-wrap" on:click={logout}>
+            <h3>
                 로그아웃
             </h3>
         </a>
@@ -160,4 +218,15 @@
             </h3>
         </a>
     </div>
+    {:catch e}
+        <div class="fetch-fail-page">
+            <div class="svg-wrap">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="rgb(226, 41, 41)" height="100" width="100">
+                    <path in:draw={{duration:700, speed: 1}} stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <h4>회원정보가 없습니다</h4>
+            <h5>로그인이 필요합니다</h5>
+        </div>
+    {/await}
 </div>

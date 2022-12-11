@@ -134,6 +134,7 @@
     export let immutable = false;
     export let placeholder = null;
     export let value = '';
+    export let hidden = false;
     export let conditions = [
         {
             condition: () => {},
@@ -208,7 +209,11 @@
 
 <div class="input-wrap">
     <div class={(condition_result) ? 'input-container': 'input-container-not-satisfied'}>
-        <input class='input' type="text" on:focus={focusHandle} on:blur={blurHandle} bind:value={value}>
+        {#if hidden}
+            <input class='input' type="password" on:focus={focusHandle} on:blur={blurHandle} bind:value={value}>
+        {:else}
+            <input class='input' type="text" on:focus={focusHandle} on:blur={blurHandle} bind:value={value}>
+        {/if}
             {#if focused || value}
                 {#key 'focused'}
                     <label for="input" class="label-focused"

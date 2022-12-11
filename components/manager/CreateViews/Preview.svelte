@@ -283,6 +283,7 @@
     import axios from 'axios';
     import { createEventDispatcher, onDestroy, onMount } from 'svelte';
     import { draw } from 'svelte/transition';
+    import { address } from "../../../utilities/settings";
 
     export let item_objs;
     export let title;
@@ -302,7 +303,6 @@
 
 
     curr = getMediaFromFront();
-    console.log(curr);
     
 
     var dispatch = createEventDispatcher();
@@ -366,10 +366,12 @@
                 headers: {
                     "Content-Type": "multipart/form-data"
                 },
-                url: `http://localhost:8000/drf/cases/codec`,
+                url: `http://${address}/drf/cases/codec`,
                 method: "POST",
                 data: formData
             })
+
+            
 
             return result
         } 
@@ -383,7 +385,6 @@
             lst.forEach((codec) => {
                 if (codec != 'h264') {
                     result = false;
-                    console.log(codec)
                 }
             })
         }
@@ -413,7 +414,6 @@
         if (image) {
             
             name = curr.file.name;
-            console.log(name)
 
             if (image.offsetHeight > image.offsetWidth) {
                 image.height = 450;
@@ -428,8 +428,6 @@
         if (video) {
 
             name = curr.file.name;
-            console.log(name)
-            console.log(changed)
 
             if (video.offsetHeight > video.offsetWidth) {
                 vedio.height = 450;

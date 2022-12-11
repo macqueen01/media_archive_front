@@ -1,23 +1,20 @@
 <script>
-    import { Route, router } from "tinro";
     import axios from "axios";
+    import { router } from "tinro";
 
-    import { createEventDispatcher, onDestroy, onMount } from "svelte";
-    import { writable } from "svelte/store";
-    import { crossfade, draw } from "svelte/transition";
-    import { flip } from "svelte/animate";
+    import { createEventDispatcher } from "svelte";
+    import { draw } from "svelte/transition";
 
-    import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
-    import InputMultiValue from "../../components/manager/Input/InputMultiValue.svelte";
-    import InputCheckboxValue from "../../components/manager/Input/InputCheckboxValue.svelte";
-    import InputDateValue from "../../components/manager/Input/InputDateValue.svelte";
-    import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
-    import Tiptap from "../../components/manager/Tiptap/Tiptap.svelte";
-    import ManageCreateItem from "../../components/manager/ManageCreateItem.svelte";
     import Preview from "../../components/manager/CreateViews/Preview.svelte";
-    import { condition_set } from "../../utilities/inputConditions";
-    import { token } from "../../utilities/store";
+    import InputMultiValue from "../../components/manager/Input/InputMultiValue.svelte";
+    import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
+    import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
+    import ManageCreateItem from "../../components/manager/ManageCreateItem.svelte";
+    import Tiptap from "../../components/manager/Tiptap/Tiptap.svelte";
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
+    import { condition_set } from "../../utilities/inputConditions";
+    import { address } from "../../utilities/settings";
+    import { token } from "../../utilities/store";
 
     export let stage = 1;
 
@@ -147,8 +144,6 @@
         let index = e.detail.index;
         if (item_objs[index]) {
             let pop_obj = item_objs.splice(index, 1);
-            console.log(pop_obj[0].src);
-            console.log(item_objs);
             if (pop_obj[0].src) {
                 console.log("revoking Url");
                 URL.revokeObjectURL(pop_obj[0].src);
@@ -274,38 +269,27 @@
 
                 result = await axios({
                     headers: {
-                        Authorization: `Token ${$token}`,
+                        'Authorization': `Token ${$token}`,
                         "Content-Type": "multipart/form-data",
                     },
-                    url: `http://127.0.0.1:8000/drf/cases/create/${type}`,
+                    url: `http://${address}/drf/cases/create/${type}`,
                     method: "POST",
                     data: formData,
                 });
-
-                console.log(result.data);
+                
             } catch (error) {
                 result = error;
                 console.log(error);
+                upload_fail = true;
             }
 
             file_uploading = false;
             console.log("file_uploading procedure ended");
-            return result;
+            router.goto("/manage/cases");
         }
     }
 
-    async function _afterFileUpload(result) {
-        if (result.response.status == 200) {
-            router.goto("/manage/cases/browse");
-        } else {
-            upload_fail = true;
-        }
-    }
 
-    async function processFileUpload() {
-        let result = await fileUpload();
-        _afterFileUpload(result);
-    }
 
     function parseToList(str) {
         // str = "#a #b #c ..."
@@ -333,7 +317,6 @@
         }
 
         for (var item in lst) {
-            console.log(item, ":", lst[item]);
             if (!lst[item]) {
                 return false;
             }
@@ -377,7 +360,7 @@
             dispatch("data", {
                 uncleared: [1, 2, 3, 4],
             });
-            processFileUpload();
+            fileUpload();
         }
     }
 

@@ -5,6 +5,7 @@
     import { createEventDispatcher, onMount } from "svelte";
     import { token, wishList } from "../../utilities/store";
     import { Circle } from "svelte-loading-spinners";
+    import { address } from "../../utilities/settings";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.
@@ -75,7 +76,7 @@
     async function getDataFromId(id, form) {
         console.log(id, form);
         fetched = await axios({
-            url: `http://localhost:8000/drf/cases/browse/detail?form=${form}&id=${id}`,
+            url: `http://${address}/drf/cases/browse/detail?form=${form}&id=${id}`,
             method: "get",
             headers: {
                 Authorization: `Token ${$token}`,
@@ -87,12 +88,12 @@
 
     function addToWishlist() {
         if (!$wishList[file_form].includes(file_id)) {
-            wishList.update(wishList => {
+            wishList.update((wishList) => {
                 wishList[file_form] = [...wishList[file_form], file_id];
                 return wishList;
             });
             wishlist_added = true;
-            console.log(true)
+            console.log(true);
         }
         wishlist_rejected = true;
     }
@@ -164,7 +165,9 @@
             </button>
         </div>
         {#await getDataFromId(file_id, file_form)}
-            <h3>파일을 받아오는 중입니다</h3>
+            <div class="title-wrap">
+                <h3>파일을 받아오는 중입니다</h3>
+            </div>
         {:then result}
             <div class="title-wrap">
                 <h3>
@@ -384,7 +387,7 @@
                                     on:mouseover={hoverHandle}
                                 >
                                     <source
-                                        src={"http://localhost:8000" + curr.url}
+                                        src="http://{address}{curr.url}"
                                         type="video/mp4"
                                     />
                                 </video>
@@ -393,7 +396,7 @@
                             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                             {#if curr}
                                 <img
-                                    src={"http://localhost:8000" + curr.url}
+                                    src="http://{address}{curr.url}"
                                     alt="main_pg_bg"
                                     bind:this={image}
                                     on:mouseover={hoverHandle}
@@ -854,12 +857,10 @@
     @keyframes icon-focus {
         from {
             background: transparent;
-
         }
 
         to {
             background: rgb(137, 137, 213);
-
         }
     }
 </style>

@@ -74,6 +74,11 @@
         z-index:-1;
         box-shadow: 3px 3px 6px 0 rgb(197 197 197 / 50%);
     }
+
+    .logo {
+        position: relative;
+        top: 3px;
+    }
     
     
     
@@ -82,7 +87,7 @@
 <script>
 
     import { Route } from 'tinro';
-    import { fly } from 'svelte/transition';
+    import { fly, fade } from 'svelte/transition';
 
     let hover = null;
 
@@ -100,9 +105,9 @@
 
 <div class="navbar-wrap">
     <div class="navbar" transition:fly={{duration: 200, x: 0, y: -100}}>
-        <div class="logo-wrap">
+        <div class="logo-wrap" transition:fade>
             <a href="/">
-                <img src="/public/navy-logo.JPG" alt="navy" height="40">
+                <img class="logo" src="/public/sub_logo.png" alt="navy" height="40">
             </a>
         </div>
         <div class="menu-wrap">

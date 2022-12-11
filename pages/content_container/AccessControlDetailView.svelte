@@ -7,6 +7,10 @@
     import InputSingleValue from "../../components/manager/Input/InputSingleValue.svelte";
     import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
     import { condition_set } from "../../utilities/inputConditions";
+    import { address } from "../../utilities/settings";
+    import { token } from "../../utilities/store";
+    import DefaultModal from "../../components/modals/DefaultModal.svelte";
+    import ModalWithButton from "../../components/modals/ModalWithButton.svelte";
 
     /* 
         FILE inherits FOCUS obj from ContentContainer.
@@ -15,7 +19,12 @@
     export let request;
     let acceptList = [];
     let declineList = [];
-    let status = 0;
+    let fetched;
+    let item_objs = [];
+    let status = {};
+    let form;
+    let id;
+    let apply_fail = false;
 
     var dispatch = createEventDispatcher();
 
@@ -25,9 +34,138 @@
         });
     }
 
-    async function getRequestFromId(id) {
-        let result = await axios.get(`http://localhost:8000/request/${id}`);
-        return result;
+    async function withdrawCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = static_access_request_parser(fetched.data, 2);
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 2,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+    async function acceptCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = access_request_parser(fetched.data, status);
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 1,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+    async function rejectAllCall() {
+        let post_result;
+
+        if (form == 0) {
+            let data = {};
+            data = static_access_request_parser(fetched.data, 0);
+            data.status = 0;
+            data.request_form = form;
+            data.request_id = id;
+
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: data,
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+
+        } else {
+            post_result = axios({
+                url: `http://${address}/drf/request/resolve`,
+                method: "post",
+                data: {
+                    request_form: form,
+                    request_id: id,
+                    status: 0,
+                },
+                headers: {
+                    Authorization: `Token ${$token}`,
+                },
+            });
+        }
+
+        post_result.then(response => {
+            router.goto("/manage/accounts");
+        }).catch(e => {
+            apply_fail = true;
+        })
+    }
+
+
+
+    async function getRequestFromId(request) {
+        console.log(request.id, request.request_form)
+        fetched = await axios({
+            url: `http://${address}/drf/request/detail?form=${request.request_form}&id=${request.id}`,
+            method: "get",
+            headers: {
+                Authorization: `Token ${$token}`,
+            }
+        });
+        return fetched.data;
     }
 
     function clickCall(type, index) {
@@ -38,7 +176,16 @@
             }
             acceptList = [...acceptList, index];
             declineList = declineList;
-            console.log(acceptList);
+
+            let component = fetched.data.request_components[index];
+
+            if (component.requesting_case_form == 0) {
+                status.image_case[component.image_case.id] = 1;
+            } else if (component.requesting_case_form == 1) {
+                status.video_case[component.video_case.id] = 1;
+            } else {
+                status.doc_case[component.doc_case.id] = 1;
+            }
             return acceptList;
         } else if (type == 0 && !declineClicked(index)) {
             if (acceptClicked(index)) {
@@ -47,7 +194,16 @@
             }
             declineList = [...declineList, index];
             acceptList = acceptList;
-            console.log(declineList);
+
+            let component = fetched.data.request_components[index];
+
+            if (component.requesting_case_form == 0) {
+                status.image_case[component.image_case.id] = 1;
+            } else if (component.requesting_case_form == 1) {
+                status.video_case[component.video_case.id] = 1;
+            } else {
+                status.doc_case[component.doc_case.id] = 1;
+            }
             return declineList;
         }
     }
@@ -80,6 +236,75 @@
         }
     }
 
+    // Utility functions
+
+    function getItemListLength() {
+        return getItemList().length;
+    }
+
+    function getItemList() {
+        return [...item_objs];
+    }
+
+    function static_access_request_parser(data, status) {
+        if ((data.request_form == 1) || !(status in [0,1,2])) {
+            return false;
+        }
+        let result = {};
+        result.image_case = {};
+        result.video_case = {};
+        result.doc_case = {};
+        data.request_components.forEach((comp) => {
+            if (comp.requesting_case_form == 0) {
+                result.image_case[comp.image_case.id] = status;
+            } else if (comp.requesting_case_form == 1) {
+                result.video_case[comp.video_case.id] = status;
+            } else if (comp.requesting_case_form == 2) {
+                result.doc_case[comp.doc_case.id] = status;
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+    function access_request_parser(data, status) {
+        if (data.request_form == 1) {
+            return false;
+        }
+
+        let result = {};
+        result.image_case = {};
+        result.video_case = {};
+        result.doc_case = {};
+        data.request_components.forEach((comp) => {
+            if (comp.requesting_case_form == 0) {
+                result.image_case[comp.image_case.id] = status.image_case[comp.image_case.id];
+            } else if (comp.requesting_case_form == 1) {
+                result.video_case[comp.video_case.id] = status.video_case[comp.video_case.id];
+            } else if (comp.requesting_case_form == 2) {
+                result.doc_case[comp.doc_case.id] = status.doc_case[comp.doc_case.id];
+            } else {
+                return false;
+            }
+        });
+
+        return result;
+    }
+
+    $: {
+        if (fetched && fetched.data && fetched.data.request_form == 0) {
+            // initializes status with all component's status as undecided == 2
+            status = static_access_request_parser(fetched.data, 2);
+            form = 0;
+            id = fetched.data.id;
+        } else if (fetched && fetched.data && fetched.data.request_form == 1) {
+            form = 1;
+            id = fetched.data.id;
+        }
+    }
+
     /* Test variables to be fetched from server when online */
 
     /* USER object:
@@ -105,7 +330,6 @@
     let registered_by = user.registered_by;
     let registered_id = user.registered_id;
     let affiliation = user.affiliation;
-    let id = user._id;
     let ip_address = user.ip_address;
     let date = user.date;
     let authority = user.authority;
@@ -135,53 +359,35 @@
                 </svg>
             </button>
         </div>
-        {#await getRequestFromId(request._id)}
-            <div class="approved-mark-wrap" />
-            <h3>파일을 받아오는 중입니다</h3>
+        {#await getRequestFromId(request)}
+            <div class="title-wrap">
+                <h3>파일을 받아오는 중입니다</h3>
+            </div>
         {:then result}
-            <div class="approved-mark-wrap">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="rgb(99, 228, 99)"
-                    height="18"
-                    width="18"
-                >
-                    <path
-                        in:draw={{ duration: 700, speed: 1 }}
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
+            <div class="title-wrap">
+                <h3>
+                    {result.title}
+                </h3>
+                <div class="approved-mark-wrap">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="2"
+                        stroke="rgb(99, 228, 99)"
+                        height="18"
+                        width="18"
+                    >
+                        <path
+                            in:draw={{ duration: 700, speed: 1 }}
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                </div>
             </div>
-            <h3>
-                {result.title}
-            </h3>
-        {:catch error}
-            <div class="approved-mark-wrap">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="rgb(226, 41, 41)"
-                    height="18"
-                    width="18"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                    />
-                </svg>
-            </div>
-            <h3>다시 시도 바랍니다</h3>
-        {/await}
 
-        {#if status == 1}
             <div class="info-wrap">
                 <div class="name-wrap">
                     <svg
@@ -200,7 +406,11 @@
                         />
                     </svg>
                     <div class="space" />
-                    <h3>{user.associate}</h3>
+                    {#if request.request_form == 1}
+                        <h3>{result.request_form1_requested_by.name}</h3>
+                    {:else}
+                        <h3>{result.request_form0_requested_by.name}</h3>
+                    {/if}
                 </div>
                 <div class="date-wrap">
                     <svg
@@ -219,69 +429,41 @@
                         />
                     </svg>
                     <div class="space" />
-                    <h3>{user.created_at}</h3>
+                    <h3>{result.created_at.split("T")[0]}</h3>
                 </div>
             </div>
-
-            <div class="icons-wrap">
-                <div class="fix-wrap icon">
+        {:catch error}
+            <div class="title-wrap">
+                {#if error.response.status == 404}
+                    <h3>해당 요청이 없습니다</h3>
+                {:else}
+                    <h3>다시 시도 바랍니다</h3>
+                {/if}
+                <div class="approved-mark-wrap">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke="rgb(226, 41, 41)"
                         height="18"
                         width="18"
                     >
                         <path
+                            in:draw={{ duration: 700, speed: 1 }}
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
-                        />
-                    </svg>
-                </div>
-                <div class="bell-wrap icon">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        height="18"
-                        width="18"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                        />
-                    </svg>
-                </div>
-                <div class="download-wrap icon">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="2"
-                        stroke="currentColor"
-                        height="18"
-                        width="18"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
                         />
                     </svg>
                 </div>
             </div>
-        {/if}
+        {/await}
     </div>
 
     <div class="body">
-        {#if user.authority}
-            <div class="body-content-wrap">
+        <div class="body-content-wrap">
+            {#if fetched && fetched.data}
                 <div class="single-input-wrap">
                     <div class="input-category-title">
                         <h3>회원 정보</h3>
@@ -384,21 +566,91 @@
                     <div class="input-category-title">
                         <h3>요청 사항</h3>
                     </div>
-                    {#if request.content.type == 0}
+                    {#if request.request_form == 0}
                         <div class="browsing-request-wrap ">
-                            {#each request.content.access_to as case_id, index}
+                            {#each fetched.data.request_components as request_comp, index}
                                 <div class="browsing-request-container">
                                     <div class="request-content-container">
-                                        <h3>등록 번호</h3>
-                                        <div class="whitespace" />
-                                        <h4>{case_id}</h4>
-                                        <div class="whitespace" />
-                                        <h3>의 기록물</h3>
-                                        <div class="whitespace" />
-                                        <h4>#이인호_동상_앞</h4>
-                                        <h5>(눌러서 이동)</h5>
-                                        <div class="whitespace" />
-                                        <h3>에 대한 열람 권한</h3>
+                                        {#if request_comp.requesting_case_form == 0}
+                                            <h3>등록 번호</h3>
+                                            <div class="whitespace" />
+                                            <h4>
+                                                {request_comp.image_case.id}
+                                            </h4>
+                                            <div class="whitespace" />
+                                            <h3>의 기록물</h3>
+                                            <div class="whitespace" />
+                                            <h4
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/0/${request_comp.image_case.id}`
+                                                    )}
+                                            >
+                                                #{request_comp.image_case.title}
+                                            </h4>
+                                            <h5
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/0/${request_comp.image_case.id}`
+                                                    )}
+                                            >
+                                                (눌러서 이동)
+                                            </h5>
+                                            <div class="whitespace" />
+                                            <h3>에 대한 열람 권한</h3>
+                                        {:else if request_comp.requesting_case_form == 1}
+                                            <h3>등록 번호</h3>
+                                            <div class="whitespace" />
+                                            <h4>
+                                                {request_comp.video_case.id}
+                                            </h4>
+                                            <div class="whitespace" />
+                                            <h3>의 기록물</h3>
+                                            <div class="whitespace" />
+                                            <h4
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/1/${request_comp.video_case.id}`
+                                                    )}
+                                            >
+                                                #{request_comp.video_case.title}
+                                            </h4>
+                                            <h5
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/1/${request_comp.video_case.id}`
+                                                    )}
+                                            >
+                                                (눌러서 이동)
+                                            </h5>
+                                            <div class="whitespace" />
+                                            <h3>에 대한 열람 권한</h3>
+                                        {:else}
+                                            <h3>등록 번호</h3>
+                                            <div class="whitespace" />
+                                            <h4>{request_comp.doc_case.id}</h4>
+                                            <div class="whitespace" />
+                                            <h3>의 기록물</h3>
+                                            <div class="whitespace" />
+                                            <h4
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/2/${request_comp.doc_case.id}`
+                                                    )}
+                                            >
+                                                #{request_comp.doc_case.title}
+                                            </h4>
+                                            <h5
+                                                on:click={() =>
+                                                    router.goto(
+                                                        `/manage/cases/browse/2/${request_comp.doc_case.id}`
+                                                    )}
+                                            >
+                                                (눌러서 이동)
+                                            </h5>
+                                            <div class="whitespace" />
+                                            <h3>에 대한 열람 권한</h3>
+                                        {/if}
                                     </div>
                                     <div class="select-wrap">
                                         <div
@@ -511,7 +763,7 @@
                                 </div>
                             {/each}
                         </div>
-                    {:else if request.content.type == 1}
+                    {:else if request.reqeust_form == 1}
                         <div class="authority-request-wrap">
                             <div class="authority-wrap">
                                 <h5 class="label">권한 종류</h5>
@@ -542,7 +794,7 @@
                                 <h5 class="label">권한 종류</h5>
                                 <h3>
                                     {["비인가", "일반 유저", "관리자"][
-                                        request.content.change_to
+                                        request.auth_to
                                     ]}
                                 </h3>
                             </div>
@@ -570,23 +822,33 @@
                 </div>
                 <div class="btn-control-wrap">
                     <div class="btn-container">
-                        <button class="withdraw-btn btn">
+                        <button class="withdraw-btn btn" on:click={withdrawCall}>
                             <h3>보류하기</h3>
                         </button>
-                        <button class="accept-btn btn">
+                        <button class="accept-btn btn" on:click={acceptCall}>
                             <h3>적용하기</h3>
                         </button>
-                        <button class="decline-btn btn">
+                        <button class="decline-btn btn" on:click={rejectAllCall}>
                             <h3>거부하기</h3>
                         </button>
                     </div>
                 </div>
-            </div>
-        {:else}
-            <div class="body-content-wrap-unauthorized" />
-        {/if}
+            {:else}
+                Error!
+            {/if}
+        </div>
     </div>
 </div>
+
+
+{#if apply_fail}
+<ModalWithButton>
+    <h3 class="modal-header" slot="header">Header</h3>
+    <h3 class="modal-content" slot="content">Content</h3>
+    <button class="modal-btn-1" slot="btn-1">BUTTON1</button>
+    <button class="modal-btn-2" slot="btn-2">BUTTON2</button>
+</ModalWithButton>
+{/if}
 
 <style>
     .focus {
@@ -639,11 +901,11 @@
     }
 
     .approved-mark-wrap {
-        position: absolute;
+        position: relative;
         width: fit-content;
         height: fit-content;
-        left: 235px;
-        bottom: 16px;
+        left: 6px;
+        bottom: -2px;
     }
 
     .icons-wrap {
@@ -768,6 +1030,25 @@
         position: absolute;
         left: 90px;
         bottom: 18px;
+    }
+
+    .title-wrap {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        left: 90px;
+        bottom: 18px;
+    }
+
+    .title-wrap > h3 {
+        font-family: "goth";
+        font-size: 17px;
+        color: #1e1c3b;
+        font-weight: 900;
     }
 
     .body {

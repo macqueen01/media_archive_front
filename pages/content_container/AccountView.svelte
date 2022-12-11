@@ -235,18 +235,7 @@
 
 
     async function getDataFromId(id) {
-        user = await axios.get(`http://localhost:4000/account/${id}`);
-        ({ name,
-          registered_by,
-          registered_id,
-          affiliation,
-          id,
-          ip_address,
-          date,
-          authority,
-          standing,
-          position } = user);
-        return user
+        return
 
         //if user is fetched:
         //  status = 1;

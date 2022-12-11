@@ -8,6 +8,7 @@
     import AccessControlItem from "../../components/manager/AccessControlItem.svelte";
     import AccessControlDetailView from "./AccessControlDetailView.svelte";
     import { Circle } from "svelte-loading-spinners";
+    import { address } from "../../utilities/settings";
 
     export let stage = 1;
 
@@ -144,7 +145,7 @@
             data.request_id = id;
 
             post_result = await axios({
-                url: "http://127.0.0.1:8000/drf/request/resolve",
+                url: `http://${address}/drf/request/resolve`,
                 method: "post",
                 data: data,
                 headers: {
@@ -153,7 +154,7 @@
             });
         } else {
             post_result = await axios({
-                url: "http://127.0.0.1:8000/drf/request/resolve",
+                url: `http://${address}/drf/request/resolve`,
                 method: "post",
                 data: {
                     request_form: form,
@@ -179,7 +180,7 @@
             data.request_id = id;
 
             post_result = await axios({
-                url: "http://127.0.0.1:8000/drf/request/resolve",
+                url: `http://${address}/drf/request/resolve`,
                 method: "post",
                 data: data,
                 headers: {
@@ -188,7 +189,7 @@
             });
         } else {
             post_result = await axios({
-                url: "http://127.0.0.1:8000/drf/request/resolve",
+                url: `http://${address}/drf/request/resolve`,
                 method: "post",
                 data: {
                     request_form: form,
@@ -205,7 +206,7 @@
 
     async function fetchRequests() {
         let result = await axios({
-            url: "http://127.0.0.1:8000/drf/request/browse",
+            url: `http://${address}/drf/request/browse`,
             method: "get",
             headers: {
                 Authorization: `Token ${$token}`,
