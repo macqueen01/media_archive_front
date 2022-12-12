@@ -1,7 +1,16 @@
 <script>
     import { createEventDispatcher, onDestroy, onMount } from "svelte";
+    import { checkAuthority } from "../../../utilities/authorityLevel";
 
     export let item = item;
+
+    let id = item.id;
+    let authority = checkAuthority(item.is_staff, item.is_active);
+    let name = item.name;
+    let standing = item.standing;
+    let date = item.created_at.split('T')[0];
+    let affiliation = item.affiliation;
+    let position = item.position;
 
     var dispatch = createEventDispatcher();
 
@@ -15,37 +24,43 @@
 <div class="table-content" on:click={clickCall}>
     <div class="id-wrap wrap">
         <div class="id-container container">
-            <h3>{item._id}</h3>
+            <h3>{id}</h3>
         </div>
     </div>
     <div class="authority-wrap">
         <div class="authority-container container">
-            <h3>{item.authority}</h3>
+            {#if authority == 2}
+                <h3>관리자</h3>
+            {:else if authority == 1}
+                <h3>일반 유저</h3>
+            {:else}
+                <h3>비활성화</h3>
+            {/if}
         </div>
     </div>
     <div class="name-wrap">
         <div class="name-container container">
-            <h3>{item.name}</h3>
+            <h3>{name}</h3>
         </div>
     </div>
     <div class="standing-wrap">
         <div class="standing-container container">
-            <h3>{item.standing}</h3>
+            <h3>{standing}</h3>
         </div>
     </div>
     <div class="date-wrap">
         <div class="date-container container">
-            <h3>{item.created_at}</h3>
+            <h3>{date}</h3>
         </div>
     </div>
     <div class="affiliation-wrap">
         <div class="affiliation-container container">
-            <h3>{item.affiliation}</h3>
+            <h3>{affiliation}</h3>
         </div>
     </div>
     <div class="position-wrap">
         <div class="position-container container">
-            <h3>{item.position}</h3>
+            <h3>{position}</h3>
         </div>
     </div>
 </div>
