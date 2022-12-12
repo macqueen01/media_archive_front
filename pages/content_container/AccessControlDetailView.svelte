@@ -8,6 +8,7 @@
     import InputSelectValue from "../../components/manager/Input/InputSelectValue.svelte";
     import { condition_set } from "../../utilities/inputConditions";
     import { address } from "../../utilities/settings";
+    import { checkAuthority } from "../../utilities/authorityLevel";
     import { token } from "../../utilities/store";
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
     import ModalWithButton from "../../components/modals/ModalWithButton.svelte";
@@ -25,6 +26,7 @@
     let form;
     let id;
     let apply_fail = false;
+    let user;
 
     var dispatch = createEventDispatcher();
 
@@ -66,11 +68,13 @@
             });
         }
 
-        post_result.then(response => {
-            router.goto("/manage/accounts");
-        }).catch(e => {
-            apply_fail = true;
-        })
+        post_result
+            .then((response) => {
+                router.goto("/manage/accounts");
+            })
+            .catch((e) => {
+                apply_fail = true;
+            });
     }
 
     async function acceptCall() {
@@ -90,7 +94,6 @@
                     Authorization: `Token ${$token}`,
                 },
             });
-
         } else {
             post_result = axios({
                 url: `http://${address}/drf/request/resolve`,
@@ -106,11 +109,13 @@
             });
         }
 
-        post_result.then(response => {
-            router.goto("/manage/accounts");
-        }).catch(e => {
-            apply_fail = true;
-        })
+        post_result
+            .then((response) => {
+                router.goto("/manage/accounts");
+            })
+            .catch((e) => {
+                apply_fail = true;
+            });
     }
 
     async function rejectAllCall() {
@@ -131,7 +136,6 @@
                     Authorization: `Token ${$token}`,
                 },
             });
-
         } else {
             post_result = axios({
                 url: `http://${address}/drf/request/resolve`,
@@ -147,23 +151,23 @@
             });
         }
 
-        post_result.then(response => {
-            router.goto("/manage/accounts");
-        }).catch(e => {
-            apply_fail = true;
-        })
+        post_result
+            .then((response) => {
+                router.goto("/manage/accounts");
+            })
+            .catch((e) => {
+                apply_fail = true;
+            });
     }
 
-
-
     async function getRequestFromId(request) {
-        console.log(request.id, request.request_form)
+        console.log(request.id, request.request_form);
         fetched = await axios({
             url: `http://${address}/drf/request/detail?form=${request.request_form}&id=${request.id}`,
             method: "get",
             headers: {
                 Authorization: `Token ${$token}`,
-            }
+            },
         });
         return fetched.data;
     }
@@ -247,7 +251,7 @@
     }
 
     function static_access_request_parser(data, status) {
-        if ((data.request_form == 1) || !(status in [0,1,2])) {
+        if (data.request_form == 1 || !(status in [0, 1, 2])) {
             return false;
         }
         let result = {};
@@ -280,11 +284,14 @@
         result.doc_case = {};
         data.request_components.forEach((comp) => {
             if (comp.requesting_case_form == 0) {
-                result.image_case[comp.image_case.id] = status.image_case[comp.image_case.id];
+                result.image_case[comp.image_case.id] =
+                    status.image_case[comp.image_case.id];
             } else if (comp.requesting_case_form == 1) {
-                result.video_case[comp.video_case.id] = status.video_case[comp.video_case.id];
+                result.video_case[comp.video_case.id] =
+                    status.video_case[comp.video_case.id];
             } else if (comp.requesting_case_form == 2) {
-                result.doc_case[comp.doc_case.id] = status.doc_case[comp.doc_case.id];
+                result.doc_case[comp.doc_case.id] =
+                    status.doc_case[comp.doc_case.id];
             } else {
                 return false;
             }
@@ -299,9 +306,12 @@
             status = static_access_request_parser(fetched.data, 2);
             form = 0;
             id = fetched.data.id;
+            user = fetched.data.request_form0_requested_by;
+            console.log(user);
         } else if (fetched && fetched.data && fetched.data.request_form == 1) {
             form = 1;
             id = fetched.data.id;
+            user = fetched.data.request_form1_requested_by;
         }
     }
 
@@ -312,29 +322,30 @@
                          Set false at default.
             @name      - Name of the logged in user.  
     */
-    let user = {
-        _id: 2,
-        registered_id: "sampleId",
-        name: "김재우",
-        authority: 1,
-        standing: "상병",
-        position: "전산병",
-        affiliation: "학술정보원 멀티미디어교실",
-        created_at: "22년 2월 3일",
-        ip_address: "192.168.0.101",
-        registered_by: "김재우",
-        date: "2022년 12월 12일",
-    };
 
-    let name = user.name;
-    let registered_by = user.registered_by;
-    let registered_id = user.registered_id;
-    let affiliation = user.affiliation;
-    let ip_address = user.ip_address;
-    let date = user.date;
-    let authority = user.authority;
-    let standing = user.standing;
-    let position = user.position;
+    let name = "접속불량";
+    let standing = "접속불량";
+    let position = "접속불량";
+    let affiliation = "접속불량";
+    let date = "22T22";
+    let ip_address = "접속불량";
+    let registered_id = "접속불량";
+    let authority = 1;
+    let registered_by = "접속불량";
+
+    $: {
+        if (user) {
+            name = user.name;
+            registered_by = "비공개";
+            registered_id = user.username;
+            affiliation = user.affiliation;
+            ip_address = user.client_ip;
+            date = user.created_at.split("T")[0];
+            authority = checkAuthority(user.is_staff, user.is_active);
+            standing = user.standing;
+            position = user.position;
+        }
+    }
 </script>
 
 <div class="focus">
@@ -546,7 +557,9 @@
                     <InputSelectValue
                         placeholder="권한 종류"
                         init={authority}
-                        conditions={condition_set.default_conditions}
+                        conditions={condition_set.unchangable_conditions(
+                            "여기서는"
+                        )}
                         option_list={["비인가", "일반 유저", "관리자"]}
                         immutable={true}
                     />
@@ -813,22 +826,25 @@
                     </div>
                     <div class="text-wrap">
                         <h5>
-                            안녕하십니까, 상병 김재우입니다. 다름이 아니라 이번
-                            순항훈련전단에서 지금까지 있었던 순항훈련 기록물을
-                            참고하여 기항지 탐색/조사를 시행하려 합니다. 협조
-                            부탁드립니다
+                            {request.comments}
                         </h5>
                     </div>
                 </div>
                 <div class="btn-control-wrap">
                     <div class="btn-container">
-                        <button class="withdraw-btn btn" on:click={withdrawCall}>
+                        <button
+                            class="withdraw-btn btn"
+                            on:click={withdrawCall}
+                        >
                             <h3>보류하기</h3>
                         </button>
                         <button class="accept-btn btn" on:click={acceptCall}>
                             <h3>적용하기</h3>
                         </button>
-                        <button class="decline-btn btn" on:click={rejectAllCall}>
+                        <button
+                            class="decline-btn btn"
+                            on:click={rejectAllCall}
+                        >
                             <h3>거부하기</h3>
                         </button>
                     </div>
@@ -840,14 +856,13 @@
     </div>
 </div>
 
-
 {#if apply_fail}
-<ModalWithButton>
-    <h3 class="modal-header" slot="header">Header</h3>
-    <h3 class="modal-content" slot="content">Content</h3>
-    <button class="modal-btn-1" slot="btn-1">BUTTON1</button>
-    <button class="modal-btn-2" slot="btn-2">BUTTON2</button>
-</ModalWithButton>
+    <ModalWithButton>
+        <h3 class="modal-header" slot="header">Header</h3>
+        <h3 class="modal-content" slot="content">Content</h3>
+        <button class="modal-btn-1" slot="btn-1">BUTTON1</button>
+        <button class="modal-btn-2" slot="btn-2">BUTTON2</button>
+    </ModalWithButton>
 {/if}
 
 <style>
