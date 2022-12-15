@@ -63,9 +63,7 @@
     <Route path="/manage/*">
         <ManageNavbar />
 
-        <Route path="/">
-            <ManageMain />
-        </Route>
+        <Route path="/" redirect="/manage/cases" />
 
         <Route path="/cases/*">
             <ManageBrowse />

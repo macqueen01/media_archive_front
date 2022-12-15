@@ -22,8 +22,19 @@
         });
     }
 
+    async function getTitle(form, id) {
+        let result = await axios({
+            url: `http://${address}/drf/cases/title?form=${form}&id=${id}`,
+            method: "get",
+            headers: {
+                Authorization: `Token ${$token}`,
+            },
+        });
+        return result.data;
+    }
+
     async function requestSubmit() {
-        console.log($wishList[0], $wishList[1], $wishList[2])
+        console.log($wishList[0], $wishList[1], $wishList[2]);
         let result = await axios({
             url: `http://${address}/drf/request/open`,
             method: "post",
@@ -142,8 +153,24 @@
                                 <div class="whitespace" />
                                 <h3>의 기록물</h3>
                                 <div class="whitespace" />
-                                <h4>#이인호_동상_앞</h4>
-                                <h5>(눌러서 이동)</h5>
+                                {#await getTitle(case_info.form, case_info.id) then result}
+                                    <h4
+                                        on:click={() =>
+                                            router.goto(
+                                                `/manage/cases/browse/${case_info.form}/${case_info.id}`
+                                            )}
+                                    >
+                                        #{result.title}
+                                    </h4>
+                                    <h5
+                                        on:click={() =>
+                                            router.goto(
+                                                `/manage/cases/browse/${case_info.form}/${case_info.id}`
+                                            )}
+                                    >
+                                        (눌러서 이동)
+                                    </h5>
+                                {/await}
                                 <div class="whitespace" />
                                 <h3>에 대한 열람 권한</h3>
                             </div>
@@ -672,8 +699,9 @@
     .no-case-id {
         width: 300px;
         padding-left: 10px;
-        font-size: 18px;
-        font-family: 'goth';
+        font-size: 15px;
+        font-family: "goth";
+        color: #2d3460;
     }
 
     .input-wrap {

@@ -11,7 +11,7 @@
         font-size: 14px;
         font-family: 'goth';
         position: absolute;
-        left: 40px;
+        left: 65px;
         bottom: 8px;
         width: 80px;
         height: 20px;
@@ -47,6 +47,12 @@
         bottom: 8px;
         color: rgb(82, 82, 82);
     }
+
+    .icon {
+        position: absolute;
+        left: 25px;
+        top: 10px;
+    }
     
     
 </style>
@@ -55,7 +61,8 @@
     
     export let category = {
         name: '이름없음',
-            sub_category: []
+        img: 'public/icons/chart.svg',
+        sub_category: []
     };
     export let selected_index = null;
     export let index = 0;
@@ -92,6 +99,7 @@
 
 
 <div class="category" on:click={categorySelect}>
+    <img class="icon" src={category.img} height="18" />
     <h3>{category.name}</h3>
     {#if selected_index == index}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="white" class="w-6 h-6" width="15" height="15">

@@ -7,61 +7,39 @@
     import UserInfo from "../../components/user/UserInfo.svelte";
     import NotReadyView from "../DevViews/NotReadyView.svelte";
 
-    import { meta, Route } from "tinro";
-    import { fly, fade } from 'svelte/transition';
+    import { meta, Route, router } from "tinro";
+    import { fly, fade } from "svelte/transition";
+    import { address } from "../../utilities/settings";
+    import { token } from "../../utilities/store";
+    import axios from "axios";
+    import { Circle } from "svelte-loading-spinners";
+    import { checkAuthority } from "../../utilities/authorityLevel";
+    import { authenticateUserApi } from "../../service/api";
+    import { categoryFilter } from "../../utilities/settings";
 
     let selected_index = null;
 
     let page = 1;
-    let form = 0
+    let form = 0;
     let focus = false;
     let view = "box";
+    let authority = 0;
+    let categories = [];
 
-    let categories = [
-        {
-            name: "기록물 관리",
-            sub_category: [
-                {
-                    name: "기록물 관리",
-                    path: "/manage/cases/browse",
-                },
-                {
-                    name: "기록물 생성",
-                    path: "/manage/cases/create",
-                },
-            ],
-        },
-        {
-            name: "홈페이지",
-            sub_category: [
-                {
-                    name: "관리자 메인",
-                    path: "/manage",
-                },
-                {
-                    name: "유저 메인",
-                    path: "/user",
-                },
-            ],
-        },
-        {
-            name: "통계",
-            sub_category: [
-                {
-                    name: "나의 통계",
-                    path: "/manage/cases/stats/user",
-                },
-                {
-                    name: "기록물 생성",
-                    path: "/manage/cases/stats/",
-                },
-            ],
-        },
-    ];
-
-    function categorySelect(e) {
-        selected_index = e.detail.index;
+    async function authenticateUser() {
+        try {
+            let result = await authenticateUserApi($token)
+            authority = checkAuthority(
+                result.data.user.is_staff,
+                result.data.user.is_active
+            );
+            return result.data;
+        } catch (e) {
+            router.goto("/auth/login");
+        }
     }
+
+
 
     function pageHandle(e) {
         page = e.detail.page;
@@ -84,41 +62,60 @@
 </script>
 
 <Route path="/*">
-    <div class="sidebar-wrap" in:fly={{duration: 200, x: -400, y: 0}} out:fade={{duration: 10}}>
-        <ManageSidebar categories={categories} />
-    </div>
-    <div class="manage-content-main">
-        <div class="browse-content-wrap">
-            <Route path="/" redirect="/manage/cases/browse" />
-
-            <Route path="/browse/*">
-                <BrowseTitle on:viewChange={viewHandle} on:formChange={formHandle} {form} {view} />
-                <ContentContainer
-                    {page}
-                    on:pageChange={pageHandle}
-                    on:focus={focusHandle}
-                    {view}
-                    type = {form}
-                />
-                <div class="bottom-bar">
-                    <BrowseNavbar {page} on:pageChange={pageHandle} {focus} />
-                </div>
-            </Route>
-
-            <Route path="/create">
-                <ManageCreateView />
-            </Route>
-
-            <Route path="/stats/*">
-                <div class="stats-content-wrap">
-                    <NotReadyView />
-                </div>
-            </Route>
+    {#await authenticateUser() then result}
+        <div
+            class="sidebar-wrap"
+            in:fly={{ duration: 200, x: -400, y: 0 }}
+            out:fade={{ duration: 10 }}
+        >
+            <ManageSidebar categories = {categoryFilter(0, authority)}/>
         </div>
-    </div>
-    <div class="user-info-wrap" in:fly={{duration: 200, x: +400, y: 0}} out:fade={{duration: 10}}>
-        <UserInfo />
-    </div>
+        <div class="manage-content-main">
+            <div class="browse-content-wrap">
+                <Route path="/" redirect="/manage/cases/browse" />
+
+                <Route path="/browse/*">
+                    <BrowseTitle
+                        on:viewChange={viewHandle}
+                        on:formChange={formHandle}
+                        {form}
+                        {view}
+                    />
+                    <ContentContainer
+                        {page}
+                        on:pageChange={pageHandle}
+                        on:focus={focusHandle}
+                        {view}
+                        type={form}
+                    />
+                    <div class="bottom-bar">
+                        <BrowseNavbar
+                            {page}
+                            on:pageChange={pageHandle}
+                            {focus}
+                        />
+                    </div>
+                </Route>
+
+                <Route path="/create">
+                    <ManageCreateView />
+                </Route>
+
+                <Route path="/stats/*">
+                    <div class="stats-content-wrap">
+                        <NotReadyView />
+                    </div>
+                </Route>
+            </div>
+        </div>
+        <div
+            class="user-info-wrap"
+            in:fly={{ duration: 200, x: +400, y: 0 }}
+            out:fade={{ duration: 10 }}
+        >
+            <UserInfo />
+        </div>
+    {/await}
 </Route>
 
 <style>

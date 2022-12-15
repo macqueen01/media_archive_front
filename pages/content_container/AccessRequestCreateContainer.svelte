@@ -226,7 +226,7 @@
                 </div>
                 <h4>등록이 끝났습니다!</h4>
                 <div class="btn-container-2">
-                    <a class="btn" href="/manage/accounts/browse">
+                    <a class="btn" href="/manage/">
                         <h3>돌아가기</h3>
                     </a>
                 </div>

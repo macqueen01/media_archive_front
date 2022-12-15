@@ -16,9 +16,18 @@
     let _username_initialize = "";
     let _password_initialize = "";
     let modalActive = false;
+    let hover = false;
 
     function navToRegister() {
         router.goto("/auth/signin");
+    }
+
+    function hoverInHandle() {
+        hover = true;
+    }
+
+    function hoverOutHandle() {
+        hover = false;
     }
 
     async function loginCall() {
@@ -87,6 +96,25 @@
 </script>
 
 <div class="login-wrap">
+    <div class="arrow-wrap">
+        <button class="arrow-btn" on:click={() => router.goto("/user")}>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                height="30"
+                width="30"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+                />
+            </svg>
+        </button>
+    </div>
     {#await check_status()}
         <Circle size="60" color="rgb(31, 32, 88)" unit="px" duration="1s" />
     {:catch e}
@@ -184,6 +212,26 @@
 </DefaultModal>
 
 <style>
+    .arrow-wrap {
+        height: 50px;
+        width: 50px;
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .arrow-btn {
+        outline: none;
+        background: none;
+        border: none;
+        height: fit-content;
+        width: fit-content;
+    }
+
     .login-wrap {
         width: 100%;
         height: 100%;

@@ -276,16 +276,17 @@
                     method: "POST",
                     data: formData,
                 });
+
+                console.log("file_uploading procedure ended");
+                file_uploading = false;
+                router.goto("/manage/cases");
                 
             } catch (error) {
                 result = error;
+                file_uploading = false;
                 console.log(error);
                 upload_fail = true;
             }
-
-            file_uploading = false;
-            console.log("file_uploading procedure ended");
-            router.goto("/manage/cases");
         }
     }
 
