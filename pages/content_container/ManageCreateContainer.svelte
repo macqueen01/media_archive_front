@@ -12,9 +12,11 @@
     import ManageCreateItem from "../../components/manager/ManageCreateItem.svelte";
     import Tiptap from "../../components/manager/Tiptap/Tiptap.svelte";
     import DefaultModal from "../../components/modals/DefaultModal.svelte";
+    import PositiveModal from "../../components/modals/PositiveModal.svelte";
     import { condition_set } from "../../utilities/inputConditions";
     import { address } from "../../utilities/settings";
     import { token } from "../../utilities/store";
+    
 
     export let stage = 1;
 
@@ -28,6 +30,7 @@
     let date;
     let produced = -1;
     let created_at;
+    let lengthCheckModal = false;
     let type = -1;
     let source;
     let pass_list = {
@@ -269,7 +272,7 @@
 
                 result = await axios({
                     headers: {
-                        'Authorization': `Token ${$token}`,
+                        Authorization: `Token ${$token}`,
                         "Content-Type": "multipart/form-data",
                     },
                     url: `http://${address}/drf/cases/create/${type}`,
@@ -280,7 +283,6 @@
                 console.log("file_uploading procedure ended");
                 file_uploading = false;
                 router.goto("/manage/cases");
-                
             } catch (error) {
                 result = error;
                 file_uploading = false;
@@ -289,8 +291,6 @@
             }
         }
     }
-
-
 
     function parseToList(str) {
         // str = "#a #b #c ..."
@@ -330,7 +330,14 @@
         if (type == 0) {
             upload_fail = e.detail.modalActive;
             router.goto("/manage/cases/browse");
+        } else if (type == 1) {
+            lengthCheckModal = e.detail.modalActive;
         }
+    }
+
+    function getLength(content) {
+        let strippedHtml = content.replace(/<[^>]+>/g, "");
+        return strippedHtml.length;
     }
 
     // stage manager
@@ -351,24 +358,29 @@
                 attendee_list = parseToList(attendee);
             }
         } else if (stage == 3) {
-            //let result = fileUpload();
-            //console.log(result)
-        } else if (stage == 4) {
-            dispatch("data", {
-                uncleared: [],
-            });
-        } else if (stage == 5) {
-            dispatch("data", {
-                uncleared: [1, 2, 3, 4],
-            });
-            fileUpload();
+            if (getLength(content) <= 30) {
+                dispatch("data", {
+                    uncleared: [4, 5],
+                });
+                console.log("uncleared: 4,5");
+            } else {
+                dispatch("data", {
+                    uncleared: [],
+                });
+            }
+        }
+    }
+
+    $: {
+        if (stage == 3) {
+            lengthCheckModal = true;
         }
     }
 
     $: {
         if (passCheck(pass_list)) {
             dispatch("data", {
-                uncleared: [5],
+                uncleared: [4, 5],
             });
         } else {
             dispatch("data", {
@@ -401,7 +413,7 @@
                 conditions={condition_set.default_conditions}
             />
             <InputMultiValue
-                placeholder="주요 참석자들을 입력해주세요"
+                placeholder="주요 참석자를 입력해주세요"
                 init={attendee}
                 on:change={(e) => changeHandle(e, "attendee")}
                 conditions={condition_set.attendee_conditions}
@@ -453,7 +465,7 @@
                 conditions={condition_set.default_conditions}
             />
             <InputSingleValue
-                placeholder="생산연도를 입력해주세요"
+                placeholder="생산일자를 입력해주세요"
                 init={date}
                 on:change={(e) => changeHandle(e, "date")}
                 conditions={condition_set.default_conditions}
@@ -636,6 +648,14 @@
     <h3 class="modal-header" slot="header">권한이 없습니다</h3>
     <h3 class="modal-content" slot="content">관리자 권한이 필요합니다</h3>
 </DefaultModal>
+
+<PositiveModal
+    modalActive={lengthCheckModal}
+    on:close={(e) => modalCloseHandle(e, 1)}
+>
+    <h3 class="modal-header" slot="header">준수 사항</h3>
+    <h3 class="modal-content" slot="content">육하원칙 기준, 30자 이상 입력하세요</h3>
+</PositiveModal>
 
 <style>
     .browse-content-container {

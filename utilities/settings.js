@@ -138,7 +138,6 @@ function browseCategoryFilter(authority) {
     }
 }
 
-
 function userManageCategoryFilter(authority) {
     // Helper function to categoryFilter
 
@@ -229,3 +228,4 @@ module.exports = {
     address,
     categoryFilter
 }
+
